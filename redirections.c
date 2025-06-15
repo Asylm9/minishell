@@ -42,7 +42,10 @@ int	apply_redirections(t_command *cmd)
 	while (redir)
 	{
 		if (redir->type == IN)
-			redirect_in(redir); //a voir
+		{
+			if (redirect_in(redir) == 1) //a voir
+				return (1);
+		}
 		else if (redir->type == OUT)
 		{
 			fd = open(redir->target, O_WRONLY | O_CREAT | O_TRUNC, 0644);

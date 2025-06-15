@@ -464,7 +464,7 @@ int	main(int ac, char **av, char **envp)
 	print_ast(ast_redir);
 
 		printf("-------EXECUTE AST 3-------------------------------------------------------------------------------------------------\n");
-	execute_ast(ast_redir, &shell);
+	shell.exit_status = execute_ast(ast_redir, &shell);
 	printf("---------------------------------------------------------------------------------------------------------------------\n");
 
 	// Free allocated memory
@@ -480,5 +480,5 @@ int	main(int ac, char **av, char **envp)
 	free(ast->right);
 	free(ast);
 
-	return (0);
+	return (shell.exit_status);
 }
