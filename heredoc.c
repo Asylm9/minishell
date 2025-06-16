@@ -86,12 +86,15 @@ char	*ft_nwljoin(char const *s1, char const *s2)
 	return (res);
 }
 
-char	*handle_heredoc(char * delimiter)
+int	handle_heredoc(char * delimiter)
 {
 	char 	*input;
 	char	*buffer;
 	char 	*temp;
+	int		pfd[2];
 
+	if (pipe(pfd) < 0)
+		return (1);
 	buffer = NULL;
 	while (1)
 	{
@@ -103,25 +106,49 @@ char	*handle_heredoc(char * delimiter)
 			free(input);
 			break ;
 		}
+		//input = expand_input(input);
 		temp = ft_nwljoin(buffer, input);
 		free(input);
 		if (!temp)
-			return (free(buffer), NULL);
+		{
+			close(pfd[0]);
+			close(pfd[1]);
+			return (free(buffer), 1);
+		}
 		free(buffer);
 		buffer = temp;
 	}
-	return (buffer);
+	if (buffer)
+	{
+		write(pfd[1], buffer, ft_strlen(buffer));
+		free(buffer);
+	
+	}
+	close(pfd[1]);
+	return (pfd[0]);
 }
 
 int main(void)
 {
 	t_redirect redir;
-	char *buffer;
+	char buffer[1024];
+	int	bytes_read;
 
 	init_heredoc(&redir, "FIN");
-	buffer = handle_heredoc(redir.target);
-	printf("%s\n", buffer);
-	free(buffer);
+	redir.fd = handle_heredoc(redir.target);
+	if (redir.fd > 0)
+	{
+		printf("=== Contenu du heredoc ===\n");
+		while ((bytes_read = read(redir.fd, buffer, sizeof(buffer) - 1)) > 0)
+		{
+			buffer[bytes_read] = '\0';
+			printf("%s", buffer);
+		}
+		printf("\n=== Fin ===\n");
+		close(redir.fd);
+	}
+	else
+		printf("Heredoc error\n");
 	free(redir.target);
 	return (0);
 }
