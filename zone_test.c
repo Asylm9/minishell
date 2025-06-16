@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:55:02 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/13 18:13:36 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/16 21:31:39 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,15 +70,47 @@ int	is_env_var(char *str)
 	return (0);
 }
 
+char	*trim_quotes(char *input)
+{
+	char	*result;
+	char	*tmp;
+	char	*buffer;
+	int		start;
+	int		end;
+
+	start = 0;
+	end = 0;
+	tmp = NULL;
+	result = NULL;
+	buffer = NULL;
+	while (input[end] && input[end] != '\0')
+	{
+		while (input[end] != '\'' && input[end] != '"' && input[end])
+			end++;
+		tmp = ft_substr(input, start, end - start);
+		if (result)
+		{
+			buffer = ft_strdup(result);
+			free(result);
+			result = NULL;
+		}
+		result = ft_strjoin(&buffer, &tmp, 3);
+		start = end + 1;
+		end++;
+	}
+	return (result);
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	char	*str;
 	char	*result;
 	int		i;
 
-	str = ft_strdup("test abc def ghi $HOME hehe ouou");
+	str = "test abc def ghi test\"$ENVtest \"test ouou";
 	result = expand_token(str);
-	printf("Result: |%s|\n", result);
+	str = trim_quotes(result);
+	printf("Result: |%s|\n", str);
 	free(str);
 	free(result);
 	return (0);

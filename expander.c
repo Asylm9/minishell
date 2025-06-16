@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/13 18:49:54 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/16 21:42:14 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,16 @@ char	*expand_token(char *input)
 		{
 			buffer = ft_substr(input, start, pos - start);
 			tmp = ft_strjoin(&result, &buffer, 0);
-			free(result);
-			free(buffer);
+			if (result)
+			{
+				free(result);
+				result = NULL;
+			}
+			if (buffer)
+			{
+				free(buffer);
+				buffer = NULL;
+			}
 			if (expand_var(input + pos, &buffer))
 			{
 				result = ft_strdup("");
@@ -58,20 +66,19 @@ char	*expand_token(char *input)
 			}
 			if (buffer)
 			{
-				printf("TEST EXPAND TOKEN\n");
-				printf("Buffer: %s\n", buffer);
-				printf("Tmp: %s\n", tmp);
 				result = ft_strjoin(&tmp, &buffer, 0);
 				free(tmp);
-				printf("TEST EXPAND TOKEN\n");
 				// Do NOT free buffer if it comes from getenv!
 			}
 			else
 			{
-				free(result);
+				if (result)
+				{
+					free(result);
+					result = NULL;
+				}
 				result = tmp;
 			}
-			printf("TEST EXPAND TOKEN\n");
 			pos++;
 			while ((ft_isalnum(input[pos]) || input[pos] == '_') && input[pos])
 				pos++;
@@ -80,12 +87,42 @@ char	*expand_token(char *input)
 		else
 			pos++;
 	}
-	printf("TEST EXPAND TOKEN\n");
 	buffer = ft_substr(input, start, pos - start);
 	tmp = ft_strjoin(&result, &buffer, 0);
 	free(result);
 	free(buffer);
 	result = tmp;
+	return (result);
+}
+
+char	*trim_quotes(char *input)
+{
+	char	*result;
+	char	*tmp;
+	char	*buffer;
+	int		start;
+	int		end;
+
+	start = 0;
+	end = 0;
+	tmp = NULL;
+	result = NULL;
+	buffer = NULL;
+	while (input[end] && input[end] != '\0')
+	{
+		while (input[end] != '\'' && input[end] != '"' && input[end])
+			end++;
+		tmp = ft_substr(input, start, end - start);
+		if (result)
+		{
+			buffer = ft_strdup(result);
+			free(result);
+			result = NULL;
+		}
+		result = ft_strjoin(&buffer, &tmp, 3);
+		start = end + 1;
+		end++;
+	}
 	return (result);
 }
 
@@ -113,7 +150,7 @@ int	expand_list(t_token *tok_lst, char **env, t_token *exp_lst)
 			}
 		}
 		else
-			exp_lst->value = expand_token(tok_lst->value);
+			exp_lst->value = trim_quotes(expand_token(tok_lst->value));
 		printf("test\n");
 		exp_lst->type = tok_lst->type;
 		tok_lst = tok_lst->next;

@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/13 17:31:46 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/16 21:46:18 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ int	main(int ac, char **av, char **envp)
 		Readline()
 		Tokenize()
 			Create_tok_lst()
-				Init_token()			CHECK FIND END OF TOKEN FOR QUOTE
+				Init_token()			CHECK EXPAND DANS SET TOKEN TYPE
 				Add_token()
 			Fill_token()
 		Expand_tok_lst()

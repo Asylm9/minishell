@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:05:28 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/13 17:20:55 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/16 18:52:32 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,6 @@ int	tokenize_input(t_token *tok_lst, const char *input)
 			return (ERROR);
 		set_value(tok_lst, input, &start, &end);
 		set_token_type(tok_lst, input, &end);
-		printf("input[end] = %c\n", input[end]);
 		i = end;
 		while (input[i] && input[i] == ' ')
 			i++;
