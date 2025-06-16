@@ -47,7 +47,7 @@ int		execute_builtin(t_command *cmd, t_sh *shell)
 		shell->exit_status = builtin_exit(cmd->args, shell);
 	return (shell->exit_status);
 }
-/* 
+
 int	main(int ac, char **av, char **envp)
 {
 	t_sh		shell;
@@ -61,9 +61,9 @@ int	main(int ac, char **av, char **envp)
 	//builtin_env(&shell);
 	printf("\n-------------EXP-----------------\n");
 	execute_builtin(&cmd, &shell);
-	printf("\n-------------ENV-----------------\n");
+	//printf("\n-------------ENV-----------------\n");
 	//builtin_env(&shell);
 
 	cleanup_shell(&shell);
 	return (shell.exit_status);
-} */
+}

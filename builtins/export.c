@@ -12,6 +12,8 @@ static int	validate_format_export(char **args, int i)
 	j = 1;
 	while (args[i][j] && args[i][j] != '=')
 	{
+		if (args[i][j] == '+' && args[i][j + 1] == '=')
+			break;
 		if (!ft_isalnum(args[i][j]) && args[i][j] != '_')
 		{
 			printf_fd(2, "minishell: export: `%s': not a valid identifier\n", args[i]);
@@ -22,15 +24,35 @@ static int	validate_format_export(char **args, int i)
 	return (SUCCESS);
 }
 
+static int	handle_append_export(char *key, char *new_value, t_env **envl)
+{
+	char	*value;
+	char	*joined_value;
+	int		ret;
+
+	value = get_envl_var(key, *envl);
+	if (!value)
+		ret = set_envl_var(key, envl, new_value);
+	else
+	{
+		joined_value = ft_strjoin(value, new_value);
+		if (!joined_value)
+			return (ERROR);
+		ret = set_envl_var(key, envl, joined_value);
+		free(joined_value);
+	}
+	return (ret);
+}
+
 static int	process_export_arg(char **args, int i, t_env **envl)
 {
 	char 	*equal_pos;
-	char	*append_pos;
+	char	*plus_pos;
 	char	*value;
 	int		ret;
 
 	ret = 0;
-	append_pos = ft_strchr(args[i], '+');
+	plus_pos = ft_strnstr(args[i], "+=", ft_strlen(args[i]));
 	equal_pos = ft_strchr(args[i], '=');
 	if (!equal_pos)	
 	{
@@ -39,18 +61,24 @@ static int	process_export_arg(char **args, int i, t_env **envl)
 	}
 	else
 	{
-		value = equal_pos + 1;
-		if (append_pos)
+		if (plus_pos)
 		{
-			append_pos = '\0';
-		} //en cours
+			*plus_pos = '\0';
+			value = plus_pos + 2;
+			ret = handle_append_export(args[i], value, envl);
+			*plus_pos = '+';
+		}
 		else
+		{
 			*equal_pos = '\0';
-		if (ft_strlen(value) == 0)
-			ret = set_envl_var(args[i], envl, EMPTY);
-		else
-			ret = set_envl_var(args[i], envl, value);
-		*equal_pos = '=';
+			value = equal_pos + 1;
+		
+			if (ft_strlen(value) == 0)
+				ret = set_envl_var(args[i], envl, EMPTY);
+			else
+				ret = set_envl_var(args[i], envl, value);
+			*equal_pos = '=';
+		}
 	}
 	if (ret != 0)
 		return (ERROR);
@@ -60,6 +88,7 @@ static int	process_export_arg(char **args, int i, t_env **envl)
 int	builtin_export(char **args, t_env **envl)
 {
 	int		i;
+	int		status;
 
 	if (!envl)
 		return (ERROR); // verifier comportement
@@ -68,22 +97,18 @@ int	builtin_export(char **args, t_env **envl)
 		print_exp_list(*envl);
 		return (SUCCESS);
 	}
+	status = 0;
 	i = 1;
 	while (args[i])
 	{
-
 		if (validate_format_export(args, i) != 0)
-			return (ERROR);
-		if (process_export_arg(args, i, envl) != 0)
-			return (ERROR);
+			status = ERROR;
+		else if (process_export_arg(args, i, envl) != 0)
+			status = ERROR;
 		i++;
-
-/* 		bash: export: -=: invalid option
-		export: usage: export [-fn] [name[=value] ...] or export -p */
-
-		printf("\n---------------------------------\n");
-		print_exp_list(*envl);
 	}
-	return (SUCCESS);
+	printf("\n---------------------------------\n");
+	print_exp_list(*envl);
+	return (status);
 }
 
