@@ -49,7 +49,11 @@ int	execute_command(t_command *cmd, t_sh *shell)
 	}
 	if (is_builtin(cmd->cmd_name)) 
 	{
+		if (cmd->redirections && !shell->in_pipeline)
+			save_fds();
 		ret = execute_builtin(cmd, shell);
+		if (cmd->redirections && !shell->in_pipeline)
+			restore_fds();
 		if (shell->in_pipeline)
 			exit(ret);
 		return (ret);

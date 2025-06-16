@@ -148,7 +148,8 @@ char	*find_cmd_path(char **paths, char *cmd_name);
 int		redirect_in(t_redirect *redir);
 int		apply_redirections(t_command *cmd);
 int		setup_pipes_redirections(int **pipes, int nb_pipes, int i);
-int		setup_heredoc(t_redirect *redir); // parsing ou exec?
+
+int		setup_heredoc(t_redirect *redir);
 
 /* Builtin commands */
 int		args_count(char **args);
