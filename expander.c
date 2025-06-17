@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/17 16:44:28 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:31:54 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,20 @@ char	*trim_quotes(char *input)
 	return (result);
 }
 
+int	is_pipe_redir(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] != '|' && str[i] != '>' && str[i] != '<' || i > 1)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 int	expand_list(t_token *tok_lst, char **env, t_token *exp_lst)
 {
 	t_token	*head;
@@ -178,16 +192,18 @@ int	expand_list(t_token *tok_lst, char **env, t_token *exp_lst)
 		exp_lst->expand = NO_EXPAND;
 		if (tok_lst->expand == NO_EXPAND)
 		{
-			exp_lst->value = trim_quotes(ft_strdup(tok_lst->value));
-			if (!exp_lst->value)
+			if (!is_pipe_redir(tok_lst->value))
 			{
-				free(exp_lst);
-				return (1);
+				exp_lst->value = trim_quotes(ft_strdup(tok_lst->value));
+				if (!exp_lst->value)
+				{
+					free(exp_lst);
+					return (1);
+				}
 			}
 		}
 		else
 			exp_lst->value = trim_quotes(expand_token(tok_lst->value));
-		printf("test\n");
 		exp_lst->type = tok_lst->type;
 		tok_lst = tok_lst->next;
 		if (tok_lst != NULL)

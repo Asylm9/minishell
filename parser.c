@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/11 16:10:59 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/17 19:23:20 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,29 +30,6 @@ int	create_node_pipe(t_ast **ast, t_token *tok_lst)
 {
 	t_ast	*new_ast;
 
-	// if ((*ast)->right == NULL)
-	// {
-	//     (*ast)->right = malloc(sizeof(t_ast));
-	//     if (!(*ast)->right)
-	//         return (1);
-	//     (*ast)->right->type = PIPE;
-	//     (*ast)->right->cmd = NULL;
-	//     (*ast)->right->left = NULL;
-	//     (*ast)->right->right = NULL;
-	//     return (0);
-	// }
-	// else if ((*ast)->right->type == PIPE)
-	// {
-	//     new_ast = malloc(sizeof(t_ast));
-	//     if (!new_ast)
-	//         return (1);
-	//     new_ast->type = PIPE;
-	//     new_ast->cmd = NULL;
-	//     new_ast->left = (*ast)->right;
-	//     new_ast->right = NULL;
-	//     (*ast)->right = new_ast;
-	//     return (0);
-	// }
 	new_ast = malloc(sizeof(t_ast));
 	if (!new_ast)
 		return (1);
@@ -114,97 +91,21 @@ int	parse_ast(t_token *tok_lst, t_ast *ast)
 	int		i;
 	char	**new_args;
 
-	arg_count = count_cmds(tok_lst);
-	if (arg_count > 0)
-	{
-		ast->cmd = malloc(sizeof(t_command));
-		if (!ast->cmd)
-			return (1);
-	}
-	else
-		ast->cmd = NULL;
+	printf("TEST CA PTN\n");
+	printf("tok lst value : %s\n", tok_lst->value);
 	while (tok_lst)
 	{
 		if (tok_lst->type == WORD)
-		{
 			create_node_command(&ast, tok_lst);
-		}
-		// else if (tok_lst->type == ARGUMENT)
-		// {
-		// 	if (ast->cmd->args == NULL)
-		// 	{
-		// 		ast->cmd->args = malloc(sizeof(char *) * 2);
-		// 		if (!ast->cmd->args)
-		// 			return (1);
-		// 		ast->cmd->args[0] = ft_strdup(tok_lst->value);
-		// 		if (!ast->cmd->args[0])
-		// 			return (1);
-		// 		ast->cmd->args[1] = NULL;
-		// 	}
-		// 	else
-		// 	{
-		// 		for (i = 0; ast->cmd->args[i]; i++)
-		// 			;
-		// 		new_args = realloc(ast->cmd->args, sizeof(char *) * (i + 2));
-		// 		if (!new_args)
-		// 			return (1);
-		// 		new_args[i] = strdup(tok_lst->value);
-		// 		if (!new_args[i])
-		// 			return (1);
-		// 		new_args[i + 1] = NULL;
-		// 		ast->cmd->args = new_args;
-		// 	}
-		// }
 		else if (tok_lst->type == PIPE)
-		{
-			if (ast->right == NULL)
-			{
-				ast->right = malloc(sizeof(t_ast));
-				if (!ast->right)
-					return (1);
-				ast->right->type = PIPE;
-				ast->right->cmd = NULL;
-				ast->right->left = NULL;
-				ast->right->right = NULL;
-			}
-			else
-			{
-				new_ast = malloc(sizeof(t_ast));
-				if (!new_ast)
-					return (1);
-				new_ast->type = PIPE;
-				new_ast->cmd = NULL;
-				new_ast->left = ast->right;
-				new_ast->right = NULL;
-				ast->right = new_ast;
-			}
-		}
+			create_node_pipe(&ast, tok_lst);
 		else if (tok_lst->type == REDIR_IN || tok_lst->type == REDIR_OUT
 			|| tok_lst->type == REDIR_APPEND || tok_lst->type == REDIR_HEREDOC)
-		{
-			if (ast->right == NULL)
-			{
-				ast->right = malloc(sizeof(t_ast));
-				if (!ast->right)
-					return (1);
-				ast->right->type = tok_lst->type;
-				ast->right->cmd = NULL;
-				ast->right->left = NULL;
-				ast->right->right = NULL;
-			}
-			else
-			{
-				new_ast = malloc(sizeof(t_ast));
-				if (!new_ast)
-					return (1);
-				new_ast->type = tok_lst->type;
-				new_ast->cmd = NULL;
-				new_ast->left = ast->right;
-				new_ast->right = NULL;
-				ast->right = new_ast;
-			}
-		}
+			create_node_redir(&ast, tok_lst);
 		tok_lst = tok_lst->next;
+		// ast = ast->right;
+		printf("Node created, type : %d  value : %s\n", ast->type,
+			ast->cmd->cmd_name);
 	}
 	printf("AST created successfully.\n");
 	return (0);
@@ -212,42 +113,153 @@ int	parse_ast(t_token *tok_lst, t_ast *ast)
 
 void	print_ast(t_ast *ast)
 {
-	printf("Type: %d\n", ast->type);
+	printf("Type:\n");
 	if (!ast)
 		return ;
 	if (ast->type == WORD && ast->cmd)
 	{
 		if (ast->cmd->cmd_name == NULL)
-			printf("Command name: NULL\n");
+			printf("	Command:\n		Name: NULL\n");
 		else
-			printf("Command name: %s\n", ast->cmd->cmd_name);
+			printf("	Command:\n		Name: %s\n", ast->cmd->cmd_name);
 		if (ast->cmd->args)
 		{
-			printf("Arguments:\n");
+			printf("		Arguments count: %d\n", ast->cmd->argc);
+			printf("		Arguments:\n");
 			for (int i = 0; ast->cmd->args[i]; i++)
-				printf("  Arg %d: %s\n", i + 1, ast->cmd->args[i]);
+			{
+				printf("			%s\n", ast->cmd->args[i]);
+			}
 		}
 		else
 			printf("No arguments\n");
 	}
 	else if (ast->type == PIPE)
-		printf("Pipe\n");
+		printf("	Pipe\n");
 	else if (ast->type == REDIR_IN)
-		printf("Redirect In\n");
+	{
+		printf("	Redirect In\n");
+		if (ast->cmd && ast->cmd->redirections)
+		{
+			printf("        Command:\n");
+			if (ast->cmd->cmd_name == NULL)
+				printf("		Name: NULL\n");
+			else
+				printf("		Name: %s\n", ast->cmd->cmd_name);
+			if (ast->cmd->args)
+			{
+				printf("		Arguments count: %d\n", ast->cmd->argc);
+				printf("		Arguments:\n");
+				for (int i = 0; ast->cmd->args[i]; i++)
+				{
+					printf("			%s\n", ast->cmd->args[i]);
+				}
+			}
+			else
+				printf("No arguments\n");
+			printf("		Redirection Target: %s\n",
+						ast->cmd->redirections->target);
+			printf("		File Descriptor: %d\n", ast->cmd->redirections->fd);
+		}
+		else
+			printf("No redirection target or file descriptor\n");
+	}
 	else if (ast->type == REDIR_OUT)
-		printf("Redirect Out\n");
+	{
+		printf("	Redirect Out\n");
+		if (ast->cmd && ast->cmd->redirections)
+		{
+			printf("		Redirection Target: %s\n",
+						ast->cmd->redirections->target);
+			printf("		File Descriptor: %d\n", ast->cmd->redirections->fd);
+		}
+		else
+			printf("No redirection target or file descriptor\n");
+	}
 	else if (ast->type == REDIR_APPEND)
-		printf("Redirect Append\n");
+	{
+		printf("	Redirect Append\n");
+		if (ast->cmd && ast->cmd->redirections)
+		{
+			printf("		Redirection Target: %s\n",
+						ast->cmd->redirections->target);
+			printf("		File Descriptor: %d\n", ast->cmd->redirections->fd);
+		}
+		else
+			printf("No redirection target or file descriptor\n");
+	}
 	else if (ast->type == REDIR_HEREDOC)
-		printf("Redirect Heredoc\n");
+	{
+		printf("	Redirect Heredoc\n");
+		if (ast->cmd && ast->cmd->redirections)
+		{
+			printf("		Redirection Target: %s\n",
+						ast->cmd->redirections->target);
+			printf("		File Descriptor: %d\n", ast->cmd->redirections->fd);
+		}
+		else
+			printf("No redirection target or file descriptor\n");
+	}
+	else
+		printf("Unknown type\n");
 	if (ast->left)
+	{
+		printf("Left child:\n");
+		printf("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL\n");
 		print_ast(ast->left);
-	else
-		printf("No left child\n");
-	printf("Right child:\n");
-	printf("ast right value: %p\n", (void *)ast->right);
-	if (ast->right->cmd)
+		printf("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL\n");
+	}
+	// else
+	// 	printf("No left child\n");
+	if (ast->right)
+	{
+		printf("Right child:\n");
+		printf("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR\n");
 		print_ast(ast->right);
-	else
-		printf("No right child\n");
+		printf("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR\n");
+	}
+	// else
+	// 	printf("No right child\n");
 }
+
+// void	print_ast(t_ast *ast)
+// {
+// 	printf("Type: %d\n", ast->type);
+// 	if (!ast)
+// 		return ;
+// 	if (ast->type == WORD && ast->cmd)
+// 	{
+// 		if (ast->cmd->cmd_name == NULL)
+// 			printf("Command name: NULL\n");
+// 		else
+// 			printf("Command name: %s\n", ast->cmd->cmd_name);
+// 		if (ast->cmd->args)
+// 		{
+// 			printf("Arguments:\n");
+// 			for (int i = 0; ast->cmd->args[i]; i++)
+// 				printf("  Arg %d: %s\n", i + 1, ast->cmd->args[i]);
+// 		}
+// 		else
+// 			printf("No arguments\n");
+// 	}
+// 	else if (ast->type == PIPE)
+// 		printf("Pipe\n");
+// 	else if (ast->type == REDIR_IN)
+// 		printf("Redirect In\n");
+// 	else if (ast->type == REDIR_OUT)
+// 		printf("Redirect Out\n");
+// 	else if (ast->type == REDIR_APPEND)
+// 		printf("Redirect Append\n");
+// 	else if (ast->type == REDIR_HEREDOC)
+// 		printf("Redirect Heredoc\n");
+// 	if (ast->left)
+// 		print_ast(ast->left);
+// 	else
+// 		printf("No left child\n");
+// 	printf("Right child:\n");
+// 	printf("ast right value: %p\n", (void *)ast->right);
+// 	if (ast->right->cmd)
+// 		print_ast(ast->right);
+// 	else
+// 		printf("No right child\n");
+// }

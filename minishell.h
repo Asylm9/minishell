@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:15 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/17 15:44:39 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/17 19:07:03 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ int							expand_list(t_token *tok_lst, char **env,
 char						*trim_quotes(char *input);
 
 // Parser
+void						print_ast(t_ast *ast);
 
 /**************************		Execution	*****************************/
 

@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/17 16:14:37 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/17 19:20:34 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ int	main(int ac, char **av, char **envp)
 			return (1);
 		}
 		// printf("AST created successfully.\n");
+		parse_ast(temp, ast);
 		// printf("Freeing token list.\n");
 		free_tok_lst(tok_lst);
 		tok_lst = NULL;
@@ -128,11 +129,10 @@ int	main(int ac, char **av, char **envp)
 		// printf("Expanded token list freed successfully.\n");
 		temp = NULL;
 		// free(input);
-		// parse_ast(tok_lst, ast);
-		// printf("AST:\n");
+		printf("AST:\n");
 		// printf("%d\n", execve("/bin/ls", (char *[]){"ls", "-l", NULL},
 		// NULL));
-		// print_ast(ast);
+		print_ast(ast);
 	}
 }
 

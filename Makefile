@@ -14,7 +14,8 @@ LIBFT = $(LIBFT_DIR)/libft.a
 # Fichiers sources
 SRCS =	matt.c	\
 		token.c \
-		expander.c
+		expander.c \
+		parser.c
 
 # Fichiers objets
 OBJS = $(SRCS:.c=.o)
