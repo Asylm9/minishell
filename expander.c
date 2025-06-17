@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/16 21:42:14 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/17 15:30:19 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,36 +95,36 @@ char	*expand_token(char *input)
 	return (result);
 }
 
-char	*trim_quotes(char *input)
-{
-	char	*result;
-	char	*tmp;
-	char	*buffer;
-	int		start;
-	int		end;
+// char	*trim_quotes(char *input)
+// {
+// 	char	*result;
+// 	char	*tmp;
+// 	char	*buffer;
+// 	int		start;
+// 	int		end;
 
-	start = 0;
-	end = 0;
-	tmp = NULL;
-	result = NULL;
-	buffer = NULL;
-	while (input[end] && input[end] != '\0')
-	{
-		while (input[end] != '\'' && input[end] != '"' && input[end])
-			end++;
-		tmp = ft_substr(input, start, end - start);
-		if (result)
-		{
-			buffer = ft_strdup(result);
-			free(result);
-			result = NULL;
-		}
-		result = ft_strjoin(&buffer, &tmp, 3);
-		start = end + 1;
-		end++;
-	}
-	return (result);
-}
+// 	start = 0;
+// 	end = 0;
+// 	tmp = NULL;
+// 	result = NULL;
+// 	buffer = NULL;
+// 	while (input[end] && input[end] != '\0')
+// 	{
+// 		while (input[end] != '\'' && input[end] != '"' && input[end])
+// 			end++;
+// 		tmp = ft_substr(input, start, end - start);
+// 		if (result)
+// 		{
+// 			buffer = ft_strdup(result);
+// 			free(result);
+// 			result = NULL;
+// 		}
+// 		result = ft_strjoin(&buffer, &tmp, 3);
+// 		start = end + 1;
+// 		end++;
+// 	}
+// 	return (result);
+// }
 
 int	expand_list(t_token *tok_lst, char **env, t_token *exp_lst)
 {
