@@ -51,7 +51,7 @@ static int	process_export_arg(char **args, int i, t_env **envl)
 	char	*value;
 	int		ret;
 
-	ret = 0;
+	ret = SUCCESS;
 	plus_pos = ft_strnstr(args[i], "+=", ft_strlen(args[i]));
 	equal_pos = ft_strchr(args[i], '=');
 	if (!equal_pos)	

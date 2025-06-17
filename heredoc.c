@@ -36,6 +36,17 @@ typedef struct s_redirect
 	//t_redirect		*next;
 }			t_redirect;
 
+typedef struct s_sh
+{
+	char		**env;
+	//t_env		*envl;
+	bool		in_pipeline; //assigner a false par defaut
+	char		*current_dir;
+	int			saved_stdin;
+	int			saved_stdout;
+	int			exit_status;
+}			t_sh;
+
 int	init_heredoc(t_redirect *redir, char *delimiter)
 {
 	redir->type = HEREDOC;
@@ -73,24 +84,31 @@ char	*ft_freejoin(char **s1, char **s2, int flag)
 	return (result);
 }
 
-int	expand_var(char *input, char **result)
+int	expand_var(char *input, char **result, t_sh *shell)
 {
 	int		i;
 	char	*var;
 
 	// char	*result;
 	i = 1;
+	if (input[i] == '?')
+	{
+		*result = ft_itoa(shell->exit_status);
+		if (!result)
+			return (1);
+		return (0);
+	}
 	while (ft_isalnum(input[i]) || input[i] == '_')
 		i++;
 	var = ft_substr(input, 0, i);
 	(*result) = getenv(var + 1);
 	free(var);
-	if (result == NULL)
+	if (*result == NULL) // add *
 		return (1);
 	return (0);
 }
 
-char	*expand_token(char *input)
+char	*expand_token(char *input, t_sh *shell)
 {
 	char	*result;
 	char	*buffer;
@@ -119,7 +137,7 @@ char	*expand_token(char *input)
 				free(buffer);
 				buffer = NULL;
 			}
-			if (expand_var(input + pos, &buffer))
+			if (expand_var(input + pos, &buffer, shell))
 			{
 				result = ft_strdup("");
 				free(tmp);
@@ -141,7 +159,7 @@ char	*expand_token(char *input)
 				result = tmp;
 			}
 			pos++;
-			while ((ft_isalnum(input[pos]) || input[pos] == '_') && input[pos])
+			while ((ft_isalnum(input[pos]) || input[pos] == '_' || input[pos] == '?' &&input[pos - 1] == '$') && input[pos]) //CONDITION SPARADRAP
 				pos++;
 			start = pos;
 		}
@@ -212,7 +230,7 @@ char	*ft_nwljoin(char const *s1, char const *s2)
 	return (res);
 }
 
-int	handle_heredoc(char * delimiter)
+int	handle_heredoc(char * delimiter, t_sh *shell)
 {
 	char 	*input;
 	char	*line;
@@ -234,7 +252,7 @@ int	handle_heredoc(char * delimiter)
 			break ;
 		}
 		if (!has_quotes(delimiter))
-			line = expand_token(input);
+			line = expand_token(input, shell);
 		else
 			line = ft_strdup(input);
 		temp = ft_nwljoin(buffer, line);
@@ -262,11 +280,13 @@ int	handle_heredoc(char * delimiter)
 int main(void)
 {
 	t_redirect redir;
+	t_sh	shell;
 	char buffer[1024];
 	int	bytes_read;
 
-	init_heredoc(&redir, "\"FIN\"");
-	redir.fd = handle_heredoc(redir.target);
+	shell.exit_status = 0;
+	init_heredoc(&redir, "FIN");
+	redir.fd = handle_heredoc(redir.target, &shell);
 	if (redir.fd > 0)
 	{
 		printf("**** Contenu du heredoc ****\n");
