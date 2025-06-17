@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/03 14:25:18 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/13 19:17:09 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/17 15:47:25 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ char	*devers(char *stash, char *filled)
 {
 	char	*temp;
 
-	temp = ft_strjoin(&stash, &filled, 0);
+	temp = ft_fstrjoin(&stash, &filled, 0);
 	ft_free(stash);
 	return (temp);
 }

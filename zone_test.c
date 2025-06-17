@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:55:02 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/16 21:31:39 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/17 15:44:52 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@
 // 			buffer = ft_substr(input, start, pos - start);
 // 			if (tmp)
 // 				free(tmp);
-// 			tmp = ft_strjoin(result, buffer);
+// 			tmp = ft_fstrjoin(result, buffer);
 // 			free(buffer);
 // 			buffer = expand_var(input + pos);
 // 			if (buffer)
 // 			{
 // 				free(result);
-// 				result = ft_strjoin(tmp, expand_var(input + pos));
+// 				result = ft_fstrjoin(tmp, expand_var(input + pos));
 // 			}
 // 			pos++;
 // 			while ((ft_isalnum(input[pos]) || input[pos] == '_') && input[pos])
@@ -50,7 +50,7 @@
 // 	}
 // 	buffer = ft_substr(input, start, pos - start);
 // 	free(result);
-// 	result = ft_strjoin(tmp, buffer);
+// 	result = ft_fstrjoin(tmp, buffer);
 // 	free(tmp);
 // 	free(buffer);
 // 	return (result);
@@ -94,7 +94,7 @@ char	*trim_quotes(char *input)
 			free(result);
 			result = NULL;
 		}
-		result = ft_strjoin(&buffer, &tmp, 3);
+		result = ft_fstrjoin(&buffer, &tmp, 3);
 		start = end + 1;
 		end++;
 	}
@@ -107,11 +107,11 @@ int	main(int ac, char **av, char **envp)
 	char	*result;
 	int		i;
 
-	str = "test abc def ghi test\"$ENVtest \"test ouou";
-	result = expand_token(str);
-	str = trim_quotes(result);
-	printf("Result: |%s|\n", str);
-	free(str);
+	str = "$HOME test";
+	expand_var(str, &result);
+	// str = trim_quotes(result);
+	printf("Result: |%s|\n", result);
+	// free(str);
 	free(result);
 	return (0);
 }

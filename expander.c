@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/17 15:30:19 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/17 16:44:28 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*expand_token(char *input)
 		if (input[pos] == '$')
 		{
 			buffer = ft_substr(input, start, pos - start);
-			tmp = ft_strjoin(&result, &buffer, 0);
+			tmp = ft_fstrjoin(&result, &buffer, 0);
 			if (result)
 			{
 				free(result);
@@ -66,7 +66,7 @@ char	*expand_token(char *input)
 			}
 			if (buffer)
 			{
-				result = ft_strjoin(&tmp, &buffer, 0);
+				result = ft_fstrjoin(&tmp, &buffer, 0);
 				free(tmp);
 				// Do NOT free buffer if it comes from getenv!
 			}
@@ -88,11 +88,12 @@ char	*expand_token(char *input)
 			pos++;
 	}
 	buffer = ft_substr(input, start, pos - start);
-	tmp = ft_strjoin(&result, &buffer, 0);
+	tmp = ft_fstrjoin(&result, &buffer, 0);
 	free(result);
 	free(buffer);
-	result = tmp;
-	return (result);
+	// result = tmp;
+	// free(tmp);
+	return (tmp);
 }
 
 // char	*trim_quotes(char *input)
@@ -119,12 +120,47 @@ char	*expand_token(char *input)
 // 			free(result);
 // 			result = NULL;
 // 		}
-// 		result = ft_strjoin(&buffer, &tmp, 3);
+// 		result = ft_fstrjoin(&buffer, &tmp, 3);
 // 		start = end + 1;
 // 		end++;
 // 	}
 // 	return (result);
 // }
+
+char	*trim_quotes(char *input)
+{
+	char	*result;
+	char	*tmp;
+	char	*buffer;
+	int		start;
+	int		end;
+
+	start = 0;
+	end = 0;
+	result = NULL;
+	tmp = NULL;
+	buffer = NULL;
+	while (input[end] && input[end] != '\0')
+	{
+		while (input[end] != '\'' && input[end] != '"' && input[end])
+			end++;
+		tmp = ft_substr(input, start, end - start);
+		if (result)
+		{
+			buffer = result;
+			result = ft_fstrjoin(&buffer, &tmp, 3); // frees buffer and tmp
+		}
+		else
+		{
+			result = tmp; // first chunk, no join needed
+		}
+		if (input[end] == '\0')
+			break ;
+		start = end + 1;
+		end++;
+	}
+	return (result);
+}
 
 int	expand_list(t_token *tok_lst, char **env, t_token *exp_lst)
 {
@@ -142,7 +178,7 @@ int	expand_list(t_token *tok_lst, char **env, t_token *exp_lst)
 		exp_lst->expand = NO_EXPAND;
 		if (tok_lst->expand == NO_EXPAND)
 		{
-			exp_lst->value = ft_strdup(tok_lst->value);
+			exp_lst->value = trim_quotes(ft_strdup(tok_lst->value));
 			if (!exp_lst->value)
 			{
 				free(exp_lst);

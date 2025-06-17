@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/16 21:46:18 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/17 16:14:37 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	main(int ac, char **av, char **envp)
 	}
 	while (1)
 	{
-		input = readline("Minishell> ");
+		input = readline("\033[0;34m\033[1m   Minishell> \033[0m");
 		add_history(input);
 		printf("Input: %s\n", input);
 		// printf("Creating new token node.\n");

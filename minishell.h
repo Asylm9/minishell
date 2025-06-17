@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:15 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/17 15:31:05 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/17 15:44:39 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,7 +195,7 @@ int							ft_strncmp(const char *s1, const char *s2,
 char						*ft_pathjoin(char const *s1, char const *s2);
 // char	*ft_strdup(const char *s);
 // char	**ft_split(const char *s, char c);
-// char	*ft_strjoin(const char *s1, const char *s2);
+// char	*ft_fstrjoin(const char *s1, const char *s2);
 // size_t	ft_strlen(const char *s);
 // void	ft_putendl_fd(const char *s, int fd);
 
