@@ -6,30 +6,38 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/17 17:31:54 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:12:15 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	expand_var(char *input, char **result)
+int	expand_var(char *input, char **result, t_sh *shell)
 {
 	int		i;
 	char	*var;
 
 	// char	*result;
 	i = 1;
+	if (input[i] == '?')
+	{
+		*result = ft_itoa(shell->exit_status);
+		if (!(*result))
+			return (1);
+		return (0);
+	}
 	while (ft_isalnum(input[i]) || input[i] == '_')
 		i++;
 	var = ft_substr(input, 0, i);
 	(*result) = getenv(var + 1);
 	free(var);
-	if (result == NULL)
+	printf("result expand var : %s\n", (*result));
+	if ((*result) == NULL)
 		return (1);
 	return (0);
 }
 
-char	*expand_token(char *input)
+char	*expand_token(char *input, t_sh *shell)
 {
 	char	*result;
 	char	*buffer;
@@ -58,16 +66,16 @@ char	*expand_token(char *input)
 				free(buffer);
 				buffer = NULL;
 			}
-			if (expand_var(input + pos, &buffer))
+			if (expand_var(input + pos, &buffer, shell))
 			{
 				result = ft_strdup("");
-				free(tmp);
-				return (result); // Error handling if variable expansion fails
+				// Error handling if variable expansion fails
 			}
 			if (buffer)
 			{
-				result = ft_fstrjoin(&tmp, &buffer, 0);
-				free(tmp);
+				result = ft_fstrjoin(&tmp, &buffer, 1);
+				// free(tmp);
+				tmp = NULL;
 				// Do NOT free buffer if it comes from getenv!
 			}
 			else
@@ -80,8 +88,13 @@ char	*expand_token(char *input)
 				result = tmp;
 			}
 			pos++;
-			while ((ft_isalnum(input[pos]) || input[pos] == '_') && input[pos])
+			while ((ft_isalnum(input[pos]) || input[pos] == '_'
+					|| input[pos] == '?') && input[pos])
+			{
 				pos++;
+				if (input[pos - 1] == '?')
+					break ;
+			}
 			start = pos;
 		}
 		else
@@ -176,7 +189,7 @@ int	is_pipe_redir(char *str)
 	return (1);
 }
 
-int	expand_list(t_token *tok_lst, char **env, t_token *exp_lst)
+int	expand_list(t_token *tok_lst, char **env, t_token *exp_lst, t_sh *shell)
 {
 	t_token	*head;
 	char	*expanded_value;
@@ -203,7 +216,7 @@ int	expand_list(t_token *tok_lst, char **env, t_token *exp_lst)
 			}
 		}
 		else
-			exp_lst->value = trim_quotes(expand_token(tok_lst->value));
+			exp_lst->value = trim_quotes(expand_token(tok_lst->value, shell));
 		exp_lst->type = tok_lst->type;
 		tok_lst = tok_lst->next;
 		if (tok_lst != NULL)

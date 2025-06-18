@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:55:02 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/17 15:44:52 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:17:11 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,45 +70,48 @@ int	is_env_var(char *str)
 	return (0);
 }
 
-char	*trim_quotes(char *input)
-{
-	char	*result;
-	char	*tmp;
-	char	*buffer;
-	int		start;
-	int		end;
+// char	*trim_quotes(char *input)
+// {
+// 	char	*result;
+// 	char	*tmp;
+// 	char	*buffer;
+// 	int		start;
+// 	int		end;
 
-	start = 0;
-	end = 0;
-	tmp = NULL;
-	result = NULL;
-	buffer = NULL;
-	while (input[end] && input[end] != '\0')
-	{
-		while (input[end] != '\'' && input[end] != '"' && input[end])
-			end++;
-		tmp = ft_substr(input, start, end - start);
-		if (result)
-		{
-			buffer = ft_strdup(result);
-			free(result);
-			result = NULL;
-		}
-		result = ft_fstrjoin(&buffer, &tmp, 3);
-		start = end + 1;
-		end++;
-	}
-	return (result);
-}
+// 	start = 0;
+// 	end = 0;
+// 	tmp = NULL;
+// 	result = NULL;
+// 	buffer = NULL;
+// 	while (input[end] && input[end] != '\0')
+// 	{
+// 		while (input[end] != '\'' && input[end] != '"' && input[end])
+// 			end++;
+// 		tmp = ft_substr(input, start, end - start);
+// 		if (result)
+// 		{
+// 			buffer = ft_strdup(result);
+// 			free(result);
+// 			result = NULL;
+// 		}
+// 		result = ft_fstrjoin(&buffer, &tmp, 3);
+// 		start = end + 1;
+// 		end++;
+// 	}
+// 	return (result);
+// }
 
 int	main(int ac, char **av, char **envp)
 {
 	char	*str;
 	char	*result;
 	int		i;
+	t_sh	*shell;
 
-	str = "$HOME test";
-	expand_var(str, &result);
+	shell = malloc(sizeof(t_sh));
+	shell->exit_status = '0';
+	str = "$?test |$HOMME| t est";
+	result = expand_token(str, shell);
 	// str = trim_quotes(result);
 	printf("Result: |%s|\n", result);
 	// free(str);

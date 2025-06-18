@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:15 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/17 19:07:03 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/18 14:56:00 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,10 +140,10 @@ int							is_env_var(char *str);
 
 // Expander
 
-int							expand_var(char *input, char **result);
-char						*expand_token(char *input);
+int							expand_var(char *input, char **result, t_sh *shell);
+char						*expand_token(char *input, t_sh *shell);
 int							expand_list(t_token *tok_lst, char **env,
-								t_token *exp_lst);
+								t_token *exp_lst, t_sh *shell);
 char						*trim_quotes(char *input);
 
 // Parser
