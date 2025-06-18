@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:55:02 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/18 15:17:11 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:36:21 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,19 +103,22 @@ int	is_env_var(char *str)
 
 int	main(int ac, char **av, char **envp)
 {
-	char	*str;
-	char	*result;
-	int		i;
-	t_sh	*shell;
+	char	*args[] = {"ls", "-l", "-a", (char *)0};
 
-	shell = malloc(sizeof(t_sh));
-	shell->exit_status = '0';
-	str = "$?test |$HOMME| t est";
-	result = expand_token(str, shell);
-	// str = trim_quotes(result);
-	printf("Result: |%s|\n", result);
-	// free(str);
-	free(result);
+	// args = "/bin/ls -l";
+	execve("/bin/ls", (char *const *)args, NULL);
+	// char	*str;
+	// char	*result;
+	// int		i;
+	// t_sh	*shell;
+	// shell = malloc(sizeof(t_sh));
+	// shell->exit_status = '0';
+	// str = "$?test |$HOMME| t est";
+	// result = expand_token(str, shell);
+	// // str = trim_quotes(result);
+	// printf("Result: |%s|\n", result);
+	// // free(str);
+	// free(result);
 	return (0);
 }
 // int i = 0;
