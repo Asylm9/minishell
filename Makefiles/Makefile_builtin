@@ -1,10 +1,10 @@
 # Makefile pour tester la partie exécution du minishell
 
-NAME = texec
+NAME = tbuiltin
 
 # Compilateur et flags
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -w
+CFLAGS = -Wall -Wextra -Werror -g -w
 LIBS = -lreadline -lhistory
 
 # Répertoires
@@ -12,14 +12,12 @@ LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
 # Fichiers sources
-SRCS = test_ast.c \
-       new_exec.c \
+SRCS = env_utils.c \
        path.c \
-	   list_utils.c \
-       redirections.c \
-       env_utils.c \
+       manual_init.c \
        resources.c \
        utils.c \
+	   list_utils.c \
 	   builtins/builtins_utils.c \
 	   builtins/cd.c \
 	   builtins/echo.c \
@@ -61,11 +59,6 @@ fclean: clean
 # Recompilation complète
 re: fclean all
 
-# Tests spécifiques
-test: $(NAME)
-	@echo "=== Exécution des tests ==="
-	./$(NAME)
-	@echo "=== Tests terminés ==="
 
 # Nettoyage des fichiers de test créés
 clean_test_files:

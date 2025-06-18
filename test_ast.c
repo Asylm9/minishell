@@ -210,7 +210,7 @@ int	init_struct_double_pipe(t_ast *first_node)
 int	init_struct_redir_in(t_ast *first_node)
 {
 	t_command	*cmd;
-	FILE		*file;
+	//FILE		*file;
 
 	if (!first_node)
 		return (1);
@@ -427,17 +427,19 @@ int	main(int ac, char **av, char **envp)
 		free(ast);
 		return (1);
 	}
-	printf("---------------------------------------------------------------------------------------------------------------------\n");
+
+	init_shell(&shell, envp);
+
+/* 	printf("---------------------------------------------------------------------------------------------------------------------\n");
 	printf("First pipe AST:\n");
 	print_ast(ast);
 
-	init_shell(&shell, envp);
 
 	printf("-------EXECUTE AST 1-------------------------------------------------------------------------------------------------\n");
 	execute_ast(ast, &shell);
 	printf("---------------------------------------------------------------------------------------------------------------------\n");
-
-
+*/
+ 
 	if (init_struct_double_pipe(ast_double_pipe) != 0)
 	{
 		free(ast);
@@ -452,7 +454,7 @@ int	main(int ac, char **av, char **envp)
 	execute_ast(ast_double_pipe, &shell);
 	printf("---------------------------------------------------------------------------------------------------------------------\n");
 
-	if (init_struct_redir_in(ast_redir) != 0)
+/* 	if (init_struct_redir_in(ast_redir) != 0)
 	{
 		free(ast);
 		free(ast_double_pipe);
@@ -466,11 +468,12 @@ int	main(int ac, char **av, char **envp)
 		printf("-------EXECUTE AST 3-------------------------------------------------------------------------------------------------\n");
 	shell.exit_status = execute_ast(ast_redir, &shell);
 	printf("---------------------------------------------------------------------------------------------------------------------\n");
-
+ */
 	// Free allocated memory
 	if (ast->left && ast->left->cmd)
 	{
 		free(ast->left->cmd);
+
 	}
 	if (ast->right && ast->right->cmd)
 	{
@@ -479,6 +482,8 @@ int	main(int ac, char **av, char **envp)
 	free(ast->left);
 	free(ast->right);
 	free(ast);
+
+	cleanup_shell(&shell);
 
 	return (shell.exit_status);
 }

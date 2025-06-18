@@ -48,7 +48,7 @@ int		execute_builtin(t_command *cmd, t_sh *shell)
 	return (shell->exit_status);
 }
 
-int	main(int ac, char **av, char **envp)
+/* int	main(int ac, char **av, char **envp)
 {
 	t_sh		shell;
 	t_command	cmd;
@@ -66,4 +66,4 @@ int	main(int ac, char **av, char **envp)
 
 	cleanup_shell(&shell);
 	return (shell.exit_status);
-}
+} */

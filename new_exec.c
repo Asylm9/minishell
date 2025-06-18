@@ -33,7 +33,32 @@ int	execute_pipeline(t_ast *ast, t_sh *shell)
 	waitpid(pid_right, &status, 0);
 	return (process_wait_status(status));
 }
-
+int	save_or_restore_fds(t_sh *shell, char flag)
+{
+	if (flag =='s')
+	{
+		shell->saved_stdin = dup(STDIN_FILENO);
+		if (shell->saved_stdin < 0)
+			return (perror("dup"), ERROR);
+		shell->saved_stdout = dup(STDOUT_FILENO);
+		if (shell->saved_stdout < 0)
+			return (perror("dup"), ERROR);
+	}
+	else if (flag == 'r')
+	{
+		if (shell->saved_stdin < 0)
+			return (ERROR);
+		if (dup2(shell->saved_stdin, STDIN_FILENO) < 0)
+			return (perror("dup2"), ERROR);
+		if (shell->saved_stdout < 0)
+			return (ERROR);
+		if (dup2(shell->saved_stdout, STDOUT_FILENO) < 0)
+			return (perror("dup2"), ERROR);
+	}
+	else
+		return (ERROR);
+	return (SUCCESS);
+}
 
 int	execute_command(t_command *cmd, t_sh *shell)
 {
@@ -50,10 +75,10 @@ int	execute_command(t_command *cmd, t_sh *shell)
 	if (is_builtin(cmd->cmd_name)) 
 	{
 		if (cmd->redirections && !shell->in_pipeline)
-			save_fds();
+			save_or_restore_fd(shell, 's');
 		ret = execute_builtin(cmd, shell);
 		if (cmd->redirections && !shell->in_pipeline)
-			restore_fds();
+			save_or_restore_fd(shell, 'r');
 		if (shell->in_pipeline)
 			exit(ret);
 		return (ret);
