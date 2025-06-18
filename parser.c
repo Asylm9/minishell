@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/18 15:28:33 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:56:10 by matthieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,13 +78,16 @@ int	create_node_command(t_ast **ast, t_token *tok_lst)
 		return (1);
 	}
 	new_ast->cmd->args = NULL;
-	new_ast->left = *ast;
+	if (ast)
+		new_ast->left = *ast;
+	else
+		new_ast->left = NULL;
 	new_ast->right = NULL;
 	*ast = new_ast;
 	return (0);
 }
 
-int	parse_ast(t_token *tok_lst, t_ast *ast)
+int	parse_ast(t_token *tok_lst, t_ast **ast)
 {
 	t_ast	*new_ast;
 	int		arg_count;
@@ -96,16 +99,26 @@ int	parse_ast(t_token *tok_lst, t_ast *ast)
 	while (tok_lst)
 	{
 		if (tok_lst->type == WORD)
-			create_node_command(&ast, tok_lst);
+			create_node_command(ast, tok_lst);
 		else if (tok_lst->type == PIPE)
-			create_node_pipe(&ast, tok_lst);
+			create_node_pipe(ast, tok_lst);
 		else if (tok_lst->type == REDIR_IN || tok_lst->type == REDIR_OUT
 			|| tok_lst->type == REDIR_APPEND || tok_lst->type == REDIR_HEREDOC)
-			create_node_redir(&ast, tok_lst);
+			create_node_redir(ast, tok_lst);
 		tok_lst = tok_lst->next;
 		// ast = ast->right;
-		printf("Node created, type : %d  value : %s\n", ast->type,
-			ast->cmd->cmd_name);
+		if ((*ast)->cmd && (*ast)->cmd->cmd_name)
+			printf("Node created, type : %d  value : %s\n", (*ast)->type, (*ast)->cmd->cmd_name);
+		else
+			printf("Node created, type : %d  value : (no cmd)\n", (*ast)->type);
+		if ((*ast)->left && (*ast)->left->cmd)
+		{
+			printf("Left child command name: %s\n", (*ast)->left->cmd->cmd_name);
+		}
+		else
+		{
+			printf("No left child or no command in left child.\n");
+		}
 	}
 	printf("AST created successfully.\n");
 	return (0);
