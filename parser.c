@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/18 20:02:01 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/18 20:35:14 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,64 +87,65 @@ int	create_node_command(t_ast **ast, t_token *tok_lst)
 	return (0);
 }
 
-int	create_cmd(t_token *exp_lst, t_command **cmd)
+int	create_cmd(t_token **exp_lst, t_command **cmd)
 {
 	int			i;
 	t_token		*tmp;
 	t_redirect	*tmp_redir;
 
 	i = 0;
-	tmp = exp_lst;
+	tmp = (*exp_lst);
 	(*cmd)->redirections = malloc(sizeof(t_redirect));
 	if ((*cmd)->redirections == NULL)
 		return (ERROR);
 	(*cmd)->redirections->next = NULL;
 	(*cmd)->redirections->target = NULL;
 	tmp_redir = (*cmd)->redirections;
-	while (exp_lst && exp_lst->type != PIPE)
+	while ((*exp_lst) && (*exp_lst)->type != PIPE)
 	{
-		if (exp_lst->type == WORD)
+		if ((*exp_lst)->type == WORD)
 			i++;
-		else if (exp_lst->next && exp_lst->next->value)
+		else if ((*exp_lst)->next && (*exp_lst)->next->value)
 		{
 			if ((*cmd)->redirections->target == NULL)
-				(*cmd)->redirections->target = exp_lst->next->value;
+				(*cmd)->redirections->target = (*exp_lst)->next->value;
 			else
 			{
 				(*cmd)->redirections->next = malloc(sizeof(t_redirect));
 				if ((*cmd)->redirections->next == NULL)
 					return (ERROR);
 				(*cmd)->redirections = (*cmd)->redirections->next;
-				(*cmd)->redirections->target = exp_lst->next->value;
+				(*cmd)->redirections->target = (*exp_lst)->next->value;
 			}
-			exp_lst = exp_lst->next;
+			(*exp_lst) = (*exp_lst)->next;
 		}
-		exp_lst = exp_lst->next;
+		(*exp_lst) = (*exp_lst)->next;
 	}
 	(*cmd)->args = malloc(sizeof(char *) * (i + 1));
 	if ((*cmd)->args == NULL)
 		return (ERROR);
 	i = 0;
-	exp_lst = tmp;
-	(*cmd)->cmd_name = exp_lst->value;
-	(*cmd)->args[i] = exp_lst->value;
+	(*exp_lst) = tmp;
+	(*cmd)->cmd_name = (*exp_lst)->value;
+	(*cmd)->args[i] = (*exp_lst)->value;
 	i++;
-	exp_lst = exp_lst->next;
-	while (exp_lst && exp_lst->type != PIPE)
+	(*exp_lst) = (*exp_lst)->next;
+	while ((*exp_lst) && (*exp_lst)->type != PIPE)
 	{
-		if (exp_lst->type == REDIR_APPEND || exp_lst->type == REDIR_HEREDOC
-			|| exp_lst->type == REDIR_IN || exp_lst->type == REDIR_OUT)
+		if ((*exp_lst)->type == REDIR_APPEND
+			|| (*exp_lst)->type == REDIR_HEREDOC || (*exp_lst)->type == REDIR_IN
+			|| (*exp_lst)->type == REDIR_OUT)
 		{
-			if (exp_lst->next->next)
-				exp_lst = exp_lst->next->next;
+			if ((*exp_lst)->next->next)
+				(*exp_lst) = (*exp_lst)->next->next;
 			else
 				break ;
 		}
 		else
 		{
-			(*cmd)->args[i] = exp_lst->value;
+			(*cmd)->args[i] = (*exp_lst)->value;
 			i++;
-			exp_lst = exp_lst->next;
+			(*exp_lst) = (*exp_lst)->next;
 		}
 	}
 	(*cmd)->redirections = tmp_redir;
@@ -153,6 +154,18 @@ int	create_cmd(t_token *exp_lst, t_command **cmd)
 
 int	parse_ast(t_token *tok_lst, t_ast **ast)
 {
+	int			i;
+	t_command	*new_cmd;
+
+	new_cmd = malloc(sizeof(t_command));
+	printf("TEST\n");
+	create_cmd(&tok_lst, &new_cmd);
+	printf("PASING DONE\n");
+	// while tok->type != PIPE
+	// 	create cmd(tok_lst, t_cmd)
+	// create pipe node
+	// link pipe node left
+	// 	go again step 1
 }
 // int	parse_ast(t_token *tok_lst, t_ast *ast)
 // {

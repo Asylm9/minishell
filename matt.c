@@ -6,10 +6,9 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/18 17:25:28 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/18 20:14:20 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "minishell.h"
 
@@ -112,11 +111,12 @@ int	main(int ac, char **av, char **envp)
 			tok_lst = NULL;
 			return (1);
 		}
-		ast->cmd = NULL;
+		ast->cmd = malloc(sizeof(t_command));
 		ast->left = NULL;
 		ast->right = NULL;
 		ast->type = EMPTY;
-		// parse_ast(temp, ast);
+		printf("TEST BF PARSE\n");
+		parse_ast(temp, ast);
 		// printf("AST:\n");
 		// print_ast(ast);
 		free_tok_lst(tok_lst);
