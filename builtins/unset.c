@@ -1,6 +1,6 @@
 #include "../minishell.h"
 
-static	void delete_env_var(t_env *current, t_env **head)
+static void	delete_env_var(t_env *current, t_env **head)
 {
 	if (current->prev == NULL)
 	{
@@ -28,7 +28,7 @@ static	void delete_env_var(t_env *current, t_env **head)
 	printf("prev key: %s, prev->value: %s\n", next->key, next->value); */
 }
 
-int		builtin_unset(char **args, t_env **envl)
+int	builtin_unset(char **args, t_env **envl)
 {
 	t_env	*current;
 	int		i;
@@ -44,7 +44,7 @@ int		builtin_unset(char **args, t_env **envl)
 			if (ft_strcmp(current->key, args[i]) == 0)
 			{
 				delete_env_var(current, envl);
-				break;
+				break ;
 			}
 			current = current->next;
 		}
@@ -52,4 +52,3 @@ int		builtin_unset(char **args, t_env **envl)
 	}
 	return (SUCCESS); // si variable non trouve return avec 0, pas d'erreur
 }
-

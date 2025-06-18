@@ -33,9 +33,10 @@ int	execute_pipeline(t_ast *ast, t_sh *shell)
 	waitpid(pid_right, &status, 0);
 	return (process_wait_status(status));
 }
+
 int	save_or_restore_fds(t_sh *shell, char flag)
 {
-	if (flag =='s')
+	if (flag == 's')
 	{
 		shell->saved_stdin = dup(STDIN_FILENO);
 		if (shell->saved_stdin < 0)
@@ -72,7 +73,7 @@ int	execute_command(t_command *cmd, t_sh *shell)
 			exit(0);
 		return (0);
 	}
-	if (is_builtin(cmd->cmd_name)) 
+	if (is_builtin(cmd->cmd_name))
 	{
 		if (cmd->redirections && !shell->in_pipeline)
 			save_or_restore_fd(shell, 's');

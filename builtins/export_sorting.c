@@ -19,7 +19,7 @@ int	count_elements(t_env *envl)
 
 t_env	**init_temp_array(t_env *envl, int count)
 {
-	t_env **ptr_array;
+	t_env	**ptr_array;
 	int		i;
 
 	ptr_array = (t_env **) malloc(sizeof(t_env *) * count);

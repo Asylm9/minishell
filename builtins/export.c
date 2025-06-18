@@ -6,17 +6,19 @@ static int	validate_format_export(char **args, int i)
 
 	if (!ft_isalpha(args[i][0]) && args[i][0] != '_')
 	{
-		printf_fd(2, "minishell: export: `%s': not a valid identifier\n", args[i]);
+		printf_fd(2, "minishell: export: `%s': not a valid identifier\n",
+			args[i]);
 		return (ERROR);
 	}
 	j = 1;
 	while (args[i][j] && args[i][j] != '=')
 	{
 		if (args[i][j] == '+' && args[i][j + 1] == '=')
-			break;
+			break ;
 		if (!ft_isalnum(args[i][j]) && args[i][j] != '_')
 		{
-			printf_fd(2, "minishell: export: `%s': not a valid identifier\n", args[i]);
+			printf_fd(2, "minishell: export: `%s': not a valid identifier\n",
+				args[i]);
 			return (ERROR);
 		}
 		j++;
@@ -46,7 +48,7 @@ static int	handle_append_export(char *key, char *new_value, t_env **envl)
 
 static int	process_export_arg(char **args, int i, t_env **envl)
 {
-	char 	*equal_pos;
+	char	*equal_pos;
 	char	*plus_pos;
 	char	*value;
 	int		ret;
@@ -54,7 +56,7 @@ static int	process_export_arg(char **args, int i, t_env **envl)
 	ret = SUCCESS;
 	plus_pos = ft_strnstr(args[i], "+=", ft_strlen(args[i]));
 	equal_pos = ft_strchr(args[i], '=');
-	if (!equal_pos)	
+	if (!equal_pos)
 	{
 		if (!get_envl_var(args[i], *envl))
 			ret = add_new_entry(args[i], NULL, envl);
@@ -72,7 +74,6 @@ static int	process_export_arg(char **args, int i, t_env **envl)
 		{
 			*equal_pos = '\0';
 			value = equal_pos + 1;
-		
 			if (ft_strlen(value) == 0)
 				ret = set_envl_var(args[i], envl, EMPTY);
 			else
@@ -82,7 +83,7 @@ static int	process_export_arg(char **args, int i, t_env **envl)
 	}
 	if (ret != 0)
 		return (ERROR);
-	return(SUCCESS);
+	return (SUCCESS);
 }
 
 int	builtin_export(char **args, t_env **envl)
@@ -92,7 +93,7 @@ int	builtin_export(char **args, t_env **envl)
 
 	if (!envl)
 		return (ERROR); // verifier comportement
-	if (args_count(args) == 1 )
+	if (args_count(args) == 1)
 	{
 		print_exp_list(*envl);
 		return (SUCCESS);
@@ -111,4 +112,3 @@ int	builtin_export(char **args, t_env **envl)
 	print_exp_list(*envl);
 	return (status);
 }
-

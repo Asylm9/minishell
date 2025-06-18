@@ -2,7 +2,7 @@
 
 int	args_count(char **args)
 {
-	int count;
+	int	count;
 
 	count = 0;
 	while (args[count])
@@ -10,27 +10,25 @@ int	args_count(char **args)
 	return (count);
 }
 
-
 bool	is_builtin(char *cmd_name)
 {
 	if (!cmd_name)
 		return (false);
-	if (ft_strcmp(cmd_name, "echo") == 0 ||
-		ft_strcmp(cmd_name, "cd") == 0 ||
-		ft_strcmp(cmd_name, "pwd") == 0 ||
-		ft_strcmp(cmd_name, "export") == 0 ||
-		ft_strcmp(cmd_name, "unset") == 0 ||
-		ft_strcmp(cmd_name, "env") == 0 ||
-		ft_strcmp(cmd_name, "exit") == 0)
+	if (ft_strcmp(cmd_name, "echo") == 0
+		|| ft_strcmp(cmd_name, "cd") == 0
+		|| ft_strcmp(cmd_name, "pwd") == 0
+		|| ft_strcmp(cmd_name, "export") == 0
+		|| ft_strcmp(cmd_name, "unset") == 0
+		|| ft_strcmp(cmd_name, "env") == 0
+		|| ft_strcmp(cmd_name, "exit") == 0)
 		return (true);
 	return (false);
 }
 
-int		execute_builtin(t_command *cmd, t_sh *shell)
+int	execute_builtin(t_command *cmd, t_sh *shell)
 {
 	if (!cmd || !shell)
-		return (ERROR); 
-	
+		return (ERROR);
 	if (ft_strcmp(cmd->cmd_name, "echo") == 0)
 		shell->exit_status = builtin_echo(cmd->args);
 	else if (ft_strcmp(cmd->cmd_name, "cd") == 0)

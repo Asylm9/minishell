@@ -5,7 +5,7 @@ int	builtin_echo(char **args)
 	int		i;
 	int		j;
 	bool	newline;
-                                                       
+
 	if (!args || !args[0])
 		return (BUILTIN_ERR);
 	newline = true;
@@ -13,7 +13,7 @@ int	builtin_echo(char **args)
 	while (args[i] && (ft_strncmp(args[i], "-n", 2)) == 0)
 	{
 		j = 2;
-		while(args[i][j] == 'n')
+		while (args[i][j] == 'n')
 			j++;
 		if (args[i][j] != '\0')
 			break ;
