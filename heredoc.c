@@ -55,7 +55,7 @@ int	init_heredoc(t_redirect *redir, char *delimiter)
 }
 /////////////////////////////// MATT FUNCTIONS //////////////////////////////////////
 
-char	*ft_freejoin(char **s1, char **s2, int flag)
+char	*ft_fstrjoin(char **s1, char **s2, int flag)
 {
 	size_t	len1;
 	size_t	len2;
@@ -84,28 +84,42 @@ char	*ft_freejoin(char **s1, char **s2, int flag)
 	return (result);
 }
 
-int	expand_var(char *input, char **result, t_sh *shell)
+int	expand_var(char *input, char **result)
 {
 	int		i;
 	char	*var;
 
-	// char	*result;
 	i = 1;
-	if (input[i] == '?')
+/* 	if (input[i] == '?')
 	{
 		*result = ft_itoa(shell->exit_status);
-		if (!result)
+		if (!(*result))
 			return (1);
 		return (0);
-	}
+	} */
 	while (ft_isalnum(input[i]) || input[i] == '_')
 		i++;
 	var = ft_substr(input, 0, i);
 	(*result) = getenv(var + 1);
 	free(var);
-	if (*result == NULL) // add *
+	if ((*result) == NULL)
 		return (1);
 	return (0);
+}
+
+int	expand_xcode(char *input, char **result, t_sh *shell)
+{
+	int		i;
+	char	*var;
+
+	i = 1;
+	if (input[i] == '?')
+	{
+		*result = ft_itoa(shell->exit_status);
+		if (!(*result))
+			return (1);
+		return (0);
+	}
 }
 
 char	*expand_token(char *input, t_sh *shell)
@@ -126,7 +140,7 @@ char	*expand_token(char *input, t_sh *shell)
 		if (input[pos] == '$')
 		{
 			buffer = ft_substr(input, start, pos - start);
-			tmp = ft_freejoin(&result, &buffer, 0);
+			tmp = ft_fstrjoin(&result, &buffer, 0);
 			if (result)
 			{
 				free(result);
@@ -137,53 +151,82 @@ char	*expand_token(char *input, t_sh *shell)
 				free(buffer);
 				buffer = NULL;
 			}
-			if (expand_var(input + pos, &buffer, shell))
+			if (input[pos + 1] == '?')
+			{
+				if (expand_xcode(input + pos, &buffer, shell))
+					result = ft_strdup("");
+				if (buffer)
+				{
+					result = ft_fstrjoin(&tmp, &buffer, 1);
+					free(buffer);
+					tmp = NULL;
+				}
+			}
+			else if (expand_var(input + pos, &buffer))
 			{
 				result = ft_strdup("");
-				free(tmp);
-				return (result); // Error handling if variable expansion fails
-			}
-			if (buffer)
-			{
-				result = ft_freejoin(&tmp, &buffer, 0);
-				free(tmp);
-				// Do NOT free buffer if it comes from getenv!
+				// Error handling if variable expansion fails
 			}
 			else
 			{
-				if (result)
+				if (buffer)
 				{
-					free(result);
-					result = NULL;
+					result = ft_fstrjoin(&tmp, &buffer, 1);
+					// free(tmp);
+					tmp = NULL;
+					// Do NOT free buffer if it comes from getenv!
 				}
-				result = tmp;
+				else
+				{
+					if (result)
+					{
+						free(result);
+						//result = NULL;
+					}
+					result = tmp;
+				}
 			}
 			pos++;
-			while ((ft_isalnum(input[pos]) || input[pos] == '_' || input[pos] == '?' &&input[pos - 1] == '$') && input[pos]) //CONDITION SPARADRAP
+			while ((ft_isalnum(input[pos]) || input[pos] == '_'
+					|| input[pos] == '?') && input[pos])
+			{
 				pos++;
+				if (input[pos - 1] == '?')
+					break ;
+			}
 			start = pos;
 		}
 		else
 			pos++;
 	}
 	buffer = ft_substr(input, start, pos - start);
-	tmp = ft_freejoin(&result, &buffer, 0);
+	tmp = ft_fstrjoin(&result, &buffer, 0);
 	free(result);
 	free(buffer);
-	result = tmp;
-	return (result);
+	// result = tmp;
+	// free(tmp);
+	return (tmp);
 }
 
 /////////////////////////////// MATT FUNCTIONS //////////////////////////////////////
 
 bool	has_quotes(char *delimiter)
 {
-	int	end;
+	int i;
+	int	count;
 
-	end = ft_strlen(delimiter) - 1;
-	if (delimiter[0] == '"' && delimiter[end] == '"')
-		return (true);
-	return (false);
+	i = 0;
+	count = 0;
+	while (delimiter[i])
+	{
+		if (delimiter[i] == '"')
+			count++;
+		i++;
+	}
+	if (count >= 2)
+			return (true);
+	else
+		return (false);
 }
 
 int	ft_strcmp(const char *s1, const char *s2)
@@ -251,7 +294,7 @@ int	handle_heredoc(char * delimiter, t_sh *shell)
 			free(input);
 			break ;
 		}
-		if (!has_quotes(delimiter))
+		if (has_quotes(delimiter) == false)
 			line = expand_token(input, shell);
 		else
 			line = ft_strdup(input);
@@ -285,7 +328,8 @@ int main(void)
 	int	bytes_read;
 
 	shell.exit_status = 0;
-	init_heredoc(&redir, "FIN");
+	init_heredoc(&redir, "EOF");
+	printf("del: %s\n", redir.target);
 	redir.fd = handle_heredoc(redir.target, &shell);
 	if (redir.fd > 0)
 	{
