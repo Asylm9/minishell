@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:55:02 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/18 16:36:21 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/18 19:33:47 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,23 +103,58 @@ int	is_env_var(char *str)
 
 int	main(int ac, char **av, char **envp)
 {
-	char	*args[] = {"ls", "-l", "-a", (char *)0};
+	t_token		*test;
+	t_token		*test2;
+	t_token		*test2_2;
+	t_token		*test2_5;
+	t_token		*test3;
+	t_token		*test4;
+	t_token		*test5;
+	t_command	*cmd;
 
-	// args = "/bin/ls -l";
-	execve("/bin/ls", (char *const *)args, NULL);
-	// char	*str;
-	// char	*result;
-	// int		i;
-	// t_sh	*shell;
-	// shell = malloc(sizeof(t_sh));
-	// shell->exit_status = '0';
-	// str = "$?test |$HOMME| t est";
-	// result = expand_token(str, shell);
-	// // str = trim_quotes(result);
-	// printf("Result: |%s|\n", result);
-	// // free(str);
-	// free(result);
-	return (0);
+	test = malloc(sizeof(t_token));
+	test2 = malloc(sizeof(t_token));
+	test2_2 = malloc(sizeof(t_token));
+	test2_5 = malloc(sizeof(t_token));
+	test3 = malloc(sizeof(t_token));
+	test4 = malloc(sizeof(t_token));
+	test5 = malloc(sizeof(t_token));
+	cmd = malloc(sizeof(t_command));
+	test->type = WORD;
+	test->value = "cat";
+	test->next = test2;
+	test2->type = WORD;
+	test2->value = "-l";
+	test2->next = test2_2;
+	test2_2->type = WORD;
+	test2_2->value = "-a";
+	test2_2->next = test2_5;
+	test2_5->type = REDIR_IN;
+	test2_5->value = NULL;
+	test2_5->next = test3;
+	test3->type = WORD;
+	test3->value = "output.txt";
+	test3->next = test4;
+	test4->type = REDIR_IN;
+	test4->value = NULL;
+	test4->next = test5;
+	test5->type = WORD;
+	test5->value = "input.txt";
+	test5->next = NULL;
+	if (create_cmd(test, &cmd) == 0)
+	{
+		printf("cmd created : %s\n", cmd->cmd_name);
+		// for (int i = 0; cmd->args[i] != NULL; i++)
+		printf("args[1] : %s\n", cmd->args[0]);
+		printf("args[1] : %s\n", cmd->args[1]);
+		printf("args[1] : %s\n", cmd->args[2]);
+		printf("args[1] : %s\n", cmd->args[3]);
+		printf("redir : %s\n", cmd->redirections->target);
+		printf("redir : %s\n", cmd->redirections->next->target);
+		return (0);
+	}
+	// print_ast(cmd);
+	return (1);
 }
 // int i = 0;
 // char *env;

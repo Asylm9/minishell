@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/18 17:27:40 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/18 20:02:01 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,68 +87,79 @@ int	create_node_command(t_ast **ast, t_token *tok_lst)
 	return (0);
 }
 
-// int	parse_ast(t_token *tok_lst, t_ast **ast)
-// {
-// 	int	i;
-// }
-
-int	parse_ast(t_token *exp_lst, t_ast *ast)
+int	create_cmd(t_token *exp_lst, t_command **cmd)
 {
-	int	f_word;
-	int	in_redir;
+	int			i;
+	t_token		*tmp;
+	t_redirect	*tmp_redir;
 
-	f_word = 1;
-	in_redir = 1;
-	if (exp_lst->type == WORD)
+	i = 0;
+	tmp = exp_lst;
+	(*cmd)->redirections = malloc(sizeof(t_redirect));
+	if ((*cmd)->redirections == NULL)
+		return (ERROR);
+	(*cmd)->redirections->next = NULL;
+	(*cmd)->redirections->target = NULL;
+	tmp_redir = (*cmd)->redirections;
+	while (exp_lst && exp_lst->type != PIPE)
 	{
-		if (f_word)
+		if (exp_lst->type == WORD)
+			i++;
+		else if (exp_lst->next && exp_lst->next->value)
 		{
-			ast->type = COMMAND;
-			ast->cmd = malloc(sizeof(t_command));
-			ast->cmd->cmd_name = ft_strdup(exp_lst->value);
-			f_word = 0;
+			if ((*cmd)->redirections->target == NULL)
+				(*cmd)->redirections->target = exp_lst->next->value;
+			else
+			{
+				(*cmd)->redirections->next = malloc(sizeof(t_redirect));
+				if ((*cmd)->redirections->next == NULL)
+					return (ERROR);
+				(*cmd)->redirections = (*cmd)->redirections->next;
+				(*cmd)->redirections->target = exp_lst->next->value;
+			}
+			exp_lst = exp_lst->next;
 		}
-		else if (in_redir)
+		exp_lst = exp_lst->next;
+	}
+	(*cmd)->args = malloc(sizeof(char *) * (i + 1));
+	if ((*cmd)->args == NULL)
+		return (ERROR);
+	i = 0;
+	exp_lst = tmp;
+	(*cmd)->cmd_name = exp_lst->value;
+	(*cmd)->args[i] = exp_lst->value;
+	i++;
+	exp_lst = exp_lst->next;
+	while (exp_lst && exp_lst->type != PIPE)
+	{
+		if (exp_lst->type == REDIR_APPEND || exp_lst->type == REDIR_HEREDOC
+			|| exp_lst->type == REDIR_IN || exp_lst->type == REDIR_OUT)
 		{
-			ast->cmd->redirections->target = ft_strdup(exp_lst->value);
+			if (exp_lst->next->next)
+				exp_lst = exp_lst->next->next;
+			else
+				break ;
 		}
 		else
 		{
-			ast->cmd->argc = ft_strdup(exp_lst->value);
+			(*cmd)->args[i] = exp_lst->value;
+			i++;
+			exp_lst = exp_lst->next;
 		}
 	}
-	/*
-	if (exp_lst->type == WORD)
-	{
-		ast type = cmd
-		if (firstword)
-			create cmd
-		if second
-			create arg
-		if prev is redir
-			create filename
-		if first node -> ok
-		if prev node = PIPE
-			pipe right node = cmd node
-	}
-	if exp_lst->type == redir
-	{
-		ast->type = redir
-		set redir
-	}
-	if exp_lst->type == PIPE
-		ast->type = PIPE
-		left = prev node
-	*/
+	(*cmd)->redirections = tmp_redir;
+	return (SUCCESS);
 }
 
+int	parse_ast(t_token *tok_lst, t_ast **ast)
+{
+}
 // int	parse_ast(t_token *tok_lst, t_ast *ast)
 // {
 // 	t_ast	*new_ast;
 // 	int		arg_count;
 // 	int		i;
 // 	char	**new_args;
-
 // 	printf("TEST CA PTN\n");
 // 	printf("tok lst value : %s\n", tok_lst->value);
 // 	while (tok_lst)
@@ -168,7 +179,6 @@ int	parse_ast(t_token *exp_lst, t_ast *ast)
 // 	printf("AST created successfully.\n");
 // 	return (0);
 // }
-
 void	print_ast(t_ast *ast)
 {
 	printf("Type:\n");

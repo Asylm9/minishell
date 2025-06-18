@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:15 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/18 16:24:15 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/18 18:28:14 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,7 @@ char						*trim_quotes(char *input);
 
 // Parser
 void						print_ast(t_ast *ast);
+int							create_cmd(t_token *exp_lst, t_command **cmd);
 
 /**************************		Execution	*****************************/
 
