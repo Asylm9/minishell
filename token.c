@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:05:28 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/17 18:44:41 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/18 13:02:42 by matthieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	create_token_list(t_token **tok_lst)
 {
 	(*tok_lst) = malloc(sizeof(t_token));
-	if (!tok_lst)
+	if (!(*tok_lst))
 	{
 		perror("Token list malloc failed.\n");
 		return (ERROR);
