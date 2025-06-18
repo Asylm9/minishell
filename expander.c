@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/18 15:12:15 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:29:29 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,22 @@ int	expand_var(char *input, char **result, t_sh *shell)
 	int		i;
 	char	*var;
 
-	// char	*result;
 	i = 1;
 	if (input[i] == '?')
 	{
 		*result = ft_itoa(shell->exit_status);
 		if (!(*result))
-			return (1);
-		return (0);
+			return (ERROR);
+		;
 	}
 	while (ft_isalnum(input[i]) || input[i] == '_')
 		i++;
 	var = ft_substr(input, 0, i);
 	(*result) = getenv(var + 1);
 	free(var);
-	printf("result expand var : %s\n", (*result));
 	if ((*result) == NULL)
-		return (1);
-	return (0);
+		return (ERROR);
+	return (SUCCESS);
 }
 
 char	*expand_token(char *input, t_sh *shell)
@@ -67,14 +65,10 @@ char	*expand_token(char *input, t_sh *shell)
 				buffer = NULL;
 			}
 			if (expand_var(input + pos, &buffer, shell))
-			{
 				result = ft_strdup("");
-				// Error handling if variable expansion fails
-			}
 			if (buffer)
 			{
 				result = ft_fstrjoin(&tmp, &buffer, 1);
-				// free(tmp);
 				tmp = NULL;
 				// Do NOT free buffer if it comes from getenv!
 			}
@@ -104,41 +98,8 @@ char	*expand_token(char *input, t_sh *shell)
 	tmp = ft_fstrjoin(&result, &buffer, 0);
 	free(result);
 	free(buffer);
-	// result = tmp;
-	// free(tmp);
 	return (tmp);
 }
-
-// char	*trim_quotes(char *input)
-// {
-// 	char	*result;
-// 	char	*tmp;
-// 	char	*buffer;
-// 	int		start;
-// 	int		end;
-
-// 	start = 0;
-// 	end = 0;
-// 	tmp = NULL;
-// 	result = NULL;
-// 	buffer = NULL;
-// 	while (input[end] && input[end] != '\0')
-// 	{
-// 		while (input[end] != '\'' && input[end] != '"' && input[end])
-// 			end++;
-// 		tmp = ft_substr(input, start, end - start);
-// 		if (result)
-// 		{
-// 			buffer = ft_strdup(result);
-// 			free(result);
-// 			result = NULL;
-// 		}
-// 		result = ft_fstrjoin(&buffer, &tmp, 3);
-// 		start = end + 1;
-// 		end++;
-// 	}
-// 	return (result);
-// }
 
 char	*trim_quotes(char *input)
 {
@@ -161,12 +122,10 @@ char	*trim_quotes(char *input)
 		if (result)
 		{
 			buffer = result;
-			result = ft_fstrjoin(&buffer, &tmp, 3); // frees buffer and tmp
+			result = ft_fstrjoin(&buffer, &tmp, 3);
 		}
 		else
-		{
 			result = tmp; // first chunk, no join needed
-		}
 		if (input[end] == '\0')
 			break ;
 		start = end + 1;
@@ -183,10 +142,10 @@ int	is_pipe_redir(char *str)
 	while (str[i])
 	{
 		if (str[i] != '|' && str[i] != '>' && str[i] != '<' || i > 1)
-			return (0);
+			return (SUCCESS);
 		i++;
 	}
-	return (1);
+	return (ERROR);
 }
 
 int	expand_list(t_token *tok_lst, char **env, t_token *exp_lst, t_sh *shell)
@@ -201,7 +160,6 @@ int	expand_list(t_token *tok_lst, char **env, t_token *exp_lst, t_sh *shell)
 	head = exp_lst;
 	while (tok_lst)
 	{
-		printf("Expanding token: %s\n", tok_lst->value);
 		exp_lst->expand = NO_EXPAND;
 		if (tok_lst->expand == NO_EXPAND)
 		{
@@ -211,7 +169,7 @@ int	expand_list(t_token *tok_lst, char **env, t_token *exp_lst, t_sh *shell)
 				if (!exp_lst->value)
 				{
 					free(exp_lst);
-					return (1);
+					return (ERROR);
 				}
 			}
 		}
@@ -230,7 +188,7 @@ int	expand_list(t_token *tok_lst, char **env, t_token *exp_lst, t_sh *shell)
 			break ;
 		}
 	}
-	return (0);
+	return (SUCCESS);
 }
 
 // int	expand_size(char *value, char **env)

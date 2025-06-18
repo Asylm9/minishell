@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/17 19:23:20 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:28:33 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ int	create_node_pipe(t_ast **ast, t_token *tok_lst)
 
 	new_ast = malloc(sizeof(t_ast));
 	if (!new_ast)
-		return (1);
+		return (ERROR);
 	new_ast->type = PIPE;
 	new_ast->cmd = NULL;
 	new_ast->left = *ast;
 	new_ast->right = NULL;
 	*ast = new_ast;
-	return (0);
+	return (SUCCESS);
 }
 
 int	create_node_redir(t_ast **ast, t_token *tok_lst)
@@ -47,13 +47,13 @@ int	create_node_redir(t_ast **ast, t_token *tok_lst)
 
 	new_ast = malloc(sizeof(t_ast));
 	if (!new_ast)
-		return (1);
+		return (ERROR);
 	new_ast->type = tok_lst->type;
 	new_ast->cmd = NULL;
 	new_ast->left = *ast;
 	new_ast->right = NULL;
 	*ast = new_ast;
-	return (0);
+	return (SUCCESS);
 }
 
 int	create_node_command(t_ast **ast, t_token *tok_lst)

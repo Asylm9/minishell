@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/18 14:45:18 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:35:24 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,8 @@ void	free_tok_lst(t_token *list)
 		temp = list;
 		list = list->next;
 		if (temp->value)
-		{
-			// printf("Freeing token: %s\n", temp->value);
 			free(temp->value);
-		}
-		// printf("Freeing token node.\n");
 		free(temp);
-		// printf("Token node freed successfully.\n");
 	}
 }
 
@@ -70,6 +65,7 @@ int	main(int ac, char **av, char **envp)
 	t_token	*tok_lst;
 	t_token	*temp;
 	t_ast	*ast;
+	t_sh	*shell;
 
 	tok_lst = NULL;
 	temp = NULL;
@@ -83,33 +79,26 @@ int	main(int ac, char **av, char **envp)
 		input = readline("\033[0;34m\033[1m   Minishell> \033[0m");
 		add_history(input);
 		printf("Input: %s\n", input);
-		// printf("Creating new token node.\n");
 		if (create_token_node(&tok_lst))
 		{
 			free(input);
 			return (1);
 		}
-		// printf("Token list created successfully.\n");
 		if (tokenize_input(tok_lst, input))
 		{
-			// FREE TOK_LST
 			free(input);
 			return (1);
 		}
-		// printf("Tokenization successful.\n");
 		free(input);
 		print_token(tok_lst);
-		// printf("Expanding token list.\n");
 		if (create_token_node(&temp))
 		{
 			free_tok_lst(tok_lst);
 			tok_lst = NULL;
 			return (1);
 		}
-		expand_list(tok_lst, envp, temp);
-		// printf("Expansion successful.\n");
+		expand_list(tok_lst, envp, temp, shell);
 		print_token(temp);
-		// printf("Creating AST.\n");
 		ast = malloc(sizeof(t_ast));
 		if (!ast)
 		{
