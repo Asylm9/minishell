@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   matt.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/18 20:14:20 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/19 18:28:04 by matthieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int	main(int ac, char **av, char **envp)
 		ast->right = NULL;
 		ast->type = EMPTY;
 		printf("TEST BF PARSE\n");
-		parse_ast(temp, ast);
+		parse_ast(temp, &ast);
 		// printf("AST:\n");
 		// print_ast(ast);
 		free_tok_lst(tok_lst);

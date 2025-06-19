@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/18 20:35:14 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/19 18:26:34 by matthieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,37 +54,6 @@ int	create_node_redir(t_ast **ast, t_token *tok_lst)
 	new_ast->right = NULL;
 	*ast = new_ast;
 	return (SUCCESS);
-}
-
-int	create_node_command(t_ast **ast, t_token *tok_lst)
-{
-	t_ast	*new_ast;
-
-	new_ast = malloc(sizeof(t_ast));
-	if (!new_ast)
-		return (1);
-	new_ast->type = WORD;
-	new_ast->cmd = malloc(sizeof(t_command));
-	if (!new_ast->cmd)
-	{
-		free(new_ast);
-		return (1);
-	}
-	new_ast->cmd->cmd_name = strdup(tok_lst->value);
-	if (!new_ast->cmd->cmd_name)
-	{
-		free(new_ast->cmd);
-		free(new_ast);
-		return (1);
-	}
-	new_ast->cmd->args = NULL;
-	if (ast)
-		new_ast->left = *ast;
-	else
-		new_ast->left = NULL;
-	new_ast->right = NULL;
-	*ast = new_ast;
-	return (0);
 }
 
 int	create_cmd(t_token **exp_lst, t_command **cmd)
@@ -160,7 +129,10 @@ int	parse_ast(t_token *tok_lst, t_ast **ast)
 	new_cmd = malloc(sizeof(t_command));
 	printf("TEST\n");
 	create_cmd(&tok_lst, &new_cmd);
+	// (*ast)->cmd = malloc(sizeof(t_command));
+	(*ast)->cmd = new_cmd;
 	printf("PASING DONE\n");
+	printf("ast redir : %s\n", (*ast)->cmd->redirections->target);
 	// while tok->type != PIPE
 	// 	create cmd(tok_lst, t_cmd)
 	// create pipe node
