@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/19 18:26:34 by matthieu         ###   ########.fr       */
+/*   Updated: 2025/06/19 22:15:46 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	count_pipes(t_token *tok_lst)
 	return (count);
 }
 
-int	create_node_pipe(t_ast **ast, t_token *tok_lst)
+int	create_node_pipe(t_ast **ast, t_token **tok_lst)
 {
 	t_ast	*new_ast;
 
@@ -41,22 +41,7 @@ int	create_node_pipe(t_ast **ast, t_token *tok_lst)
 	return (SUCCESS);
 }
 
-int	create_node_redir(t_ast **ast, t_token *tok_lst)
-{
-	t_ast	*new_ast;
-
-	new_ast = malloc(sizeof(t_ast));
-	if (!new_ast)
-		return (ERROR);
-	new_ast->type = tok_lst->type;
-	new_ast->cmd = NULL;
-	new_ast->left = *ast;
-	new_ast->right = NULL;
-	*ast = new_ast;
-	return (SUCCESS);
-}
-
-int	create_cmd(t_token **exp_lst, t_command **cmd)
+int	create_node_cmd(t_token **exp_lst, t_command **cmd)
 {
 	int			i;
 	t_token		*tmp;
@@ -128,16 +113,15 @@ int	parse_ast(t_token *tok_lst, t_ast **ast)
 
 	new_cmd = malloc(sizeof(t_command));
 	printf("TEST\n");
-	create_cmd(&tok_lst, &new_cmd);
-	// (*ast)->cmd = malloc(sizeof(t_command));
+	create_node_cmd(&tok_lst, &new_cmd);
 	(*ast)->cmd = new_cmd;
+	(*ast)->type = COMMAND;
+	if (tok_lst->type == PIPE)
+		create_node_pipe(&ast, &tok_lst);
+	// (*ast)->cmd = malloc(sizeof(t_command));
 	printf("PASING DONE\n");
-	printf("ast redir : %s\n", (*ast)->cmd->redirections->target);
-	// while tok->type != PIPE
-	// 	create cmd(tok_lst, t_cmd)
-	// create pipe node
-	// link pipe node left
-	// 	go again step 1
+	printf("ast left cmd : %s\n", (*ast)->left->cmd->cmd_name);
+	// printf("ast redir : %s\n", (*ast)->cmd->redirections->next->target);
 }
 // int	parse_ast(t_token *tok_lst, t_ast *ast)
 // {
