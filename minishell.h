@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/06/20 23:04:14 by agaland          ###   ########.fr       */
+/*   Updated: 2025/06/20 23:55:31 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,6 +179,13 @@ int		execute_pipeline(t_ast *ast, t_sh *shell);
 int		process_wait_status(int status);
 int		execute_binary(t_command *cmd, char **env);
 
+/* Exec utils */
+pid_t	process_left_child(t_ast *ast, t_sh *shell, int *pfd);
+pid_t	process_right_child(t_ast *ast, t_sh *shell, int *pfd);
+int		handle_builtin(t_command *cmd, t_sh *shell);
+void	handle_binary_pipeline(t_command *cmd, t_sh *shell);
+int		fork_single_binary(t_command *cmd, t_sh *shell);
+
 /* Path and environment handling */
 char	*get_env_var(char *name, char **env);
 int		set_env_var(char *name, char **env, char *path);
@@ -186,6 +193,7 @@ char	**get_paths(char **env);
 char	*find_cmd_path(char **paths, char *cmd_name);
 
 /* Redirections */
+int		save_or_restore_fds(t_sh *shell, char flag);
 int		redirect_in(t_redirect *redir);
 int		redirect_out(t_redirect *redir);
 int		apply_redirections(t_command *cmd);
