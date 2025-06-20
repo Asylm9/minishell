@@ -5,19 +5,19 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/06/20 20:11:28 by agaland          ###   ########.fr       */
+/*   Created: 2025/06/20 17:24:44 by agaland           #+#    #+#             */
+/*   Updated: 2025/06/20 17:24:49 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef EXEC_H
+# define EXEC_H
 
 //-lreadline
 //-lhistory
-# include "libft/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
+# include "libft/libft.h"
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -40,136 +40,114 @@
 # define EXECVE_ERR 126 //commande trouvee mais pas executable
 
 /* #ifndef PATH_MAX */
-# define PATH_MAX 4096 // most common value on Linux systems
+# define PATH_MAX 4096  // valeur courante sur la plupart des systèmes Linux
 # define EMPTY ""
 
 typedef struct s_redirect	t_redirect;
 typedef struct s_command	t_command;
-typedef struct s_sh			t_sh;
+typedef struct s_sh		    t_sh;
 typedef struct s_token		t_token;
 typedef struct s_env		t_env;
 typedef struct s_ast		t_ast;
 
+/* typedef enum e_token_type
+{
+	TOKEN_EXIT_STATUS
+}			t_token_type; */
+
 typedef enum e_token_type
 {
-	WORD,
+	CMD,
 	PIPE,
 	REDIR_IN,
 	REDIR_OUT,
 	REDIR_APPEND,
-	REDIR_HEREDOC,
-	CMD, // ou COMMAND ?
-	//EMPTY conflit avec macro
+	REDIR_HEREDOC
 }			t_token_type;
-
-typedef enum e_expand
-{
-	EXPAND,
-	NO_EXPAND
-}			t_expand;
-
-typedef enum e_redir_type
-{
-	IN,
-	OUT,
-	APPEND,
-	HEREDOC
-}			t_redir_type;
 
 typedef struct s_token
 {
-	char			*value;
-	t_expand		expand;
 	t_token_type	type;
-	struct s_token	*next;
+	t_token			*next;
 }			t_token;
+
+typedef enum e_redir_type
+{
+	IN,      // <
+	OUT,     // >
+	APPEND,  // >>
+	HEREDOC  // <<
+}			t_redir_type;
 
 typedef struct s_redirect
 {
 	t_redir_type	type;
-	char			*target;	// fichier ou delimiteur si heredoc
-	int				fd;	// pour heredoc
+	char			*target; // fichier ou delimiteur si heredoc
+	int 			fd;      // pour heredoc
 	t_redirect		*next;
 }			t_redirect;
 
 typedef struct s_command
 {
-	char			*cmd_name;
-	char			**args;
-	int				argc;
-	t_redirect		*redirections;
-	t_command		*next;
+	char		*cmd_name;
+	char 		**args;
+	int			argc;
+	t_redirect	*redirections;
+	t_command	*next;
 }			t_command;
 
 typedef struct s_env
 {
-	char			*key;
-	char			*value;
-	int				index;
-	t_env			*next;
-	t_env			*prev;
+	char	*key;
+	char	*value;
+	int		index;
+	t_env	*next;
+	t_env	*prev;
 }			t_env;
+
 
 typedef struct s_sh
 {
-	char			**env;
-	t_env			*envl;
-	bool			in_pipeline; //assigner a false par defaut
-	char			*current_dir;
-	int				saved_stdin;
-	int				saved_stdout;
-	int				exit_status;
+	char		**env;
+	t_env		*envl;
+	bool		in_pipeline; //assigner a false par defaut
+	char		*current_dir;
+	int			saved_stdin;
+	int			saved_stdout;
+	int			exit_status;
 }			t_sh;
 
-typedef struct s_exec //pas sure d'etre utile
+typedef struct s_ast
 {
-	pid_t			*pids;
-	t_command		*current;
-	int				i;
-	int				status;
-}			t_exec;
+	t_token_type			type;
+	t_command				*cmd;
+	t_ast					*left;
+	t_ast					*right;
+}							t_ast;
 
-/**************************		Parsing		*****************************/
-
-void	print_token(t_token *tok_lst);
-void	free_tok_lst(t_token *list);
-
-/* Tokenizer */
-
-int		create_token_list(t_token **tok_lst);
-int		create_token_node(t_token **tok_lst);
-int		skip_spaces(const char *input, int *start);
-int		find_end_of_token(const char *input, int *start, int *end);
-void	set_token_type(t_token *tok_lst, const char *input, int *end);
-int		set_value(t_token *tok_lst, const char *input, int *start, int *end);
-int		tokenize_input(t_token *tok_lst, const char *input);
-int		is_env_var(char *str);
+typedef	struct s_exec
+{
+	int 		**pipes;
+	int			nb_pipes;
+	pid_t		*pids;
+	t_command	*current;
+	int			i;
+	int			status;
+}				t_exec;
 
 /* Expander */
-int		expand_xcode(char *input, char **result, t_sh *shell);
-int		expand_var(char *input, char **result);
-char	*expand_token(char *input, t_sh *shell);
-char	*trim_quotes(char *input);
-int		is_pipe_redir(char *str);
-int		expand_list(t_token *tok_lst, char **env,
-			t_token *exp_lst, t_sh *shell);
-int		expand_xcode(char *input, char **result, t_sh *shell);
-
-/* Parser */
-int		create_node_pipe(t_ast **ast);
-int		create_node_cmd(t_token **exp_lst, t_command **cmd);
-int		parse_ast(t_token *tok_lst, t_ast **ast);
-void	print_ast(t_ast *ast);
-
-/**************************		Execution	*****************************/
-
-int		handle_heredoc(char *delimiter, t_sh *shell);
+char	*expand_exit_status(t_sh *shell, t_token token);
 
 /* Execution */
 int		execute_ast(t_ast *ast, t_sh *shell);
 int		execute_command(t_command *cmd, t_sh *shell);
 int		execute_pipeline(t_ast *ast, t_sh *shell);
+
+
 int		process_wait_status(int status);
+/* int		execute(t_command *cmd_list, t_sh *shell); //transformer en execute_ast probablement :v
+int		execute_command(t_command *cmd, t_sh *shell);
+int		execute_pipeline(t_command *cmds, t_sh *shell); */
 int		execute_binary(t_command *cmd, char **env);
 
 /* Path and environment handling */
@@ -180,8 +158,10 @@ char	*find_cmd_path(char **paths, char *cmd_name);
 
 /* Redirections */
 int		redirect_in(t_redirect *redir);
-int		redirect_out(t_redirect *redir);
 int		apply_redirections(t_command *cmd);
+int		setup_pipes_redirections(int **pipes, int nb_pipes, int i);
+
+int		setup_heredoc(t_redirect *redir);
 
 /* Builtin commands */
 int		args_count(char **args);
@@ -216,6 +196,7 @@ int		set_env_var(char *name, char **env, char *value); */
 
 /* Utils */
 int		ft_strcmp(const char *s1, const char *s2);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_pathjoin(char const *s1, char const *s2);
 //void	error_message(const char *msg);
 

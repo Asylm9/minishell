@@ -1,58 +1,5 @@
-#include <readline/readline.h>
-#include <readline/history.h>
-#include "libft/libft.h"
-#include <stdlib.h>
-#include <stdbool.h>
+#include "minishell.h"
 
-typedef enum e_token_type
-{
-	CMD,
-	PIPE,
-	REDIR_IN,
-	REDIR_OUT,
-	REDIR_APPEND,
-	REDIR_HEREDOC
-}			t_token_type;
-
-typedef struct s_token
-{
-	t_token_type	type;
-	//t_token			*next;
-}			t_token;
-
-typedef enum e_redir_type
-{
-	IN,      // <
-	OUT,     // >
-	APPEND,  // >>
-	HEREDOC  // <<
-}			t_redir_type;
-
-typedef struct s_redirect
-{
-	t_redir_type	type;
-	char			*target; // fichier ou delimiteur si heredoc
-	int 			fd;      // pour heredoc
-	//t_redirect		*next;
-}			t_redirect;
-
-typedef struct s_sh
-{
-	char		**env;
-	//t_env		*envl;
-	bool		in_pipeline; //assigner a false par defaut
-	char		*current_dir;
-	int			saved_stdin;
-	int			saved_stdout;
-	int			exit_status;
-}			t_sh;
-
-int	init_heredoc(t_redirect *redir, char *delimiter)
-{
-	redir->type = HEREDOC;
-	redir->target = ft_strdup(delimiter);
-	//fd
-}
 /////////////////////////////// MATT FUNCTIONS //////////////////////////////////////
 
 char	*ft_fstrjoin(char **s1, char **s2, int flag)
@@ -140,7 +87,7 @@ char	*expand_token(char *input, t_sh *shell)
 		if (input[pos] == '$')
 		{
 			buffer = ft_substr(input, start, pos - start);
-			tmp = ft_fstrjoin(&result, &buffer, 0);
+			tmp = ft_fstrjoin(&result, &buffer, 0); //! leakin case $HOMEtest -> definitely lost: 1 bytes in 1 blocks
 			if (result)
 			{
 				free(result);
@@ -204,13 +151,20 @@ char	*expand_token(char *input, t_sh *shell)
 	free(result);
 	free(buffer);
 	// result = tmp;
-	// free(tmp);
+	//free(tmp);
 	return (tmp);
 }
 
 /////////////////////////////// MATT FUNCTIONS //////////////////////////////////////
 
-bool	has_quotes(char *delimiter)
+void	init_heredoc(t_redirect *redir, char *delimiter)
+{
+	redir->type = HEREDOC;
+	redir->target = ft_strdup(delimiter);
+	//fd
+}
+
+static bool	has_quotes(char *delimiter)
 {
 	int i;
 	int	count;
@@ -273,7 +227,7 @@ char	*ft_nwljoin(char const *s1, char const *s2)
 	return (res);
 }
 
-int	handle_heredoc(char * delimiter, t_sh *shell)
+int	handle_heredoc(char *delimiter, t_sh *shell)
 {
 	char 	*input;
 	char	*line;
