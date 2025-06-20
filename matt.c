@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/20 14:42:00 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:20:58 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ int	main(int ac, char **av, char **envp)
 				Init_pipe_node()
 			Create_cmd_nodes()
 				Init_cmd_node()
-				Fill_cmd()
+				Fill_cmd()				CREER FONCTION DE CREATION DE NODE CMD POUR EVITER RELINK ET ECRASER L'ANCIENNE
 
 	EXPAND CASES :
 		- $VAR

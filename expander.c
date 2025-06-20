@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/20 13:33:04 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:19:37 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,9 +150,9 @@ int	is_pipe_redir(char *str)
 
 int	expand_list(t_token *tok_lst, char **env, t_token *exp_lst, t_sh *shell)
 {
-	t_token	*head;
-	char	*expanded_value;
-	int		i;
+	t_token *head;
+	char *expanded_value;
+	int i;
 
 	i = 0;
 	if (!exp_lst)
@@ -190,40 +190,3 @@ int	expand_list(t_token *tok_lst, char **env, t_token *exp_lst, t_sh *shell)
 	}
 	return (SUCCESS);
 }
-
-// int	expand_size(char *value, char **env)
-// {
-// 	int		i;
-// 	int		len;
-// 	int		env_prev_size;
-// 	int		env_expd_size;
-// 	char	*cur_env;
-
-// 	i = 0;
-// 	len = 0;
-// 	env_prev_size = 0;
-// 	env_expd_size = 0;
-// 	while (value[len])
-// 	{
-// 		if (value[len] == '$')
-// 		{
-// 			i = 0;
-// 			while (value[len + i] && value[len + i] != ' ')
-// 				i++;
-// 			cur_env = ft_substr(value, len + 1, i - 1);
-// 			env_prev_size += i;
-// 			if (getenv(cur_env) == NULL)
-// 				env_expd_size -= i;
-// 			else
-// 				env_expd_size += ft_strlen(ft_strdup(getenv(cur_env)));
-// 		}
-// 		if (i != 0)
-// 			len += i;
-// 		else
-// 			len++;
-// 	}
-// 	printf("env prev : %d\n", env_prev_size);
-// 	printf("env expd : %d\n", env_expd_size);
-// 	env_expd_size = len - env_prev_size + env_expd_size + 1;
-// 	return (env_expd_size);
-// }
