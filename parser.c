@@ -6,13 +6,13 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/20 16:20:26 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:40:34 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	create_node_pipe(t_ast **ast, t_token **tok_lst)
+int	create_node_pipe(t_ast **ast)
 {
 	t_ast	*new_ast;
 
@@ -94,7 +94,6 @@ int	create_node_cmd(t_token **exp_lst, t_command **cmd)
 
 int	parse_ast(t_token *tok_lst, t_ast **ast)
 {
-	int			i;
 	t_command	*new_cmd;
 	t_command	*new_cmd2;
 
@@ -105,7 +104,6 @@ int	parse_ast(t_token *tok_lst, t_ast **ast)
 	printf("TEST 2\n");
 	(*ast)->cmd = new_cmd;
 	(*ast)->type = COMMAND;
-	// free(new_cmd);
 	printf("TEST 3\n");
 	while (tok_lst)
 	{
@@ -113,23 +111,24 @@ int	parse_ast(t_token *tok_lst, t_ast **ast)
 		if (tok_lst && tok_lst->type == PIPE)
 		{
 			printf("TEST PIPE\n");
-			create_node_pipe(ast, &tok_lst);
+			create_node_pipe(ast);
 			tok_lst = tok_lst->next;
 		}
 		printf("TEST 5\n");
 		if (tok_lst && tok_lst->type == WORD)
 		{
 			printf("TEST CMD\n");
-			create_node_cmd(&tok_lst, &new_cmd);
+			create_node_cmd(&tok_lst, &new_cmd2);
 			printf("TEST 7\n");
 			(*ast)->right = malloc(sizeof(t_ast));
-			(*ast)->right->cmd = new_cmd;
+			(*ast)->right->cmd = new_cmd2;
 			(*ast)->right->type = COMMAND;
 			// free(new_cmd);
 		}
 		printf("TEST 8\n");
 	}
 	printf("PARSING DONE\n");
+	return (SUCCESS);
 }
 void	print_ast(t_ast *ast)
 {
@@ -150,6 +149,8 @@ void	print_ast(t_ast *ast)
 			{
 				printf("			%s\n", ast->cmd->args[i]);
 			}
+			if (ast->cmd->redirections)
+				printf("Redirection : %s\n", ast->cmd->redirections->target);
 		}
 		else
 			printf("No arguments\n");

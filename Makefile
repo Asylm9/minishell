@@ -4,7 +4,7 @@ NAME = a.out
 
 # Compilateur et flags
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g -w
+CFLAGS = -Wall -Wextra -Werror -g 
 LIBS = -lreadline -lhistory
 
 # Répertoires

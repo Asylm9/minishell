@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:15 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/20 16:17:20 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:39:29 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ int							expand_list(t_token *tok_lst, char **env,
 								t_token *exp_lst, t_sh *shell);
 
 // Parser
-int							create_node_pipe(t_ast **ast, t_token **tok_lst);
+int							create_node_pipe(t_ast **ast);
 int							create_node_cmd(t_token **exp_lst, t_command **cmd);
 int							parse_ast(t_token *tok_lst, t_ast **ast);
 void						print_ast(t_ast *ast);
