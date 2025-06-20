@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/06/20 20:11:28 by agaland          ###   ########.fr       */
+/*   Updated: 2025/06/20 23:04:14 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,10 @@
 # define SUCCESS 0
 # define ERROR 1
 # define BUILTIN_ERR 2
-
-# define STDERR 2
-
 # define CMD_NOT_FOUND 127
 # define EXECVE_ERR 126 //commande trouvee mais pas executable
+
+# define STDERR 2
 
 /* #ifndef PATH_MAX */
 # define PATH_MAX 4096 // most common value on Linux systems
@@ -81,7 +80,7 @@ typedef struct s_token
 	char			*value;
 	t_expand		expand;
 	t_token_type	type;
-	struct s_token	*next;
+	t_token			*next;
 }			t_token;
 
 typedef struct s_redirect
@@ -120,6 +119,14 @@ typedef struct s_sh
 	int				saved_stdout;
 	int				exit_status;
 }			t_sh;
+
+typedef struct s_ast
+{
+	t_token_type			type;
+	t_command				*cmd;
+	t_ast					*left;
+	t_ast					*right;
+}							t_ast;
 
 typedef struct s_exec //pas sure d'etre utile
 {
