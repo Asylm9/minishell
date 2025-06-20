@@ -11,7 +11,6 @@ t_env	*init_env_list(char **env)
 		return (NULL);
 	head = NULL;
 	i = 0;
-
 	while (env[i])
 	{
 		var = ft_split(env[i], '=');

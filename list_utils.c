@@ -71,12 +71,8 @@ t_env	*add_back_node(t_env *new_node, t_env *head)
 {
 	t_env	*last_node;
 
-	//new_node->next = NULL;
 	if (!head)
-	{
-		//new_node->prev = NULL;
 		return (new_node);
-	}
 	else
 	{
 		last_node = find_last_node(head);

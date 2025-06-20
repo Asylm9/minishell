@@ -47,24 +47,18 @@ int	redirect_in(t_redirect *redir)
 	int fd;
 
 	if (redir->type != HEREDOC)
-	{
 		fd = open(redir->target, O_RDONLY);
-		if (fd < 0)
-			return (perror("open"), 1);
-	}
 	else
-	{
 		fd = redir->fd;
-		if (fd < 0)
-			return (perror("heredoc"), 1);
-	}
+	if (fd < 0)
+		return (perror("open"), ERROR);
 	if (dup2(fd, STDIN_FILENO) < 0)
 	{
 		close (fd);
-		return (perror("dup2"), 1);
+		return (perror("dup2"), ERROR);
 	}
 	close(fd);
-	return (0);
+	return (SUCCESS);
 }
 
 int	redirect_out(t_redirect *redir)
@@ -76,20 +70,20 @@ int	redirect_out(t_redirect *redir)
 	else if (redir->type == APPEND)
 		fd = open(redir->target, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
-		return (perror("open"), 1);
+		return (perror("open"), ERROR);
 	if (dup2(fd, STDOUT_FILENO) < 0)
 	{
 		close (fd);
-		return (perror("dup2"), 1);
+		return (perror("dup2"), ERROR);
 	}
 	close(fd);
-	return (0);
+	return (SUCCESS);
 }
 
 int	apply_redirections(t_command *cmd)
 {
 	t_redirect *redir;
-	int	fd;
+	int			fd;
 
 	if (!cmd->redirections)
 		return (0); //pas d'erreur si pas de redirections
@@ -98,15 +92,15 @@ int	apply_redirections(t_command *cmd)
 	{
 		if (redir->type == IN || redir->type == HEREDOC)
 		{
-			if (redirect_in(redir) == 1)
-				return (1);
+			if (redirect_in(redir) != SUCCESS)
+				return (ERROR);
 		}
 		else if (redir->type == OUT || redir->type == APPEND)
 		{
-			if (redirect_out(redir) == 1)
-				return (1);
+			if (redirect_out(redir) != SUCCESS)
+				return (ERROR);
 		}
 		redir = redir->next;
 	}
-	return (0);
+	return (SUCCESS);
 }

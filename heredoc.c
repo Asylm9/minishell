@@ -37,13 +37,6 @@ int	expand_var(char *input, char **result)
 	char	*var;
 
 	i = 1;
-/* 	if (input[i] == '?')
-	{
-		*result = ft_itoa(shell->exit_status);
-		if (!(*result))
-			return (1);
-		return (0);
-	} */
 	while (ft_isalnum(input[i]) || input[i] == '_')
 		i++;
 	var = ft_substr(input, 0, i);
@@ -161,7 +154,7 @@ void	init_heredoc(t_redirect *redir, char *delimiter)
 {
 	redir->type = HEREDOC;
 	redir->target = ft_strdup(delimiter);
-	//fd
+	redir->fd = -1;
 }
 
 static bool	has_quotes(char *delimiter)
