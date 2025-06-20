@@ -6,25 +6,11 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/19 22:15:46 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:15:57 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	count_pipes(t_token *tok_lst)
-{
-	int	count;
-
-	count = 0;
-	while (tok_lst)
-	{
-		if (tok_lst->type == PIPE)
-			count++;
-		tok_lst = tok_lst->next;
-	}
-	return (count);
-}
 
 int	create_node_pipe(t_ast **ast, t_token **tok_lst)
 {
@@ -110,17 +96,43 @@ int	parse_ast(t_token *tok_lst, t_ast **ast)
 {
 	int			i;
 	t_command	*new_cmd;
+	t_command	*new_cmd2;
 
 	new_cmd = malloc(sizeof(t_command));
-	printf("TEST\n");
+	new_cmd2 = malloc(sizeof(t_command));
+	printf("TEST 1\n");
 	create_node_cmd(&tok_lst, &new_cmd);
+	printf("TEST 2\n");
 	(*ast)->cmd = new_cmd;
 	(*ast)->type = COMMAND;
-	if (tok_lst->type == PIPE)
-		create_node_pipe(&ast, &tok_lst);
-	// (*ast)->cmd = malloc(sizeof(t_command));
-	printf("PASING DONE\n");
-	printf("ast left cmd : %s\n", (*ast)->left->cmd->cmd_name);
+	// free(new_cmd);
+	printf("TEST 3\n");
+	while (tok_lst)
+	{
+		printf("TEST 4\n");
+		if (tok_lst && tok_lst->type == PIPE)
+		{
+			printf("TEST PIPE\n");
+			create_node_pipe(ast, &tok_lst);
+			tok_lst = tok_lst->next;
+		}
+		printf("TEST 5\n");
+		if (tok_lst && tok_lst->type == WORD)
+		{
+			printf("TEST CMD\n");
+			create_node_cmd(&tok_lst, &new_cmd);
+			printf("TEST 7\n");
+			(*ast)->right = malloc(sizeof(t_ast));
+			(*ast)->right->cmd = new_cmd;
+			(*ast)->right->type = COMMAND;
+			// free(new_cmd);
+		}
+		printf("TEST 8\n");
+	}
+	printf("PARSING DONE\n");
+	// if ((*ast)->left)
+	// 	printf("ast left cmd : %s\n", (*ast)->left->cmd->cmd_name);
+	// printf("ast redir : %s\n", (*ast)->cmd->redirections->target);
 	// printf("ast redir : %s\n", (*ast)->cmd->redirections->next->target);
 }
 // int	parse_ast(t_token *tok_lst, t_ast *ast)
@@ -153,7 +165,7 @@ void	print_ast(t_ast *ast)
 	printf("Type:\n");
 	if (!ast)
 		return ;
-	if (ast->type == WORD && ast->cmd)
+	if (ast->type == COMMAND && ast->cmd)
 	{
 		if (ast->cmd->cmd_name == NULL)
 			printf("	Command:\n		Name: NULL\n");

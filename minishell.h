@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:15 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/19 21:47:47 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/20 16:17:20 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,30 +128,37 @@ typedef struct s_exec
 
 /**************************		Parsing		*****************************/
 
+int							is_env_var(char *str);
+void						print_token(t_token *tok_lst);
+void						free_tok_lst(t_token *list);
 // Tokenizer
 
 int							create_token_list(t_token **tok_lst);
 int							create_token_node(t_token **tok_lst);
-int							tokenize_input(t_token *tok_lst, const char *input);
-// int							tokenize_input_bis(t_token *tok_lst,
-// 								const char *input);
 int							skip_spaces(const char *input, int *start);
 int							find_end_of_token(const char *input, int *start,
 								int *end);
+void						set_token_type(t_token *tok_lst, const char *input,
+								int *end);
+int							set_value(t_token *tok_lst, const char *input,
+								int *start, int *end);
+int							tokenize_input(t_token *tok_lst, const char *input);
 int							is_env_var(char *str);
 
 // Expander
 
 int							expand_var(char *input, char **result, t_sh *shell);
 char						*expand_token(char *input, t_sh *shell);
+char						*trim_quotes(char *input);
+int							is_pipe_redir(char *str);
 int							expand_list(t_token *tok_lst, char **env,
 								t_token *exp_lst, t_sh *shell);
-char						*trim_quotes(char *input);
 
 // Parser
-void						print_ast(t_ast *ast);
-int							create_node_cmd(t_token **exp_lst, t_command **cmd);
 int							create_node_pipe(t_ast **ast, t_token **tok_lst);
+int							create_node_cmd(t_token **exp_lst, t_command **cmd);
+int							parse_ast(t_token *tok_lst, t_ast **ast);
+void						print_ast(t_ast *ast);
 
 /**************************		Execution	*****************************/
 
