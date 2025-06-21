@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/21 18:20:09 by agaland          ###   ########.fr       */
+/*   Updated: 2025/06/21 22:12:23 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int	expand_var(char *input, char **result, t_sh *shell)
 		*result = ft_itoa(shell->exit_status);
 		if (!(*result))
 			return (ERROR);
-		;
 	}
 	while (ft_isalnum(input[i]) || input[i] == '_')
 		i++;
