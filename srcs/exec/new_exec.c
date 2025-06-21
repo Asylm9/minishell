@@ -1,4 +1,4 @@
-#include "minishell.h"
+# include "../../minishell.h"
 
 int	execute_pipeline(t_ast *ast, t_sh *shell)
 {

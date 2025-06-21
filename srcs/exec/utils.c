@@ -1,4 +1,4 @@
-#include "minishell.h"
+# include "../../minishell.h"
 
 int	process_wait_status(int status)
 {

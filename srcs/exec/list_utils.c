@@ -1,4 +1,4 @@
-#include "minishell.h"
+# include "../../minishell.h"
 
 void	print_env_list(t_env *envl)
 {

@@ -1,4 +1,4 @@
-#include "../minishell.h"
+# include "../../minishell.h"
 
 static bool	is_numeric(char *arg)
 {

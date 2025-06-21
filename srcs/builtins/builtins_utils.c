@@ -1,4 +1,4 @@
-#include "../minishell.h"
+# include "../../minishell.h"
 
 int	args_count(char **args)
 {

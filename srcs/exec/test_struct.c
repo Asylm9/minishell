@@ -1,4 +1,4 @@
-#include "minishell.h"
+# include "../../minishell.h"
 
 int	init_struct_pipe(t_ast *first_node)
 {

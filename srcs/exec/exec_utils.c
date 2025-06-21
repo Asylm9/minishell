@@ -1,4 +1,4 @@
-#include "minishell.h"
+# include "../../minishell.h"
 
 pid_t	process_left_child(t_ast *ast, t_sh *shell, int *pfd)
 {

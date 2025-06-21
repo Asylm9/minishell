@@ -1,4 +1,4 @@
-#include "../minishell.h"
+# include "../../minishell.h"
 
 static void	delete_env_var(t_env *current, t_env **head)
 {

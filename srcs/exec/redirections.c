@@ -1,4 +1,4 @@
-#include "minishell.h"
+# include "../../minishell.h"
 
 /* int	setup_pipes_redirections(int **pipes, int nb_pipes, int i)
 {

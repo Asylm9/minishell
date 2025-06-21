@@ -1,4 +1,4 @@
-#include "../minishell.h"
+# include "../../minishell.h"
 
 static int	validate_format_export(char **args, int i)
 {
