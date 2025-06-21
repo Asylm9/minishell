@@ -3,14 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   matt.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/21 18:52:11 by agaland          ###   ########.fr       */
+/*   Updated: 2025/06/21 20:41:24 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	check_input(char *input)
+{
+	int	i;
+
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] == '|')
+			if (input[i + 1] == '|')
+				return (ERROR);
+		if (input[i] == '<')
+		{
+			if (input[i + 1] == '|' || input[i + 1] == '>')
+				return (ERROR);
+		}
+		if (input[i] == '>')
+		{
+			if (input[i + 1] == '|' || input[i + 1] == '<')
+				return (ERROR);
+		}
+		i++;
+	}
+	return (SUCCESS);
+}
 
 int	is_env_var(char *str)
 {
@@ -80,6 +105,8 @@ int	main(int ac, char **av, char **envp)
 		input = readline("\033[0;34m\033[1m   Minishell> \033[0m");
 		add_history(input);
 		printf("Input: %s\n", input);
+		if (check_input(input) == ERROR)
+			return (1);
 		if (create_token_node(&tok_lst))
 		{
 			free(input);
@@ -101,7 +128,6 @@ int	main(int ac, char **av, char **envp)
 			return (1);
 		}
 		printf("EXPANDING LIST\n");
-
 		expand_list(tok_lst, expanded, &shell);
 		printf("LIST EXPANDED\n");
 		print_token(expanded);
@@ -126,8 +152,6 @@ int	main(int ac, char **av, char **envp)
 		tok_lst = NULL;
 		free_tok_lst(expanded);
 		expanded = NULL;
-
-		
 	}
 }
 
