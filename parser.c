@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/21 19:54:27 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/21 20:02:02 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ int	create_node_cmd(t_token **exp_lst, t_command **cmd)
 	}
 	if ((*cmd)->redirections)
 		(*cmd)->redirections = tmp_redir;
+	(*cmd)->args[i] = NULL;
 	return (SUCCESS);
 }
 
