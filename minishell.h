@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/06/21 18:24:22 by agaland          ###   ########.fr       */
+/*   Updated: 2025/06/21 20:07:37 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ typedef struct s_command
 	char			**args;
 	int				argc;
 	t_redirect		*redirections;
-	t_command		*next;
 }			t_command;
 
 typedef struct s_env
