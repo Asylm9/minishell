@@ -3,111 +3,85 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/19 20:30:03 by magoosse          #+#    #+#             */
-/*   Updated: 2025/04/20 21:52:44 by magoosse         ###   ########.fr       */
+/*   Created: 2024/10/17 16:16:52 by agaland           #+#    #+#             */
+/*   Updated: 2024/11/03 00:57:30 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+static void	ft_init(size_t *i, long *result, long *test, int *sign)
+{
+	*i = 0;
+	*result = 0;
+	*test = 0;
+	*sign = 1;
+}
+
 int	ft_atoi(const char *str)
 {
-	int		i;
-	long	neg;
-	long	buffer;
+	size_t	i;
 	long	result;
+	long	test;
+	int		sign;
 
-	i = 0;
-	neg = 1;
-	result = 0;
-	buffer = 0;
-	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
+	ft_init(&i, &result, &test, &sign);
+	while ((str[i] >= 9 && str[i] <= 13) || (str[i] == 32))
 		i++;
 	if (str[i] == '-' || str[i] == '+')
 	{
 		if (str[i] == '-')
-			neg = -1;
+			sign = -1;
 		i++;
 	}
-	while (str[i] > 47 && str[i] < 58)
+	while (str[i] >= '0' && str[i] <= '9')
 	{
-		result = (result * 10) + (str[i++] - '0');
-		if (buffer > result && neg > 0)
+		result = result * 10 + str[i] - '0';
+		if (test > result && sign == 1)
 			return (-1);
-		buffer = result;
+		else if (test > result && sign == -1)
+			return (0);
+		test = result;
+		i++;
 	}
-	return (result * neg);
+	return (result * sign);
 }
-
 /*
 int	main(void)
 {
-	char	*a;
-	char	*b;
-	char	*c;
-	char	*d;
-	char	*e;
-	char	*f;
-	char	*s;
-	char	*t;
-	int		g;
-	int		h;
-	int		i;
-	int		j;
-	int		k;
-	int		l;
-	int		u;
-	int		w;
-	int		m;
-	int		n;
-	int		o;
-	int		p;
-	int		q;
-	int		r;
-	int		v;
-	int		x;
+	printf("FT_ATOI:\n");
+	//ft_atoi(0);
+	printf("%d\n", ft_atoi(""));
+	printf("%d\n", ft_atoi("   +324156sefg"));
+	printf("%d\n", ft_atoi("  -+-45"));	
+	printf("%d\n", ft_atoi("92233720368580788888880000000"));	
+	printf("%d\n", ft_atoi("-92233720368580788888880000000"));
+	printf("%d\n", ft_atoi("  -3151"));
+	printf("%d\n", ft_atoi("2147483647"));
+	printf("%d\n\n", ft_atoi("-2147483648"));
+	
+	
+	printf("%d\n", ft_atoi("2147483649"));
+	printf("%d\n", ft_atoi("9223372036854775807"));
+	printf("%d\n", ft_atoi("92233720368"));
 
-	a = " ";
-	b = "\t\v\f\r\n \f-06050";
-	c = "2147483647";
-	d = "-2147483648";
-	e = "9223372036854775809879847";
-	f = "-92233720368549498498775807";
-	s = "   -2147483652";
-	t = "+2147483647";
-	g = atoi(a);
-	h = atoi(b);
-	i = atoi(c);
-	j = atoi(d);
-	k = atoi(e);
-	l = atoi(f);
-	u = atoi(s);
-	w = atoi(t);
-	m = ft_atoi(a);
-	n = ft_atoi(b);
-	o = ft_atoi(c);
-	p = ft_atoi(d);
-	q = ft_atoi(e);
-	r = ft_atoi(f);
-	v = ft_atoi(s);
-	x = ft_atoi(t);
-	printf("Atoi : %d\n", g);
-	printf("Ft   : %d\n", m);
-	printf("Atoi : %d\n", h);
-	printf("Ft   : %d\n", n);
-	printf("Atoi : %d\n", i);
-	printf("Ft   : %d\n", o);
-	printf("Atoi : %d\n", j);
-	printf("Ft   : %d\n", p);
-	printf("Atoi : %d\n", k);
-	printf("Ft l  : %d\n", q);
-	printf("Atoi : %d\n", l);
-	printf("Ft   : %d\n", r);
-	printf("Atoi : %d\n", u);
-	printf("Ft   : %d\n", v);
-	printf("Atoi : %d\n", w);
-	printf("Ft   : %d\n", x);
+	//atoi(0);
+	printf("ATOI:\n");
+	printf("%d\n", atoi(""));
+	printf("%d\n", atoi("   +324156sefg"));
+	printf("%d\n", atoi("  -+-45"));	
+	printf("%d\n", atoi("92233720368580788888880000000"));	
+	printf("%d\n", atoi("-92233720368580788888880000000"));
+	printf("%d\n", atoi("  -3151"));
+	printf("%d\n", atoi("2147483647"));
+	printf("%d\n\n", atoi("-2147483648"));
+	
+
+	printf("%d\n", atoi("2147483649"));
+	printf("%d\n", atoi("9223372036854775807"));
+	printf("%d\n", atoi("92233720368"));
+	
 }
- */
+*/

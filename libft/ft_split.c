@@ -3,25 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/24 15:46:35 by magoosse          #+#    #+#             */
-/*   Updated: 2025/03/28 17:12:21 by magoosse         ###   ########.fr       */
+/*   Created: 2024/10/22 22:21:43 by agaland           #+#    #+#             */
+/*   Updated: 2025/06/01 02:21:03 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_count(char *s, char c)
+static size_t	count_words(char const *s, char c)
 {
-	int	i;
-	int	count;
+	size_t	i;
+	size_t	count;
 
 	i = 0;
 	count = 0;
-	while (s[i] != '\0')
+	if (!s)
+		return (0);
+	while (s[i])
 	{
-		while ((s[i] == c || s[i] == '\n') && s[i] != '\0')
+		while (s[i] == c)
 			i++;
 		if (s[i] != '\0')
 			count++;
@@ -31,99 +33,103 @@ static int	ft_count(char *s, char c)
 	return (count);
 }
 
-static char	**ft_freeloc(char **split, int count)
+static char	*allocate_word(char const *s, size_t start, size_t len)
 {
-	int	i;
+	size_t	i;
+	char	*word;
+
+	word = ft_calloc((len + 1), sizeof(char));
+	if (!word)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		word[i++] = s[start++];
+	}
+	word[i] = '\0';
+	return (word);
+}
+
+void	free_split(char ***split, size_t words)
+{
+	size_t	i;
 
 	i = 0;
-	while (i < count)
+	while (i < words)
 	{
-		free(split[i]);
+		free((*split)[i]);
 		i++;
 	}
 	free(*split);
-	return (NULL);
+	split = NULL;
 }
 
-static int	ft_stralloc(char *s, char c, char **result)
+static char	**fill_split(char **split, char const *s, char c, size_t word_count)
 {
-	int	i;
-	int	j;
-	int	count;
+	size_t	i;
+	size_t	start;
+	size_t	len;
 
 	i = 0;
-	j = 0;
-	while (s[i] != '\0' && s[i] != '\n')
+	start = 0;
+	while (i < word_count)
 	{
-		count = 0;
-		while (s[i] == c)
-			i++;
-		while (s[i] != c && s[i] != '\0' && s[i] != '\n')
+		while (s[start] == c)
+			start++;
+		len = 0;
+		while (s[start + len] && s[start + len] != c)
+			len++;
+		split[i] = allocate_word(s, start, len);
+		if (!split[i])
 		{
-			i++;
-			count++;
+			free_split(&split, i);
+			return (NULL);
 		}
-		if (count > 0)
-		{
-			result[j++] = (char *)malloc(sizeof(char) * (count + 1));
-			if (!result[j - 1])
-				return (ft_freeloc(result, j), 0);
-		}
+		start += len;
+		i++;
 	}
-	return (result[j] = NULL, 1);
-}
-
-static void	ft_fill(char const *s, char c, char **split)
-{
-	int	i;
-	int	j;
-	int	k;
-
-	i = 0;
-	j = 0;
-	k = 0;
-	while (s[i] != '\0' && s[i] != '\n')
-	{
-		while (s[i] == c)
-			i++;
-		while (s[i] != c && s[i] != '\0' && s[i] != '\n')
-			split[j][k++] = s[i++];
-		if (split[j] != 0)
-		{
-			split[j++][k] = '\0';
-			k = 0;
-		}
-	}
+	split[i] = NULL;
+	return (split);
 }
 
 char	**ft_split(char const *s, char c)
 {
 	char	**split;
+	size_t	word_count;
 
 	if (!s)
 		return (NULL);
-	if (ft_count((char *)s, c) <= 1)
-		return (NULL);
-	split = (char **)malloc(sizeof(char *) * (ft_count((char *)s, c) + 1));
+	word_count = count_words(s, c);
+	if (word_count == 0)
+	{
+		split = ft_calloc(1, sizeof(char *));
+		return (split);
+	}
+	split = ft_calloc((word_count + 1), sizeof(char *));
 	if (!split)
 		return (NULL);
-	if (ft_stralloc((char *)s, c, split) == 0)
-		return (split = NULL, NULL);
-	ft_fill(s, c, split);
+	split = fill_split(split, s, c, word_count);
 	return (split);
 }
 
-/*int	main(int ac, char **av)
+/* int	main(int ac, char **av)
 {
-	int		i;
-	char	**split;
+	size_t		i;
+	//char const	*s = av[1];
+	//char		c = av[2][0];
+	//char const	*s = "Hell,or,,nooon,";
+	//char		*s = "hello!";+
+	//char		c = ',';
 
-	(void)ac;
+	char		**result = ft_split(av[1], av[2][0]);
+	//ft_split(av[1], av[2][0]);
+	//char		**result = ft_split(av[1], av[2][0]);
+	
 	i = 0;
-	split = ft_split(av[1], av[2][0]);
-	while (split[i])
+	while (result[i])
 	{
-		printf("%s\n", split[i]);
+		printf("%s\n", result[i]);
 		i++;
 	}
-}*/
+	free_split(&result, i);
+} */

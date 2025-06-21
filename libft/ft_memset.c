@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.s19.be>         +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/15 13:59:57 by magoosse          #+#    #+#             */
-/*   Updated: 2024/11/01 18:17:07 by magoosse         ###   ########.fr       */
+/*   Created: 2024/10/14 20:30:41 by agaland           #+#    #+#             */
+/*   Updated: 2024/11/01 21:21:28 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,36 +14,46 @@
 
 void	*ft_memset(void *b, int c, size_t len)
 {
-	char	*p;
+	unsigned char	*dst;
 
-	p = (char *)b;
-	while (len > 0)
-	{
-		p[len - 1] = (unsigned char)c;
-		len--;
-	}
-	return (b);
+	dst = (unsigned char *) b;
+	while (len--)
+		*dst++ = (unsigned char) c;
+	return ((void *) b);
 }
-/*
-int	main(void)
+
+/* # include <stdio.h>
+
+int	main (void)
 {
-	size_t len;
-	
-	char b[6];
-	char c[6];
-	len = 4;
-	memset(b, '1', len);
-	ft_memset(c, '1', len);
-	int	i = 0;
-	while (i < 6)
-	{
-		printf("%c\n", b[i]);
-		i++;
-	}
+	char		tab1[10] = "meow";
+	char		tab2[10] = "meow";
+	size_t	len = sizeof(tab1);
+	size_t	i;
+
+	printf("tab1: %s\n", tab1);
+	printf("tab2: %s\n", tab2);
+
+	ft_memset(&tab1, '3', len);
+	memset(&tab2, '5', 2);
+
+	printf("tab1:\n");
 	i = 0;
-	while (i < 6)
+	while (i < 10)
 	{
-		printf("%c\n", c[i]);
+		printf("%c", tab1[i]);
 		i++;
 	}
-}*/
+
+	printf("\n");
+
+	i = 0;
+	printf("tab2:\n");
+	while (i < 10)
+	{
+		printf("%c", tab2[i]);
+		i++;
+	}
+
+	printf("\n");
+} */

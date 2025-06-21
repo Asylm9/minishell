@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.s19.be>         +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/14 16:23:49 by magoosse          #+#    #+#             */
-/*   Updated: 2024/11/01 18:14:00 by magoosse         ###   ########.fr       */
+/*   Created: 2024/10/14 19:20:05 by agaland           #+#    #+#             */
+/*   Updated: 2024/10/22 17:03:00 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include <ctype.h>
-//#include <stdio.h>
+#include "libft.h"
 
 int	ft_isascii(int c)
 {
@@ -19,18 +18,3 @@ int	ft_isascii(int c)
 		return (1);
 	return (0);
 }
-
-/*
-int	main(void)
-{
-	int a;
-	char b;
-
-	a = 9;
-	b = 'q';
-
-	printf("%d\n", isascii(a));
-	printf("%d\n", isascii(b));
-	printf("%d\n", ft_isascii(a));
-	printf("%d\n", ft_isascii(b));
-}*/

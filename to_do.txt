@@ -1,0 +1,30 @@
+
+ELEVE:
+- fix pipes -> good pour l'instant
+- Builtins: is_builtin + execute_builtin OK
+	- switch 2d array -> linked list
+	- echo ++ ok
+	- cd +++ ok
+	- pwd + ok
+	- export ++++ -> tri + gestion test== (split)
+	- unset +++ ok
+	- env + ok
+	- exit +++ FINITO (p-e verifier si %256 auto avec exit() )
+
+shlvl??
+
+MOYEN
+- Transformer exucute fonctions pour parcourir AST -> attendre
+- binary paths OK
+
+
+FAIBLE
+- traiter heredoc
+- gestion signaux
+
+- remplacer printf (interdits)
+
+Redirections:
+- refactoriser apply_redirections()
+- proteger dup2 -> +- gere a la sortie de apply_redirections()
+- proteger close ???

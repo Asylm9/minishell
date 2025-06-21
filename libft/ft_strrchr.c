@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.s19.be>         +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/14 17:48:19 by magoosse          #+#    #+#             */
-/*   Updated: 2024/11/01 18:28:12 by magoosse         ###   ########.fr       */
+/*   Created: 2024/10/15 12:28:57 by agaland           #+#    #+#             */
+/*   Updated: 2024/10/22 17:20:45 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,26 @@
 
 char	*ft_strrchr(const char *s, int c)
 {
-	int		i;
-	char	*b;
+	char	*last_occur;
 
-	i = 0;
-	b = (NULL);
-	while (s[i])
+	last_occur = NULL;
+	while (*s)
 	{
-		if (s[i] == (char)c)
-			b = (char *)&s[i];
-		i++;
+		if ((char) *s == (char) c)
+			last_occur = (char *) s;
+		s++;
 	}
-	if ((char)c == '\0')
-		return ((char *)&s[i]);
-	return (b);
+	if ((char) c == '\0')
+		return ((char *) s);
+	return (last_occur);
 }
 /*
 int	main(void)
 {
-	char a;
-	char *b;
+	const char	*s = "Derivations";
+	int	c = 'i';
 
-	a = '\0';
-	b = "abdefghjiklmnopqrstuvwxyz";
-
-	printf("%s\n", strrchr((b + 2), a));
-	printf("%s\n", ft_strrchr((b + 2), a));
-}*/
+	printf("%s\n", ft_strrchr(&s[1], c));
+	printf("%s\n", strrchr(&s[1], c));
+}
+*/	

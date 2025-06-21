@@ -3,68 +3,78 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.s19.be>         +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/24 16:54:08 by magoosse          #+#    #+#             */
-/*   Updated: 2024/11/01 19:18:49 by magoosse         ###   ########.fr       */
+/*   Created: 2024/10/22 14:06:05 by agaland           #+#    #+#             */
+/*   Updated: 2024/11/01 19:29:33 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	ft_nbrlen(int a)
+static	size_t	ft_nbrlen(int n)
 {
-	int	count;
+	size_t	i;
 
-	count = 0;
-	if (a <= 0)
-		count++;
-	while (a != 0)
+	i = 0;
+	if (n <= 0)
+		i++;
+	while (n != 0)
 	{
-		a = a / 10;
-		count++;
+		n /= 10;
+		i++;
 	}
-	return (count);
+	return (i);
 }
 
 char	*ft_itoa(int n)
 {
-	char		*result;
-	long int	nb;
-	int			len;
+	size_t		len;
+	char		*res;
+	long		nb;
 
-	nb = n;
+	nb = (long) n;
 	len = ft_nbrlen(nb);
-	result = (char *)malloc(sizeof(char) * (len + 1));
-	if (!result)
+	res = (char *) malloc((len + 1) * sizeof(char));
+	if (!res)
 		return (NULL);
+	res[len] = '\0';
 	if (nb < 0)
-		nb = -nb;
-	while (len > 0)
 	{
-		result[--len] = (nb % 10) + '0';
-		nb = nb / 10;
+		res[0] = '-';
+		nb = -nb;
 	}
-	if (n < 0)
-		result[0] = '-';
-	result[ft_nbrlen(n)] = '\0';
-	return (result);
+	while (nb >= 10)
+	{
+		res[len - 1] = (nb % 10) + '0';
+		nb /= 10;
+		len--;
+	}
+	res[len - 1] = nb + '0';
+	return (res);
 }
 /*
 int	main(void)
 {
-	int	a;
-
-	a = -125;
-	printf("%s\n", ft_itoa(a));
-	int b;
-	int c;
-
-	b = 2147483647;
-	c = -2147483648;
-
-	
-	printf("%s\n", ft_itoa(b));
-	printf("%s\n", ft_itoa(c));
+	int	n = 0;	
+	int	i = 0;
+	char	*t1 = ft_itoa();
+	char 	*t2 = ft_itoa(-2147483648);
+	char 	*t3 = ft_itoa(-623);
+ 	char 	*t4 = ft_itoa(9);
+ 	char 	*t5 = ft_itoa(-0);
+	char	*t6 = ft_itoa(2147483647);
+	printf("%s\n", t1);
+	printf("%s\n", t2);
+	while (t2[i])
+	{
+		printf("%c", t2[i]);
+		i++;
+	}
+	printf("\n");
+	printf("%s\n", t3);
+	printf("%s\n", t4);
+	printf("%s\n", t5);
+	printf("%s\n", t6);
 }
 */

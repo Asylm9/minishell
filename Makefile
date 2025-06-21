@@ -15,7 +15,24 @@ LIBFT = $(LIBFT_DIR)/libft.a
 SRCS =	matt.c	\
 		token.c \
 		expander.c \
-		parser.c
+		parser.c \
+		test_ast.c \
+       	new_exec.c \
+		path.c \
+		list_utils.c \
+		redirections.c \
+		env_utils.c \
+		resources.c \
+		utils.c \
+		builtins/builtins_utils.c \
+		builtins/cd.c \
+		builtins/echo.c \
+		builtins/env.c \
+		builtins/exit.c \
+		builtins/pwd.c \
+		builtins/unset.c \
+		builtins/export.c \
+		builtins/export_sorting.c
 
 # Fichiers objets
 OBJS = $(SRCS:.c=.o)
@@ -48,6 +65,11 @@ fclean: clean
 # Recompilation complète
 re: fclean all
 
+# Tests spécifiques
+test: $(NAME)
+	@echo "=== Exécution des tests ==="
+	./$(NAME)
+	@echo "=== Tests terminés ==="
 
 # Nettoyage des fichiers de test créés
 clean_test_files:

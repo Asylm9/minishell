@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.s19.be>         +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/21 21:28:02 by magoosse          #+#    #+#             */
-/*   Updated: 2024/11/26 14:01:46 by magoosse         ###   ########.fr       */
+/*   Created: 2024/10/18 16:24:41 by agaland           #+#    #+#             */
+/*   Updated: 2024/11/01 18:45:47 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,41 +15,35 @@
 void	*ft_calloc(size_t count, size_t size)
 {
 	size_t			i;
-	unsigned char	*b;
+	unsigned char	*tab;
 
-	i = 0;
 	if (size != 0 && count > (SIZE_MAX / size))
 		return (NULL);
-	b = (unsigned char *)malloc(size * count);
-	if (!b)
+	tab = (unsigned char *) malloc(count * size);
+	if (!tab)
 		return (NULL);
+	i = 0;
 	while (i < count * size)
 	{
-		b[i] = 0;
+		tab[i] = 0;
 		i++;
 	}
-	return ((void *)b);
+	return ((void *) tab);
 }
-/*
-int	main(void)
+
+/* int	main(void)
 {
-	char *b;
-	char *c;
-	int	i;
+	size_t	i;
+	size_t	count;
+
+	count = 10;
+	int	*tab = (int *) ft_calloc(count, sizeof(int));
 
 	i = 0;
-	b = (char *)calloc(10, 0);
-	c = (char *)ft_calloc(10, 0);
-	while (i < 15)
+	while (i < count)
 	{
-		printf("%d\n", b[i]);
+		printf("%d\n", tab[i]);
 		i++;
 	}
-	i = 0;
-	printf(" ft : \n");
-	while (i < 15)
-	{
-		printf("%d\n", b[i]);
-		i++;	
-	}
-}*/
+	free(tab);
+} */

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.s19.be>         +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/14 17:55:02 by magoosse          #+#    #+#             */
-/*   Updated: 2024/11/01 18:29:25 by magoosse         ###   ########.fr       */
+/*   Created: 2024/10/15 15:21:43 by agaland           #+#    #+#             */
+/*   Updated: 2024/11/02 23:24:59 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,15 @@
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	unsigned long	i;
+	size_t	i;
 
-	i = 0;
 	if (n == 0)
 		return (0);
-	if (s1[i] == '\0' || s2[i] == '\0')
-		return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-	while (i < n)
+	i = 0;
+	while ((s1[i] || s2[i]) && i < n)
 	{
-		if ((unsigned char)s1[i] != (unsigned char)s2[i])
-			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-		if (s1[i] == '\0' || s2[i] == '\0')
-			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		if (s1[i] != s2[i])
+			return ((unsigned char) s1[i] - (unsigned char) s2[i]);
 		i++;
 	}
 	return (0);
@@ -34,15 +30,12 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 /*
 int	main(void)
 {
-	char	*a;
-	char	*b;
-
-	a = "abcdefgh";
-	b = "";
-	printf("%d\n", strncmp(a, b, 0));
-	printf("%d\n", strncmp(a, b, 15));
-	printf("%d\n", strncmp(a, b, 30));
-	printf("%d\n", ft_strncmp(a, b, 0));
-	printf("%d\n", ft_strncmp(a, b, 15));
-	printf("%d\n", ft_strncmp(a, b, 30));
-}*/
+	const char	*s1 = "Hell1oooooo"; 
+	const char	*s2 = "Hell1ooooo";
+	size_t		n =  10;
+	
+	//strncmp(0, s2, 10);
+	printf("%d\n", ft_strncmp(s1, s2, n));
+	printf("%d\n", strncmp(s1, s2, n));
+}
+*/

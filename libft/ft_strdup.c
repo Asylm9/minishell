@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.s19.be>         +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/22 00:07:54 by magoosse          #+#    #+#             */
-/*   Updated: 2024/11/01 18:46:38 by magoosse         ###   ########.fr       */
+/*   Created: 2024/10/18 16:27:18 by agaland           #+#    #+#             */
+/*   Updated: 2024/11/01 21:51:51 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,39 @@
 
 char	*ft_strdup(const char *s1)
 {
-	int		i;
-	char	*ptr;
+	size_t	i;
+	char	*dup;
+	size_t	len;
 
-	i = 0;
-	while (s1[i])
-		i++;
-	ptr = (char *)malloc((sizeof(char) * i) + 1);
-	if (!ptr)
+	len = ft_strlen(s1);
+	dup = (char *) malloc((len + 1) * sizeof(char));
+	if (!dup)
 		return (NULL);
 	i = 0;
 	while (s1[i])
 	{
-		ptr[i] = s1[i];
+		dup[i] = s1[i];
 		i++;
 	}
-	ptr[i] = '\0';
-	return (ptr);
+	dup[i] = '\0';
+	return (dup);
 }
 /*
 int	main(void)
 {
-	char *a = "Hello";
-	char *b = strdup(a);
-	char *c = ft_strdup(a);
-	printf("origine : %s\n", a);
-	printf("1 : 	  %s\n", b);
-	printf("2 : 	  %s\n", c);
-}*/
+	const char	*s;
+	size_t	i;
+	size_t	len;
+	char	*dup;
+
+	s = "fdlknhfilhi oJu";	
+	dup = ft_strdup(s);
+	len = strlen(s);
+	i = 0;
+	while (i < len)	
+	{
+		printf("%c", dup[i]);
+		i++;
+	}
+}
+*/

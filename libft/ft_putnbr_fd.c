@@ -3,39 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/25 14:59:13 by magoosse          #+#    #+#             */
-/*   Updated: 2025/03/17 15:53:11 by magoosse         ###   ########.fr       */
+/*   Created: 2024/10/22 22:01:39 by agaland           #+#    #+#             */
+/*   Updated: 2024/11/01 21:30:57 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putchar(char c, int fd)
-{
-	write(fd, &c, 1);
-}
-
 void	ft_putnbr_fd(int n, int fd)
 {
-	long int	nb;
+	long	nb;
 
-	nb = n;
 	if (fd < 0)
 		return ;
+	nb = (long) n;
 	if (nb < 0)
 	{
-		ft_putchar('-', fd);
+		ft_putchar_fd('-', fd);
 		nb = -nb;
 	}
-	if (nb < 10)
+	if (nb >= 10)
 	{
-		ft_putchar(nb + '0', fd);
+		ft_putnbr_fd(nb / 10, fd);
+		ft_putnbr_fd(nb % 10, fd);
 	}
 	else
-	{
-		ft_putnbr_fd((nb / 10), fd);
-		ft_putchar((nb % 10) + '0', fd);
-	}
+		ft_putchar_fd(nb + '0', fd);
 }

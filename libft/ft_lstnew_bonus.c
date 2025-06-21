@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew_bonus.c                                  :+:      :+:    :+:   */
+/*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.s19.be>         +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/29 18:36:39 by magoosse          #+#    #+#             */
-/*   Updated: 2024/11/01 18:54:49 by magoosse         ###   ########.fr       */
+/*   Created: 2024/10/25 18:14:45 by agaland           #+#    #+#             */
+/*   Updated: 2024/10/30 21:21:25 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,27 @@
 
 t_list	*ft_lstnew(void *content)
 {
-	t_list	*node;
+	t_list	*new;
 
-	node = malloc(sizeof(t_list));
-	if (node == NULL)
+	new = malloc(sizeof(t_list));
+	if (!new)
 		return (NULL);
-	node->content = content;
-	node->next = NULL;
-	return (node);
+	new->content = content;
+	new->next = NULL;
+	return (new);
 }
 /*
 int	main(void)
 {
-	t_list	*test;
+	// int		nb = -2;
+	t_list	*current;
+	t_list	*root = ft_lstnew(NULL);
+	current = root;
 
-	test = ft_lstnew_bonus((void *)42);
-	test->next = ft_lstnew_bonus((void *)56);
-	test->next->next = ft_lstnew_bonus((void *)420);
-	while (test)
+	while (current != NULL)
 	{
-		printf("%d\n", (int)test->content);
-		test = test->next;
+		printf("%d\n", * (int *) current->content);
+		current = current->next;
 	}
-}*/
+}
+*/

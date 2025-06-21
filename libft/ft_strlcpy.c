@@ -3,43 +3,45 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.s19.be>         +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/18 17:14:37 by magoosse          #+#    #+#             */
-/*   Updated: 2024/11/01 18:25:28 by magoosse         ###   ########.fr       */
+/*   Created: 2024/10/15 18:36:16 by agaland           #+#    #+#             */
+/*   Updated: 2024/10/30 19:37:15 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+size_t	ft_strlcpy(char *dst, const char*src, size_t dstsize)
 {
-	size_t		i;
-	long int	j;
+	size_t	src_size;
+	size_t	i;
 
+	src_size = ft_strlen(src);
+	if (dstsize == 0)
+		return (src_size);
 	i = 0;
-	j = 0;
-	while (i < dstsize - 1 && src[i] && dstsize != 0)
+	while (src[i] && i < dstsize - 1)
 	{
-		((unsigned char *)dst)[i] = ((unsigned char *)src)[i];
+		dst[i] = src[i];
 		i++;
 	}
-	if (dstsize != 0)
-		((unsigned char *)dst)[i] = '\0';
-	while (src[j])
-		j++;
-	return (j);
+	dst[i] = '\0';
+	return (src_size);
 }
 /*
 int	main(void)
 {
-	char a[20];
-	char b[] = "bonjour comment allez vous ?";
-	char c[20];
-	char d[] = "bonjour comment allez vous ?";
+	const char	*src = "helloooow";
+	char	dst[5];
+	size_t	size = 0;
 
-	printf("%lu\n", strlcpy(a, b, 0));
-	printf("%zu\n", ft_strlcpy(c, d, 0));
-	printf("%s\n", a);
-	printf("%s\n", c);
-}*/
+	printf("%zu\n", ft_strlcpy(dst, src, size));
+	printf("%zu\n", strlcpy(dst, src, size));
+
+	ft_strlcpy(dst, src, size);
+	printf("%s\n", dst);
+	strlcpy(dst, src, size);
+	printf("%s\n", dst);
+}
+*/

@@ -3,42 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isalnum.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.s19.be>         +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/14 16:00:39 by magoosse          #+#    #+#             */
-/*   Updated: 2024/11/01 18:13:50 by magoosse         ###   ########.fr       */
+/*   Created: 2024/10/14 18:06:30 by agaland           #+#    #+#             */
+/*   Updated: 2024/10/30 20:18:11 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include <ctype.h>
-//#include <stdio.h>
+#include "libft.h" 
 
 int	ft_isalnum(int c)
 {
-	if ((c > 47 && c < 58) || (c > 64 && c < 91) || (c > 96 && c < 123))
+	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
+		return (1);
+	else if (c >= '0' && c <= '9')
 		return (1);
 	return (0);
 }
 /*
 int	main(void)
 {
-	int a;
-	char b;
-	unsigned int c;
-	unsigned char d;
-
-	a = 1;
-	b = '1';
-	c = 'a';
-	d = 'b';
-
-	printf("%d\n", isalnum(a));
-	printf("%d\n", isalnum(b));
-	printf("%d\n", isalnum(c));
-	printf("%d\n", isalnum(d));
-
-	printf("%d\n", ft_isalnum(a));
-	printf("%d\n", ft_isalnum(b));
-	printf("%d\n", ft_isalnum(c));
-	printf("%d\n", ft_isalnum(d));
-}*/
+	printf("%d\n", ft_isalnum(-35));
+	printf("%d\n", isalnum(-35));
+}
+*/

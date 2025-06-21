@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.s19.be>         +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/22 21:16:22 by magoosse          #+#    #+#             */
-/*   Updated: 2024/11/01 18:47:36 by magoosse         ###   ########.fr       */
+/*   Created: 2024/10/18 21:02:58 by agaland           #+#    #+#             */
+/*   Updated: 2024/10/22 21:57:10 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,38 +14,41 @@
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	char			*result;
 	unsigned int	i;
+	char			*subs;
+	size_t			s_len;
 
-	if (ft_strlen(s) - (start + 1) < len)
-		len = ft_strlen(s) - start;
-	i = 0;
-	if (start >= ft_strlen(s))
-		return (ft_strdup(""));
-	result = (char *)malloc(sizeof(char) * (len + 1));
-	if (!result || start > ft_strlen(s))
+	if (!s)
 		return (NULL);
-	while (len--)
+	s_len = ft_strlen(s);
+	if (start >= s_len)
+		return (ft_strdup(""));
+	else if (len > s_len - start)
+		len = s_len - start;
+	subs = (char *) malloc((len + 1) * sizeof(char));
+	if (!subs)
+		return (NULL);
+	i = 0;
+	while (i < len)
 	{
-		result[i++] = s[start++];
+		subs[i] = s[start];
+		i++;
+		start++;
 	}
-	result[i] = '\0';
-	return (result);
+	subs[i] = '\0';
+	return (subs);
 }
 /*
 int	main(void)
 {
-	char *a = ft_substr("hola", 4, 20);
-	char *b = ft_substr("hola", 0, 1);
-	char *c = ft_substr("hola", 0, 3);
-	char *d = ft_substr("hola", 2, 0);
-	char *e = ft_substr("hola", 2, 1);
-	char *f = ft_substr("hola", 3, 0);
 
-	printf("%s\n", a);
-	printf("%s\n", b);
-	printf("%s\n", c);
-	printf("%s\n", d);
-	printf("%s\n", e);
-	printf("%s\n", f);
-}*/
+	char const		*s = "";
+	unsigned int	start = 0;
+	size_t			len = 0;
+
+	char			*sub;
+
+	sub = ft_substr("hola", 4294967295, 0);
+	printf("%s\n", sub); 
+}
+*/

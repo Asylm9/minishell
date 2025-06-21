@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.s19.be>         +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/15 17:44:36 by magoosse          #+#    #+#             */
-/*   Updated: 2024/11/01 20:45:10 by magoosse         ###   ########.fr       */
+/*   Created: 2024/10/17 22:33:51 by agaland           #+#    #+#             */
+/*   Updated: 2024/11/01 20:40:44 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,32 +15,30 @@
 int	ft_memcmp(const void *s1, const void *s2, size_t n)
 {
 	size_t			i;
-	unsigned char	*p1;
-	unsigned char	*p2;
+	unsigned char	*str1;
+	unsigned char	*str2;
 
-	i = 0;
-	p1 = (unsigned char *)s1;
-	p2 = (unsigned char *)s2;
 	if (n == 0)
 		return (0);
+	str1 = (unsigned char *) s1;
+	str2 = (unsigned char *) s2;
+	i = 0;
 	while (i < n - 1)
 	{
-		if (p1[i] != p2[i])
-			return ((unsigned char)p1[i] - (unsigned char)p2[i]);
+		if (str1[i] != str2[i])
+			return (str1[i] - str2[i]);
 		i++;
 	}
-	return ((unsigned char)p1[i] - (unsigned char)p2[i]);
+	return (str1[i] - str2[i]);
 }
-/*
+
+/* # include <stdio.h>
+
 int	main(void)
 {
-	char *a = "Hello";
-	char *b = "";
-	char *c = "";
-	char *d = "perruche";
-
-	printf("%d\n", memcmp(a, b, 5));
-	printf("%d\n", ft_memcmp(a, b, 5));
-	printf("%d\n", memcmp(c, d, 12));
-	printf("%d\n", ft_memcmp(c, d, 12));
-}*/
+	printf("%d\n", ft_memcmp("Hello", "Hello", 5));
+	printf("%d\n", ft_memcmp("perruche", "perruche", 7));
+	
+	printf("%d\n", memcmp("Hello", "", 5));
+	printf("%d\n", memcmp("", "perruche", 7));
+} */

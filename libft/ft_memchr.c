@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.s19.be>         +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/14 18:03:26 by magoosse          #+#    #+#             */
-/*   Updated: 2024/11/01 18:30:02 by magoosse         ###   ########.fr       */
+/*   Created: 2024/10/17 20:18:36 by agaland           #+#    #+#             */
+/*   Updated: 2024/11/01 20:22:19 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,32 @@
 
 void	*ft_memchr(const void *s, int c, size_t n)
 {
-	unsigned long	i;
-	const char		*z;
+	size_t			i;
+	unsigned char	*src;
+	unsigned char	char_to_find;
 
+	src = (unsigned char *) s;
+	char_to_find = (unsigned char) c;
 	i = 0;
-	z = (const char *) s;
 	while (i < n)
 	{
-		if ((unsigned char)z[i] == (unsigned char)c)
-		{
-			return ((void *)(s + i));
-		}
+		if (src[i] == char_to_find)
+			return ((void *) &src[i]);
 		i++;
 	}
 	return (NULL);
 }
-/*
-int	main(void)
+/* int	main(void)
 {
-	int	c;
-	char *s;
+	const char *s1 = "babiroussa";
+//	const char *s2 = "blrblbrl";
+	int			c = 's';
+	size_t		n = 8; 
+	void		*result = ft_memchr(s1, c, n);
 
-	c = 'a';
-	s = "mmmmagnifique";
-	printf("%s\n", memchr(s, c, 10));
-	printf("%s\n", ft_memchr(s, c, 10));
-}*/
+	if (result)
+	{
+		printf("%s\n", (char *)result);
+		printf("%s\n", (char *)result);
+	}
+} */
