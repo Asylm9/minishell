@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/21 19:02:19 by agaland          ###   ########.fr       */
+/*   Updated: 2025/06/21 19:54:27 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,13 @@ int	create_node_cmd(t_token **exp_lst, t_command **cmd)
 		return (ERROR);
 	i = 0;
 	(*exp_lst) = tmp;
-	(*cmd)->cmd_name = (*exp_lst)->value;
-	(*cmd)->args[i] = (*exp_lst)->value;
-	i++;
-	(*exp_lst) = (*exp_lst)->next;
+	if ((*exp_lst)->type == WORD)
+	{
+		(*cmd)->cmd_name = (*exp_lst)->value;
+		(*cmd)->args[i] = (*exp_lst)->value;
+		i++;
+		(*exp_lst) = (*exp_lst)->next;
+	}
 	while ((*exp_lst) && (*exp_lst)->type != PIPE)
 	{
 		if ((*exp_lst)->type == REDIR_APPEND
@@ -84,6 +87,8 @@ int	create_node_cmd(t_token **exp_lst, t_command **cmd)
 		}
 		else
 		{
+			if (i == 0)
+				(*cmd)->cmd_name = (*exp_lst)->value;
 			(*cmd)->args[i] = (*exp_lst)->value;
 			i++;
 			(*exp_lst) = (*exp_lst)->next;
@@ -145,7 +150,6 @@ void	print_ast(t_ast *ast)
 			printf("	Command:\n		Name: %s\n", ast->cmd->cmd_name);
 		if (ast->cmd->args)
 		{
-			printf("		Arguments count: %d\n", ast->cmd->argc);
 			printf("		Arguments:\n");
 			for (int i = 0; ast->cmd->args[i]; i++)
 			{
@@ -171,7 +175,6 @@ void	print_ast(t_ast *ast)
 				printf("		Name: %s\n", ast->cmd->cmd_name);
 			if (ast->cmd->args)
 			{
-				printf("		Arguments count: %d\n", ast->cmd->argc);
 				printf("		Arguments:\n");
 				for (int i = 0; ast->cmd->args[i]; i++)
 				{
