@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/21 20:02:02 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/21 20:17:14 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,50 +27,59 @@ int	create_node_pipe(t_ast **ast)
 	return (SUCCESS);
 }
 
-int	create_node_cmd(t_token **exp_lst, t_command **cmd)
+t_command	*create_node_cmd(t_token **exp_lst)
 {
 	int			i;
 	t_token		*tmp;
 	t_redirect	*tmp_redir;
+	t_command	*cmd;
 
 	i = 0;
 	tmp = (*exp_lst);
-	(*cmd)->redirections = NULL;
+	cmd = malloc(sizeof(t_command));
+	if (!cmd)
+		return (NULL);
+	cmd->redirections = NULL;
+	tmp_redir = NULL;
 	while ((*exp_lst) && (*exp_lst)->type != PIPE)
 	{
 		if ((*exp_lst)->type == WORD)
 			i++;
 		else if ((*exp_lst)->next && (*exp_lst)->next->value)
 		{
-			(*cmd)->redirections = malloc(sizeof(t_redirect));
-			if ((*cmd)->redirections == NULL)
-				return (ERROR);
-			(*cmd)->redirections->next = NULL;
-			(*cmd)->redirections->target = NULL;
-			tmp_redir = (*cmd)->redirections;
-			if ((*cmd)->redirections->target == NULL)
-				(*cmd)->redirections->target = (*exp_lst)->next->value;
+			cmd->redirections = malloc(sizeof(t_redirect));
+			if (cmd->redirections == NULL)
+				return (NULL);
+			cmd->redirections->next = NULL;
+			cmd->redirections->target = NULL;
+			tmp_redir = cmd->redirections;
+			if (cmd->redirections->target == NULL)
+				cmd->redirections->target = (*exp_lst)->next->value;
 			else
 			{
-				(*cmd)->redirections->next = malloc(sizeof(t_redirect));
-				if ((*cmd)->redirections->next == NULL)
-					return (ERROR);
-				(*cmd)->redirections = (*cmd)->redirections->next;
-				(*cmd)->redirections->target = (*exp_lst)->next->value;
+				cmd->redirections->next = malloc(sizeof(t_redirect));
+				if (cmd->redirections->next == NULL)
+					return (NULL);
+				cmd->redirections = cmd->redirections->next;
+				cmd->redirections->target = (*exp_lst)->next->value;
 			}
 			(*exp_lst) = (*exp_lst)->next;
 		}
 		(*exp_lst) = (*exp_lst)->next;
 	}
-	(*cmd)->args = malloc(sizeof(char *) * (i + 1));
-	if ((*cmd)->args == NULL)
-		return (ERROR);
+	cmd->args = malloc(sizeof(char *) * (i + 1));
+	if (!cmd->args)
+	{
+		// Free redirections if needed
+		free(cmd);
+		return (NULL);
+	}
 	i = 0;
 	(*exp_lst) = tmp;
 	if ((*exp_lst)->type == WORD)
 	{
-		(*cmd)->cmd_name = (*exp_lst)->value;
-		(*cmd)->args[i] = (*exp_lst)->value;
+		cmd->cmd_name = (*exp_lst)->value;
+		cmd->args[i] = (*exp_lst)->value;
 		i++;
 		(*exp_lst) = (*exp_lst)->next;
 	}
@@ -80,7 +89,7 @@ int	create_node_cmd(t_token **exp_lst, t_command **cmd)
 			|| (*exp_lst)->type == REDIR_HEREDOC || (*exp_lst)->type == REDIR_IN
 			|| (*exp_lst)->type == REDIR_OUT)
 		{
-			if ((*exp_lst)->next->next)
+			if ((*exp_lst)->next && (*exp_lst)->next->next)
 				(*exp_lst) = (*exp_lst)->next->next;
 			else
 				break ;
@@ -88,31 +97,22 @@ int	create_node_cmd(t_token **exp_lst, t_command **cmd)
 		else
 		{
 			if (i == 0)
-				(*cmd)->cmd_name = (*exp_lst)->value;
-			(*cmd)->args[i] = (*exp_lst)->value;
+				cmd->cmd_name = (*exp_lst)->value;
+			cmd->args[i] = (*exp_lst)->value;
 			i++;
 			(*exp_lst) = (*exp_lst)->next;
 		}
 	}
-	if ((*cmd)->redirections)
-		(*cmd)->redirections = tmp_redir;
-	(*cmd)->args[i] = NULL;
-	return (SUCCESS);
+	if (cmd->redirections)
+		cmd->redirections = tmp_redir;
+	cmd->args[i] = NULL;
+	return (cmd);
 }
 
 int	parse_ast(t_token *tok_lst, t_ast **ast)
 {
-	t_command	*new_cmd;
-	t_command	*new_cmd2;
-
-	new_cmd = malloc(sizeof(t_command));
-	new_cmd2 = malloc(sizeof(t_command));
-	printf("TEST 1\n");
-	create_node_cmd(&tok_lst, &new_cmd);
-	printf("TEST 2\n");
-	(*ast)->cmd = new_cmd;
+	(*ast)->cmd = create_node_cmd(&tok_lst);
 	(*ast)->type = CMD;
-	printf("TEST 3\n");
 	while (tok_lst)
 	{
 		printf("TEST 4\n");
@@ -126,12 +126,9 @@ int	parse_ast(t_token *tok_lst, t_ast **ast)
 		if (tok_lst && tok_lst->type == WORD)
 		{
 			printf("TEST CMD\n");
-			create_node_cmd(&tok_lst, &new_cmd2);
-			printf("TEST 7\n");
 			(*ast)->right = malloc(sizeof(t_ast));
-			(*ast)->right->cmd = new_cmd2;
+			(*ast)->right->cmd = create_node_cmd(&tok_lst);
 			(*ast)->right->type = CMD;
-			// free(new_cmd);
 		}
 		printf("TEST 8\n");
 	}

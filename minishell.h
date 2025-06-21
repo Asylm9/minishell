@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/06/21 20:07:37 by agaland          ###   ########.fr       */
+/*   Updated: 2025/06/21 20:18:37 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,25 @@
 //-lreadline
 //-lhistory
 # include "libft/libft.h"
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <unistd.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <stdbool.h>
+# include <errno.h>
 # include <fcntl.h>
 # include <limits.h>
-# include <errno.h>
-# include <sys/wait.h>
-# include <sys/types.h>
-# include <string.h>
+# include <readline/history.h>
+# include <readline/readline.h>
 # include <signal.h>
+# include <stdbool.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <unistd.h>
 
 # define SUCCESS 0
 # define ERROR 1
 # define BUILTIN_ERR 2
 # define CMD_NOT_FOUND 127
-# define EXECVE_ERR 126 //commande trouvee mais pas executable
+# define EXECVE_ERR 126 // commande trouvee mais pas executable
 
 # define STDERR 2
 
@@ -58,14 +58,14 @@ typedef enum e_token_type
 	REDIR_APPEND,
 	REDIR_HEREDOC,
 	CMD,
-	//EMPTY conflit avec macro
-}			t_token_type;
+	// EMPTY conflit avec macro
+}							t_token_type;
 
 typedef enum e_expand
 {
 	EXPAND,
 	NO_EXPAND
-}			t_expand;
+}							t_expand;
 
 typedef enum e_redir_type
 {
@@ -73,51 +73,51 @@ typedef enum e_redir_type
 	OUT,
 	APPEND,
 	HEREDOC
-}			t_redir_type;
+}							t_redir_type;
 
 typedef struct s_token
 {
-	char			*value;
-	t_expand		expand;
-	t_token_type	type;
-	t_token			*next;
-}			t_token;
+	char					*value;
+	t_expand				expand;
+	t_token_type			type;
+	t_token					*next;
+}							t_token;
 
 typedef struct s_redirect
 {
-	t_redir_type	type;
-	char			*target;	// fichier ou delimiteur si heredoc
-	int				fd;	// pour heredoc
-	t_redirect		*next;
-}			t_redirect;
+	t_redir_type			type;
+	char *target; // fichier ou delimiteur si heredoc
+	int fd;       // pour heredoc
+	t_redirect				*next;
+}							t_redirect;
 
 typedef struct s_command
 {
-	char			*cmd_name;
-	char			**args;
-	int				argc;
-	t_redirect		*redirections;
-}			t_command;
+	char					*cmd_name;
+	char					**args;
+	int						argc;
+	t_redirect				*redirections;
+}							t_command;
 
 typedef struct s_env
 {
-	char			*key;
-	char			*value;
-	int				index;
-	t_env			*next;
-	t_env			*prev;
-}			t_env;
+	char					*key;
+	char					*value;
+	int						index;
+	t_env					*next;
+	t_env					*prev;
+}							t_env;
 
 typedef struct s_sh
 {
-	char			**env;
-	t_env			*envl;
-	bool			in_pipeline; //assigner a false par defaut
-	char			*current_dir;
-	int				saved_stdin;
-	int				saved_stdout;
-	int				exit_status;
-}			t_sh;
+	char					**env;
+	t_env					*envl;
+	bool in_pipeline; // assigner a false par defaut
+	char					*current_dir;
+	int						saved_stdin;
+	int						saved_stdout;
+	int						exit_status;
+}							t_sh;
 
 typedef struct s_ast
 {
@@ -127,127 +127,136 @@ typedef struct s_ast
 	t_ast					*right;
 }							t_ast;
 
-typedef struct s_exec //pas sure d'etre utile
+typedef struct s_exec // pas sure d'etre utile
 {
-	pid_t			*pids;
-	t_command		*current;
-	int				i;
-	int				status;
-}			t_exec;
+	pid_t *pids;
+	t_command *current;
+	int i;
+	int status;
+}							t_exec;
 
 /**************************		Parsing		*****************************/
 
-void	print_token(t_token *tok_lst);
-void	free_tok_lst(t_token *list);
+void						print_token(t_token *tok_lst);
+void						free_tok_lst(t_token *list);
 
 /* Tokenizer */
 
-int		create_token_list(t_token **tok_lst);
-int		create_token_node(t_token **tok_lst);
-int		skip_spaces(const char *input, int *start);
-int		find_end_of_token(const char *input, int *start, int *end);
-void	set_token_type(t_token *tok_lst, const char *input, int *end);
-int		set_value(t_token *tok_lst, const char *input, int *start, int *end);
-int		tokenize_input(t_token *tok_lst, const char *input);
-int		is_env_var(char *str);
+int							create_token_list(t_token **tok_lst);
+int							create_token_node(t_token **tok_lst);
+int							skip_spaces(const char *input, int *start);
+int							find_end_of_token(const char *input, int *start,
+								int *end);
+void						set_token_type(t_token *tok_lst, const char *input,
+								int *end);
+int							set_value(t_token *tok_lst, const char *input,
+								int *start, int *end);
+int							tokenize_input(t_token *tok_lst, const char *input);
+int							is_env_var(char *str);
 
 /* Expander */
-int		expand_xcode(char *input, char **result, t_sh *shell);
-int		expand_var(char *input, char **result, t_sh *shell);
-char	*expand_token(char *input, t_sh *shell);
-char	*trim_quotes(char *input);
-int		is_pipe_redir(char *str);
-int		expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell);
-int		expand_xcode(char *input, char **result, t_sh *shell);
+int							expand_xcode(char *input, char **result,
+								t_sh *shell);
+int							expand_var(char *input, char **result, t_sh *shell);
+char						*expand_token(char *input, t_sh *shell);
+char						*trim_quotes(char *input);
+int							is_pipe_redir(char *str);
+int							expand_list(t_token *tok_lst, t_token *exp_lst,
+								t_sh *shell);
+int							expand_xcode(char *input, char **result,
+								t_sh *shell);
 
 /* Parser */
-int		create_node_pipe(t_ast **ast);
-int		create_node_cmd(t_token **exp_lst, t_command **cmd);
-int		parse_ast(t_token *tok_lst, t_ast **ast);
-void	print_ast(t_ast *ast);
+int							create_node_pipe(t_ast **ast);
+t_command					*create_node_cmd(t_token **exp_lst);
+int							parse_ast(t_token *tok_lst, t_ast **ast);
+void						print_ast(t_ast *ast);
 
 /**************************		Execution	*****************************/
 
-int		handle_heredoc(char *delimiter, t_sh *shell);
+int							handle_heredoc(char *delimiter, t_sh *shell);
 
 /* Execution */
-int		execute_ast(t_ast *ast, t_sh *shell);
-int		execute_command(t_command *cmd, t_sh *shell);
-int		execute_pipeline(t_ast *ast, t_sh *shell);
-int		process_wait_status(int status);
-int		execute_binary(t_command *cmd, char **env);
+int							execute_ast(t_ast *ast, t_sh *shell);
+int							execute_command(t_command *cmd, t_sh *shell);
+int							execute_pipeline(t_ast *ast, t_sh *shell);
+int							process_wait_status(int status);
+int							execute_binary(t_command *cmd, char **env);
 
 /* Exec utils */
-pid_t	process_left_child(t_ast *ast, t_sh *shell, int *pfd);
-pid_t	process_right_child(t_ast *ast, t_sh *shell, int *pfd);
-int		handle_builtin(t_command *cmd, t_sh *shell);
-void	handle_binary_pipeline(t_command *cmd, t_sh *shell);
-int		fork_single_binary(t_command *cmd, t_sh *shell);
+pid_t						process_left_child(t_ast *ast, t_sh *shell,
+								int *pfd);
+pid_t						process_right_child(t_ast *ast, t_sh *shell,
+								int *pfd);
+int							handle_builtin(t_command *cmd, t_sh *shell);
+void						handle_binary_pipeline(t_command *cmd, t_sh *shell);
+int							fork_single_binary(t_command *cmd, t_sh *shell);
 
 /* Path and environment handling */
-char	*get_env_var(char *name, char **env);
-int		set_env_var(char *name, char **env, char *path);
-char	**get_paths(char **env);
-char	*find_cmd_path(char **paths, char *cmd_name);
+char						*get_env_var(char *name, char **env);
+int							set_env_var(char *name, char **env, char *path);
+char						**get_paths(char **env);
+char						*find_cmd_path(char **paths, char *cmd_name);
 
 /* Redirections */
-int		save_or_restore_fds(t_sh *shell, char flag);
-int		redirect_in(t_redirect *redir);
-int		redirect_out(t_redirect *redir);
-int		apply_redirections(t_command *cmd);
+int							save_or_restore_fds(t_sh *shell, char flag);
+int							redirect_in(t_redirect *redir);
+int							redirect_out(t_redirect *redir);
+int							apply_redirections(t_command *cmd);
 
 /* Builtin commands */
-int		args_count(char **args);
-bool	is_builtin(char *cmd_name);
-int		execute_builtin(t_command *cmd, t_sh *shell);
+int							args_count(char **args);
+bool						is_builtin(char *cmd_name);
+int							execute_builtin(t_command *cmd, t_sh *shell);
 
 /* Builtin implementations */
-int		builtin_echo(char **args);
+int							builtin_echo(char **args);
 
-int		builtin_cd(char **args, t_sh *shell); //double pointeur??
+int	builtin_cd(char **args, t_sh *shell); // double pointeur??
 
-int		builtin_pwd(void);
+int							builtin_pwd(void);
 
-int		builtin_export(char **args, t_env **envl);
-t_env	**init_temp_array(t_env *envl, int count);
-void	sort_env_list(t_env **array, int count);
-int		count_elements(t_env *envl);
+int							builtin_export(char **args, t_env **envl);
+t_env						**init_temp_array(t_env *envl, int count);
+void						sort_env_list(t_env **array, int count);
+int							count_elements(t_env *envl);
 
-int		builtin_unset(char **args, t_env **envl);
+int							builtin_unset(char **args, t_env **envl);
 
-int		builtin_env(t_sh *shell);
+int							builtin_env(t_sh *shell);
 
-int		builtin_exit(char **args, t_sh *shell);
+int							builtin_exit(char **args, t_sh *shell);
 
 /* Env utils */
-t_env	*init_env_list(char **env);
-int		add_new_entry(char *key, char *value, t_env **envl);
-char	*get_envl_var(char *name, t_env *envl);
-int		set_envl_var(char *name, t_env **envl, char *value);
+t_env						*init_env_list(char **env);
+int							add_new_entry(char *key, char *value, t_env **envl);
+char						*get_envl_var(char *name, t_env *envl);
+int							set_envl_var(char *name, t_env **envl, char *value);
 /* char	*get_env_var(char *name, char **env);
-int		set_env_var(char *name, char **env, char *value); */
+int	set_env_var(char *name, char **env, char *value); */
 
 /* Utils */
-int		ft_strcmp(const char *s1, const char *s2);
-char	*ft_pathjoin(char const *s1, char const *s2);
-//void	error_message(const char *msg);
+int							ft_strcmp(const char *s1, const char *s2);
+char						*ft_pathjoin(char const *s1, char const *s2);
+// void	error_message(const char *msg);
 
 /* List utils */
-void	print_env_list(t_env *envl);
-void	print_exp_list(t_env *envl);
-t_env	*create_node(char *key, char *value);
-t_env	*find_last_node(t_env *head);
-t_env	*add_back_node(t_env *new_node, t_env *head);
+void						print_env_list(t_env *envl);
+void						print_exp_list(t_env *envl);
+t_env						*create_node(char *key, char *value);
+t_env						*find_last_node(t_env *head);
+t_env						*add_back_node(t_env *new_node, t_env *head);
 
 /* Resources */
-void	free_pipes(int **pipes, int i);
-void	free_array(char **array, int i);
-void	free_envl(t_env **head);
-void	cleanup_shell(t_sh *shell);
+void						free_pipes(int **pipes, int i);
+void						free_array(char **array, int i);
+void						free_envl(t_env **head);
+void						cleanup_shell(t_sh *shell);
 
 /* Testing */
-void	init_redir(t_redirect *redir);
-void	init_cmd_struct(t_command *cmd, char **av, t_redirect *redir);
-void	init_shell_struct(t_sh *shell, char **envp);
+void						init_redir(t_redirect *redir);
+void						init_cmd_struct(t_command *cmd, char **av,
+								t_redirect *redir);
+void						init_shell_struct(t_sh *shell, char **envp);
 
 #endif
