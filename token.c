@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:05:28 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/21 17:18:47 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/21 17:40:44 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ int	check_input(char *input)
 			if (input[i + 1] == '|' || input[i + 1] == '<')
 				return (ERROR);
 		}
+		i++;
 	}
+	return (SUCCESS);
 }
 
 int	create_token_list(t_token **tok_lst)
