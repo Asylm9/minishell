@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/20 16:40:34 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/21 16:27:39 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,47 +27,60 @@ int	create_node_pipe(t_ast **ast)
 	return (SUCCESS);
 }
 
-int	create_node_cmd(t_token **exp_lst, t_command **cmd)
+t_command	*create_node_cmd(t_token **exp_lst)
 {
 	int			i;
 	t_token		*tmp;
 	t_redirect	*tmp_redir;
+	t_command	*cmd;
 
 	i = 0;
 	tmp = (*exp_lst);
-	(*cmd)->redirections = malloc(sizeof(t_redirect));
-	if ((*cmd)->redirections == NULL)
-		return (ERROR);
-	(*cmd)->redirections->next = NULL;
-	(*cmd)->redirections->target = NULL;
-	tmp_redir = (*cmd)->redirections;
+	cmd = malloc(sizeof(t_command));
+	if (!cmd)
+		return (NULL);
+	cmd->redirections = malloc(sizeof(t_redirect));
+	if (!cmd->redirections)
+	{
+		free(cmd);
+		return (NULL);
+	}
+	cmd->redirections->next = NULL;
+	cmd->redirections->target = NULL;
+	tmp_redir = cmd->redirections;
 	while ((*exp_lst) && (*exp_lst)->type != PIPE)
 	{
 		if ((*exp_lst)->type == WORD)
 			i++;
 		else if ((*exp_lst)->next && (*exp_lst)->next->value)
 		{
-			if ((*cmd)->redirections->target == NULL)
-				(*cmd)->redirections->target = (*exp_lst)->next->value;
+			if (cmd->redirections->target == NULL)
+				cmd->redirections->target = (*exp_lst)->next->value;
 			else
 			{
-				(*cmd)->redirections->next = malloc(sizeof(t_redirect));
-				if ((*cmd)->redirections->next == NULL)
-					return (ERROR);
-				(*cmd)->redirections = (*cmd)->redirections->next;
-				(*cmd)->redirections->target = (*exp_lst)->next->value;
+				cmd->redirections->next = malloc(sizeof(t_redirect));
+				if (!cmd->redirections->next)
+				{
+					free(cmd);
+					return (NULL);
+				}
+				cmd->redirections = cmd->redirections->next;
+				cmd->redirections->target = (*exp_lst)->next->value;
 			}
 			(*exp_lst) = (*exp_lst)->next;
 		}
 		(*exp_lst) = (*exp_lst)->next;
 	}
-	(*cmd)->args = malloc(sizeof(char *) * (i + 1));
-	if ((*cmd)->args == NULL)
-		return (ERROR);
+	cmd->args = malloc(sizeof(char *) * (i + 1));
+	if (!cmd->args)
+	{
+		free(cmd);
+		return (NULL);
+	}
 	i = 0;
 	(*exp_lst) = tmp;
-	(*cmd)->cmd_name = (*exp_lst)->value;
-	(*cmd)->args[i] = (*exp_lst)->value;
+	cmd->cmd_name = (*exp_lst)->value;
+	cmd->args[i] = (*exp_lst)->value;
 	i++;
 	(*exp_lst) = (*exp_lst)->next;
 	while ((*exp_lst) && (*exp_lst)->type != PIPE)
@@ -79,32 +92,27 @@ int	create_node_cmd(t_token **exp_lst, t_command **cmd)
 			if ((*exp_lst)->next->next)
 				(*exp_lst) = (*exp_lst)->next->next;
 			else
+			{
+				(*exp_lst) = (*exp_lst)->next->next;
 				break ;
+			}
 		}
 		else
 		{
-			(*cmd)->args[i] = (*exp_lst)->value;
+			cmd->args[i] = (*exp_lst)->value;
 			i++;
 			(*exp_lst) = (*exp_lst)->next;
 		}
 	}
-	(*cmd)->redirections = tmp_redir;
-	return (SUCCESS);
+	cmd->args[i] = NULL;
+	cmd->redirections = tmp_redir;
+	return (cmd);
 }
 
 int	parse_ast(t_token *tok_lst, t_ast **ast)
 {
-	t_command	*new_cmd;
-	t_command	*new_cmd2;
-
-	new_cmd = malloc(sizeof(t_command));
-	new_cmd2 = malloc(sizeof(t_command));
-	printf("TEST 1\n");
-	create_node_cmd(&tok_lst, &new_cmd);
-	printf("TEST 2\n");
-	(*ast)->cmd = new_cmd;
+	(*ast)->cmd = create_node_cmd(&tok_lst);
 	(*ast)->type = COMMAND;
-	printf("TEST 3\n");
 	while (tok_lst)
 	{
 		printf("TEST 4\n");
@@ -118,12 +126,9 @@ int	parse_ast(t_token *tok_lst, t_ast **ast)
 		if (tok_lst && tok_lst->type == WORD)
 		{
 			printf("TEST CMD\n");
-			create_node_cmd(&tok_lst, &new_cmd2);
-			printf("TEST 7\n");
 			(*ast)->right = malloc(sizeof(t_ast));
-			(*ast)->right->cmd = new_cmd2;
+			(*ast)->right->cmd = create_node_cmd(&tok_lst);
 			(*ast)->right->type = COMMAND;
-			// free(new_cmd);
 		}
 		printf("TEST 8\n");
 	}
@@ -132,113 +137,69 @@ int	parse_ast(t_token *tok_lst, t_ast **ast)
 }
 void	print_ast(t_ast *ast)
 {
-	printf("Type:\n");
+	t_redirect	*redir;
+
 	if (!ast)
+	{
+		printf("NULL node\n");
 		return ;
-	if (ast->type == COMMAND && ast->cmd)
-	{
-		if (ast->cmd->cmd_name == NULL)
-			printf("	Command:\n		Name: NULL\n");
-		else
-			printf("	Command:\n		Name: %s\n", ast->cmd->cmd_name);
-		if (ast->cmd->args)
-		{
-			printf("		Arguments count: %d\n", ast->cmd->argc);
-			printf("		Arguments:\n");
-			for (int i = 0; ast->cmd->args[i]; i++)
-			{
-				printf("			%s\n", ast->cmd->args[i]);
-			}
-			if (ast->cmd->redirections)
-				printf("Redirection : %s\n", ast->cmd->redirections->target);
-		}
-		else
-			printf("No arguments\n");
 	}
-	else if (ast->type == PIPE)
-		printf("	Pipe\n");
-	else if (ast->type == REDIR_IN)
+	switch (ast->type)
 	{
-		printf("	Redirect In\n");
-		if (ast->cmd && ast->cmd->redirections)
+	case COMMAND:
+		printf("COMMAND NODE\n");
+		if (ast->cmd)
 		{
-			printf("        Command:\n");
-			if (ast->cmd->cmd_name == NULL)
-				printf("		Name: NULL\n");
-			else
-				printf("		Name: %s\n", ast->cmd->cmd_name);
+			printf("  Name: %s\n",
+				ast->cmd->cmd_name ? ast->cmd->cmd_name : "NULL");
+			printf("  Arguments: ");
 			if (ast->cmd->args)
 			{
-				printf("		Arguments count: %d\n", ast->cmd->argc);
-				printf("		Arguments:\n");
 				for (int i = 0; ast->cmd->args[i]; i++)
-				{
-					printf("			%s\n", ast->cmd->args[i]);
-				}
+					printf("%s ", ast->cmd->args[i]);
+				printf("\n");
 			}
 			else
-				printf("No arguments\n");
-			printf("		Redirection Target: %s\n",
-						ast->cmd->redirections->target);
-			printf("		File Descriptor: %d\n", ast->cmd->redirections->fd);
+				printf("None\n");
+			// Print redirections
+			redir = ast->cmd->redirections;
+			while (redir)
+			{
+				if (redir->target)
+					printf("  Redirection: %s\n", redir->target);
+				redir = redir->next;
+			}
 		}
 		else
-			printf("No redirection target or file descriptor\n");
+			printf("  No command struct\n");
+		break ;
+	case PIPE:
+		printf("PIPE NODE\n");
+		break ;
+	case REDIR_IN:
+		printf("REDIR_IN NODE\n");
+		break ;
+	case REDIR_OUT:
+		printf("REDIR_OUT NODE\n");
+		break ;
+	case REDIR_APPEND:
+		printf("REDIR_APPEND NODE\n");
+		break ;
+	case REDIR_HEREDOC:
+		printf("REDIR_HEREDOC NODE\n");
+		break ;
+	default:
+		printf("Unknown node type: %d\n", ast->type);
 	}
-	else if (ast->type == REDIR_OUT)
-	{
-		printf("	Redirect Out\n");
-		if (ast->cmd && ast->cmd->redirections)
-		{
-			printf("		Redirection Target: %s\n",
-						ast->cmd->redirections->target);
-			printf("		File Descriptor: %d\n", ast->cmd->redirections->fd);
-		}
-		else
-			printf("No redirection target or file descriptor\n");
-	}
-	else if (ast->type == REDIR_APPEND)
-	{
-		printf("	Redirect Append\n");
-		if (ast->cmd && ast->cmd->redirections)
-		{
-			printf("		Redirection Target: %s\n",
-						ast->cmd->redirections->target);
-			printf("		File Descriptor: %d\n", ast->cmd->redirections->fd);
-		}
-		else
-			printf("No redirection target or file descriptor\n");
-	}
-	else if (ast->type == REDIR_HEREDOC)
-	{
-		printf("	Redirect Heredoc\n");
-		if (ast->cmd && ast->cmd->redirections)
-		{
-			printf("		Redirection Target: %s\n",
-						ast->cmd->redirections->target);
-			printf("		File Descriptor: %d\n", ast->cmd->redirections->fd);
-		}
-		else
-			printf("No redirection target or file descriptor\n");
-	}
-	else
-		printf("Unknown type\n");
+	// Print children recursively
 	if (ast->left)
 	{
 		printf("Left child:\n");
-		printf("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL\n");
 		print_ast(ast->left);
-		printf("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL\n");
 	}
-	else
-		printf("No left child\n");
 	if (ast->right)
 	{
 		printf("Right child:\n");
-		printf("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR\n");
 		print_ast(ast->right);
-		printf("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR\n");
 	}
-	else
-		printf("No right child\n");
 }

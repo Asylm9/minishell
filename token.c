@@ -3,14 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:05:28 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/18 13:02:42 by matthieu         ###   ########.fr       */
+/*   Updated: 2025/06/21 17:18:47 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	check_input(char *input)
+{
+	int	i;
+
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] == '|')
+			if (input[i + 1] == '|')
+				return (ERROR);
+		if (input[i] == '<')
+		{
+			if (input[i + 1] == '|' || input[i + 1] == '>')
+				return (ERROR);
+		}
+		if (input[i] == '>')
+		{
+			if (input[i + 1] == '|' || input[i + 1] == '<')
+				return (ERROR);
+		}
+	}
+}
 
 int	create_token_list(t_token **tok_lst)
 {
