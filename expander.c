@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/20 16:19:37 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/21 18:20:09 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,23 +141,17 @@ int	is_pipe_redir(char *str)
 	i = 0;
 	while (str && str[i])
 	{
-		if (str[i] != '|' && str[i] != '>' && str[i] != '<' || i > 1)
+		if ((str[i] != '|' && str[i] != '>' && str[i] != '<') || i > 1)
 			return (SUCCESS);
 		i++;
 	}
 	return (ERROR);
 }
 
-int	expand_list(t_token *tok_lst, char **env, t_token *exp_lst, t_sh *shell)
+int	expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell)
 {
-	t_token *head;
-	char *expanded_value;
-	int i;
-
-	i = 0;
 	if (!exp_lst)
 		return (1);
-	head = exp_lst;
 	while (tok_lst)
 	{
 		exp_lst->expand = NO_EXPAND;

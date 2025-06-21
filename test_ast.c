@@ -284,7 +284,7 @@ void	init_shell(t_sh *shell, char **envp)
 	shell->envl = init_env_list(shell->env);
 	
 }
-
+/* 
 void	print_ast(t_ast *ast)
 {
 	printf("Type:\n");
@@ -395,7 +395,7 @@ void	print_ast(t_ast *ast)
 	// else
 	// 	printf("No right child\n");
 }
-
+ */
 int	main(int ac, char **av, char **envp)
 {
 	t_ast	*ast;

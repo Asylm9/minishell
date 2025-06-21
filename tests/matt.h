@@ -42,7 +42,7 @@ typedef enum e_token_type
 	REDIR_OUT,
 	REDIR_APPEND,
 	REDIR_HEREDOC,
-	COMMAND,
+	CMD,
 	EMPTY
 }							t_token_type;
 

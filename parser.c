@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/20 16:40:34 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/21 19:02:19 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,18 +35,19 @@ int	create_node_cmd(t_token **exp_lst, t_command **cmd)
 
 	i = 0;
 	tmp = (*exp_lst);
-	(*cmd)->redirections = malloc(sizeof(t_redirect));
-	if ((*cmd)->redirections == NULL)
-		return (ERROR);
-	(*cmd)->redirections->next = NULL;
-	(*cmd)->redirections->target = NULL;
-	tmp_redir = (*cmd)->redirections;
+	(*cmd)->redirections = NULL;
 	while ((*exp_lst) && (*exp_lst)->type != PIPE)
 	{
 		if ((*exp_lst)->type == WORD)
 			i++;
 		else if ((*exp_lst)->next && (*exp_lst)->next->value)
 		{
+			(*cmd)->redirections = malloc(sizeof(t_redirect));
+			if ((*cmd)->redirections == NULL)
+				return (ERROR);
+			(*cmd)->redirections->next = NULL;
+			(*cmd)->redirections->target = NULL;
+			tmp_redir = (*cmd)->redirections;
 			if ((*cmd)->redirections->target == NULL)
 				(*cmd)->redirections->target = (*exp_lst)->next->value;
 			else
@@ -88,7 +89,8 @@ int	create_node_cmd(t_token **exp_lst, t_command **cmd)
 			(*exp_lst) = (*exp_lst)->next;
 		}
 	}
-	(*cmd)->redirections = tmp_redir;
+	if ((*cmd)->redirections)
+		(*cmd)->redirections = tmp_redir;
 	return (SUCCESS);
 }
 
@@ -103,7 +105,7 @@ int	parse_ast(t_token *tok_lst, t_ast **ast)
 	create_node_cmd(&tok_lst, &new_cmd);
 	printf("TEST 2\n");
 	(*ast)->cmd = new_cmd;
-	(*ast)->type = COMMAND;
+	(*ast)->type = CMD;
 	printf("TEST 3\n");
 	while (tok_lst)
 	{
@@ -122,7 +124,7 @@ int	parse_ast(t_token *tok_lst, t_ast **ast)
 			printf("TEST 7\n");
 			(*ast)->right = malloc(sizeof(t_ast));
 			(*ast)->right->cmd = new_cmd2;
-			(*ast)->right->type = COMMAND;
+			(*ast)->right->type = CMD;
 			// free(new_cmd);
 		}
 		printf("TEST 8\n");
@@ -135,7 +137,7 @@ void	print_ast(t_ast *ast)
 	printf("Type:\n");
 	if (!ast)
 		return ;
-	if (ast->type == COMMAND && ast->cmd)
+	if (ast->type == CMD && ast->cmd)
 	{
 		if (ast->cmd->cmd_name == NULL)
 			printf("	Command:\n		Name: NULL\n");

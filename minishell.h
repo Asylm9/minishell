@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/06/20 23:55:31 by agaland          ###   ########.fr       */
+/*   Updated: 2025/06/21 18:24:22 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ typedef enum e_token_type
 	REDIR_OUT,
 	REDIR_APPEND,
 	REDIR_HEREDOC,
-	CMD, // ou COMMAND ?
+	CMD,
 	//EMPTY conflit avec macro
 }			t_token_type;
 
@@ -154,12 +154,11 @@ int		is_env_var(char *str);
 
 /* Expander */
 int		expand_xcode(char *input, char **result, t_sh *shell);
-int		expand_var(char *input, char **result);
+int		expand_var(char *input, char **result, t_sh *shell);
 char	*expand_token(char *input, t_sh *shell);
 char	*trim_quotes(char *input);
 int		is_pipe_redir(char *str);
-int		expand_list(t_token *tok_lst, char **env,
-			t_token *exp_lst, t_sh *shell);
+int		expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell);
 int		expand_xcode(char *input, char **result, t_sh *shell);
 
 /* Parser */

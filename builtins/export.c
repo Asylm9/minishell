@@ -108,7 +108,7 @@ int	builtin_export(char **args, t_env **envl)
 			status = ERROR;
 		i++;
 	}
-	printf("\n---------------------------------\n");
-	print_exp_list(*envl);
+/* 	printf("\n---------------------------------\n");
+	print_exp_list(*envl); */
 	return (status);
 }

@@ -9,4 +9,11 @@ lol
 bash-5.1$ cat infile1 
 BLBLBL 
 
+bash-5.1$ cat infile.txt
+test
+bash-5.1$ < infile.txt grep t
+test
+bash-5.1$ grep t < infile.txt
+test
+
 

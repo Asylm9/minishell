@@ -83,7 +83,6 @@ int	redirect_out(t_redirect *redir)
 int	apply_redirections(t_command *cmd)
 {
 	t_redirect *redir;
-	int			fd;
 
 	if (!cmd->redirections)
 		return (0); //pas d'erreur si pas de redirections

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   matt.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/20 16:20:58 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/21 18:52:11 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,13 @@ int	main(int ac, char **av, char **envp)
 {
 	char	*input;
 	t_token	*tok_lst;
-	t_token	*temp;
+	t_token	*expanded;
 	t_ast	*ast;
-	t_sh	*shell;
+	t_sh	shell;
 
+	init_shell_struct(&shell, envp);
 	tok_lst = NULL;
-	temp = NULL;
+	expanded = NULL;
 	if (ac > 1)
 	{
 		fprintf(stderr, "Usage: %s\n", av[0]);
@@ -93,16 +94,17 @@ int	main(int ac, char **av, char **envp)
 		printf("TOKENISATION SUCCESSFULL\n");
 		free(input);
 		print_token(tok_lst);
-		if (create_token_node(&temp))
+		if (create_token_node(&expanded))
 		{
 			free_tok_lst(tok_lst);
 			tok_lst = NULL;
 			return (1);
 		}
 		printf("EXPANDING LIST\n");
-		expand_list(tok_lst, envp, temp, shell);
+
+		expand_list(tok_lst, expanded, &shell);
 		printf("LIST EXPANDED\n");
-		print_token(temp);
+		print_token(expanded);
 		ast = malloc(sizeof(t_ast));
 		if (!ast)
 		{
@@ -114,15 +116,18 @@ int	main(int ac, char **av, char **envp)
 		ast->cmd = malloc(sizeof(t_command));
 		ast->left = NULL;
 		ast->right = NULL;
-		ast->type = EMPTY;
+		// ast->type = EMPTY;
 		printf("TEST BF PARSE\n");
-		parse_ast(temp, &ast);
+		parse_ast(expanded, &ast);
 		printf("AST:\n");
 		print_ast(ast);
+		execute_ast(ast, &shell);
 		free_tok_lst(tok_lst);
 		tok_lst = NULL;
-		free_tok_lst(temp);
-		temp = NULL;
+		free_tok_lst(expanded);
+		expanded = NULL;
+
+		
 	}
 }
 

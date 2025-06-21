@@ -32,7 +32,9 @@ void	init_shell_struct(t_sh *shell, char **envp)
 		i++;
 	}
 	shell->env[i] = NULL;
+	shell->in_pipeline = false;
+	shell->saved_stdin = -1;
+	shell->saved_stdout = -1;
 	shell->exit_status = 0;
-
 	shell->envl = init_env_list(shell->env);
 }

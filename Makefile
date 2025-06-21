@@ -1,6 +1,6 @@
 # Makefile pour tester la partie exécution du minishell
 
-NAME = a.out
+NAME = minishell
 
 # Compilateur et flags
 CC = gcc
@@ -16,8 +16,9 @@ SRCS =	matt.c	\
 		token.c \
 		expander.c \
 		parser.c \
-		test_ast.c \
+		manual_init.c \
        	new_exec.c \
+		exec_utils.c \
 		path.c \
 		list_utils.c \
 		redirections.c \
