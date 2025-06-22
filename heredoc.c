@@ -140,7 +140,7 @@ char	*expand_token(char *input, t_sh *shell)
 	return (tmp);
 }
 
-/////////////////////////////// MATT FUNCTIONS //////////////////////////////////////
+/////////////////////////////// END //////////////////////////////////////
 
 void	init_heredoc(t_redirect *redir, char *delimiter)
 {
@@ -182,78 +182,87 @@ static bool	has_quotes(char *delimiter)
 	return (0);
 } */
 
-char	*ft_nwljoin(char const *s1, char const *s2)
+/* char	*ft_charjoin(char const *s1, char const *s2, char c)
 {
-	size_t	i;
-	size_t	j;
-	char	*res;
+	size_t	len1;
+	size_t	len2;
+	char	*result;
 
 	if (!s2)
 		return (NULL);
 	if (!s1)
 		return (ft_strdup(s2));
-	res = (void *) malloc((ft_strlen(s1) + ft_strlen(s2) + 2) * sizeof(char));
-	if (!res)
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	result = (void *) malloc((len1 + len2 + 2) * sizeof(char));
+	if (!result)
 		return (NULL);
-	i = 0;
-	while (s1[i])
+	ft_memcpy(result, s1, len1);
+	result[len1] = c;
+	ft_memcpy(result + len1 + 1, s2, len2);
+	result[len1 + len2 + 1] = '\0';
+	return (result);
+} */
+
+static char	*process_heredoc_line(char *input, char *delimiter, t_sh *shell)
+{
+	char	*line;
+
+	if (ft_strcmp(delimiter, input) == 0)
 	{
-		res[i] = s1[i];
-		i++;
+		free(input);
+		return (NULL);
 	}
-	res[i++] = '\n';
-	j = 0;
-	while (s2[j])
-	{
-		res[i + j] = s2[j];
-		j++;
-	}
-	res[i + j] = '\0';
-	return (res);
+	if (has_quotes(delimiter) == false)
+		line = expand_token(input, shell);
+	else
+		line = ft_strdup(input);
+	free(input);
+	return (line);
 }
 
-int	handle_heredoc(char *delimiter, t_sh *shell)
+static int	read_heredoc_content(char *delimiter, t_sh *shell, char **buffer)
 {
 	char 	*input;
 	char	*line;
-	char	*buffer;
 	char 	*temp;
-	int		pfd[2];
 
-	if (pipe(pfd) < 0)
-		return (1);
-	buffer = NULL;
+	*buffer = NULL;
 	while (1)
 	{
 		input = readline("> ");
 		if (!input)
 			break ;
-		if (ft_strcmp(delimiter, input) == 0)
-		{
-			free(input);
+		line = process_heredoc_line(input, delimiter, shell);
+		if (!line)
 			break ;
-		}
-		if (has_quotes(delimiter) == false)
-			line = expand_token(input, shell);
-		else
-			line = ft_strdup(input);
-		temp = ft_nwljoin(buffer, line);
-		free(input);
+		temp = ft_charjoin(*buffer, line, '\n');
 		free(line);
 		if (!temp)
-		{
-			close(pfd[0]);
-			close(pfd[1]);
-			return (free(buffer), 1);
-		}
-		free(buffer);
-		buffer = temp;
+			return (free(*buffer), 1);
+		free(*buffer);
+		*buffer = temp;
+	}
+	return (0);
+}
+
+int	handle_heredoc(char *delimiter, t_sh *shell)
+{
+	char	*buffer;
+	int		pfd[2];
+
+	if (pipe(pfd) < 0)
+		return (1);
+	if (read_heredoc_content(delimiter, shell, &buffer) != SUCCESS)
+	{
+		close(pfd[0]);
+		close(pfd[1]);
+		return (1);
 	}
 	if (buffer)
 	{
 		write(pfd[1], buffer, ft_strlen(buffer));
 		free(buffer);
-	
 	}
 	close(pfd[1]);
 	return (pfd[0]);

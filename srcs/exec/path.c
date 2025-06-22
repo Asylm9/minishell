@@ -56,7 +56,7 @@ char	*find_cmd_path(char **paths, char *cmd_name)
 	i = 0;
 	while (paths[i])
 	{
-		test_path = ft_pathjoin(paths[i], cmd_name);
+		test_path = ft_charjoin(paths[i], cmd_name, '/');
 		if (!test_path)
 			return (NULL);
 		if (access(test_path, F_OK | X_OK) == 0)

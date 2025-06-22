@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/06/22 14:40:29 by agaland          ###   ########.fr       */
+/*   Updated: 2025/06/22 15:49:43 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,7 +234,7 @@ int	set_env_var(char *name, char **env, char *value); */
 
 /* Utils */
 int							ft_strcmp(const char *s1, const char *s2);
-char						*ft_pathjoin(char const *s1, char const *s2);
+char						*ft_charjoin(char const *s1, char const *s2, char c);
 // void	error_message(const char *msg);
 
 /* List utils */

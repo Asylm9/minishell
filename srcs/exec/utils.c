@@ -23,30 +23,24 @@ int	ft_strcmp(const char *s1, const char *s2)
 	return (0);
 }
 
-char	*ft_pathjoin(char const *s1, char const *s2)
+char	*ft_charjoin(char const *s1, char const *s2, char c)
 {
-	size_t	i;
-	size_t	j;
-	char	*res;
+	size_t	len1;
+	size_t	len2;
+	char	*result;
 
-	if (!s1 || !s2)
+	if (!s2)
 		return (NULL);
-	res = (void *) malloc((ft_strlen(s1) + ft_strlen(s2) + 2) * sizeof(char));
-	if (!res)
+	if (!s1)
+		return (ft_strdup(s2));
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	result = (void *) malloc((len1 + len2 + 2) * sizeof(char));
+	if (!result)
 		return (NULL);
-	i = 0;
-	while (s1[i])
-	{
-		res[i] = s1[i];
-		i++;
-	}
-	res[i++] = '/';
-	j = 0;
-	while (s2[j])
-	{
-		res[i + j] = s2[j];
-		j++;
-	}
-	res[i + j] = '\0';
-	return (res);
+	ft_memcpy(result, s1, len1);
+	result[len1] = c;
+	ft_memcpy(result + len1 + 1, s2, len2);
+	result[len1 + len2 + 1] = '\0';
+	return (result);
 }
