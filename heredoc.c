@@ -47,19 +47,12 @@ int	expand_var(char *input, char **result)
 	return (0);
 }
 
-int	expand_xcode(char *input, char **result, t_sh *shell)
+int	expand_xcode(char **result, t_sh *shell)
 {
-	int		i;
-	char	*var;
-
-	i = 1;
-	if (input[i] == '?')
-	{
-		*result = ft_itoa(shell->exit_status);
-		if (!(*result))
-			return (1);
-		return (0);
-	}
+	*result = ft_itoa(shell->exit_status);
+	if (!(*result))
+		return (1);
+	return (0);
 }
 
 char	*expand_token(char *input, t_sh *shell)
@@ -93,8 +86,8 @@ char	*expand_token(char *input, t_sh *shell)
 			}
 			if (input[pos + 1] == '?')
 			{
-				if (expand_xcode(input + pos, &buffer, shell))
-					result = ft_strdup("");
+				if (expand_xcode(&buffer, shell))
+					result = tmp;
 				if (buffer)
 				{
 					result = ft_fstrjoin(&tmp, &buffer, 1);
@@ -104,8 +97,9 @@ char	*expand_token(char *input, t_sh *shell)
 			}
 			else if (expand_var(input + pos, &buffer))
 			{
-				result = ft_strdup("");
+				//result = ft_strdup("");
 				// Error handling if variable expansion fails
+				result = tmp; //permet d'expand a$HOMEEE en a + regle tmp leak 
 			}
 			else
 			{
@@ -143,8 +137,6 @@ char	*expand_token(char *input, t_sh *shell)
 	tmp = ft_fstrjoin(&result, &buffer, 0);
 	free(result);
 	free(buffer);
-	// result = tmp;
-	//free(tmp);
 	return (tmp);
 }
 
@@ -176,7 +168,7 @@ static bool	has_quotes(char *delimiter)
 		return (false);
 }
 
-int	ft_strcmp(const char *s1, const char *s2)
+/* int	ft_strcmp(const char *s1, const char *s2)
 {
 	size_t	i;
 
@@ -188,7 +180,7 @@ int	ft_strcmp(const char *s1, const char *s2)
 		i++;
 	}
 	return (0);
-}
+} */
 
 char	*ft_nwljoin(char const *s1, char const *s2)
 {
@@ -267,7 +259,7 @@ int	handle_heredoc(char *delimiter, t_sh *shell)
 	return (pfd[0]);
 }
 
-int main(void)
+/* int main(void)
 {
 	t_redirect redir;
 	t_sh	shell;
@@ -293,4 +285,4 @@ int main(void)
 		printf("Heredoc error\n");
 	free(redir.target);
 	return (0);
-}
+} */

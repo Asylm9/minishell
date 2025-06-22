@@ -14,6 +14,7 @@ SRCS =  $(SRCDIR)/matt.c \
         $(SRCDIR)/token.c \
         $(SRCDIR)/expander.c \
         $(SRCDIR)/parser.c \
+        $(SRCDIR)/heredoc.c \
         $(SRCDIR)/srcs/exec/env_utils.c \
         $(SRCDIR)/srcs/exec/path.c \
         $(SRCDIR)/srcs/exec/exec_utils.c \

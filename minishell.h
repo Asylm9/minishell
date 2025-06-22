@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/06/21 22:59:07 by agaland          ###   ########.fr       */
+/*   Updated: 2025/06/22 14:40:29 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,15 +155,12 @@ int							tokenize_input(t_token *tok_lst, const char *input);
 int							is_env_var(char *str);
 
 /* Expander */
-int							expand_xcode(char *input, char **result,
-								t_sh *shell);
-int							expand_var(char *input, char **result, t_sh *shell);
+int							expand_xcode(char **result, t_sh *shell);
+int							expand_var(char *input, char **result);
 char						*expand_token(char *input, t_sh *shell);
 char						*trim_quotes(char *input);
 int							is_pipe_redir(char *str);
 int							expand_list(t_token *tok_lst, t_token *exp_lst,
-								t_sh *shell);
-int							expand_xcode(char *input, char **result,
 								t_sh *shell);
 
 /* Parser */
