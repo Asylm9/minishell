@@ -1,138 +1,67 @@
-# Makefile pour tester la partie exécution du minishell
-
+# Nom de l'executable
 NAME = minishell
 
 # Compilateur et flags
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g 
-LIBS = -lreadline -lhistory
+CFLAGS = -Wall -Wextra -Werror -g
 
-# Répertoires
+# Dossiers sources et objets
+SRCDIR = .
+OBJ_DIR = objs
+
+# Fichiers sources avec chemins complets
+SRCS =  $(SRCDIR)/matt.c \
+        $(SRCDIR)/token.c \
+        $(SRCDIR)/expander.c \
+        $(SRCDIR)/parser.c \
+        $(SRCDIR)/srcs/exec/env_utils.c \
+        $(SRCDIR)/srcs/exec/path.c \
+        $(SRCDIR)/srcs/exec/exec_utils.c \
+        $(SRCDIR)/srcs/exec/list_utils.c \
+        $(SRCDIR)/srcs/exec/manual_init.c \
+        $(SRCDIR)/srcs/exec/new_exec.c \
+        $(SRCDIR)/srcs/exec/redirections.c \
+        $(SRCDIR)/srcs/exec/resources.c \
+        $(SRCDIR)/srcs/exec/utils.c \
+        $(SRCDIR)/srcs/builtins/builtins_utils.c \
+        $(SRCDIR)/srcs/builtins/cd.c \
+        $(SRCDIR)/srcs/builtins/echo.c \
+        $(SRCDIR)/srcs/builtins/env.c \
+        $(SRCDIR)/srcs/builtins/exit.c \
+        $(SRCDIR)/srcs/builtins/pwd.c \
+        $(SRCDIR)/srcs/builtins/unset.c \
+        $(SRCDIR)/srcs/builtins/export.c \
+        $(SRCDIR)/srcs/builtins/export_sorting.c
+
+# Création des objets à partir des sources
+OBJ = $(SRCS:$(SRCDIR)/%.c=$(OBJ_DIR)/%.o)
+
+# Libft path
 LIBFT_DIR = libft
-LIBFT = $(LIBFT_DIR)/libft.a
-OBJS_DIR = objs
+LIBFT = $(LIBFT_DIR)/libft.a# Compilation du programme principal
 
-# Fichiers sources à la racine
-ROOT_SRCS = matt.c \
-			token.c \
-			expander.c \
-			parser.c
+# Librairies à linker
+LIBS = $(LIBFT) -lreadline -lhistory
 
-# Fichiers sources dans srcs/exec/
-EXEC_SRCS = srcs/exec/env_utils.c \
-			srcs/exec/path.c \
-			srcs/exec/exec_utils.c \
-			srcs/exec/list_utils.c \
-			srcs/exec/manual_init.c \
-			srcs/exec/new_exec.c \
-			srcs/exec/redirections.c \
-			srcs/exec/resources.c \
-			srcs/exec/utils.c
-
-# Fichiers sources dans srcs/builtins/
-BUILTINS_SRCS = srcs/builtins/builtins_utils.c \
-				srcs/builtins/cd.c \
-				srcs/builtins/echo.c \
-				srcs/builtins/env.c \
-				srcs/builtins/exit.c \
-				srcs/builtins/pwd.c \
-				srcs/builtins/unset.c \
-				srcs/builtins/export.c \
-				srcs/builtins/export_sorting.c
-
-# Tous les fichiers sources
-SRCS = $(ROOT_SRCS) $(EXEC_SRCS) $(BUILTINS_SRCS)
-
-# Fichiers objets (nom de base seulement dans objs/)
-OBJS = $(addprefix $(OBJS_DIR)/, $(notdir $(SRCS:.c=.o)))
-
-# Règle principale
+# Compilation principale
 all: $(NAME)
 
-# Compilation de libft
+# Règle pour compiler le programme
+$(NAME): $(LIBFT) $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) $(LIBS) -o $(NAME)
+
+# Création du dossier objs et compilation des objets
+$(OBJ_DIR)/%.o: $(SRCDIR)/%.c
+	@mkdir -p $(dir $@)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Règle pour compiler libft
 $(LIBFT):
 	@make -C $(LIBFT_DIR)
 
-# Création du dossier objs
-$(OBJS_DIR):
-	@mkdir -p $(OBJS_DIR)
-
-# Compilation du programme principal
-$(NAME): $(OBJS_DIR) $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(LIBS) -o $(NAME)
-
-# Règles pour fichiers à la racine
-$(OBJS_DIR)/matt.o: matt.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJS_DIR)/token.o: token.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJS_DIR)/expander.o: expander.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJS_DIR)/parser.o: parser.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-# Règles pour srcs/exec/
-$(OBJS_DIR)/env_utils.o: srcs/exec/env_utils.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJS_DIR)/path.o: srcs/exec/path.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJS_DIR)/exec_utils.o: srcs/exec/exec_utils.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJS_DIR)/list_utils.o: srcs/exec/list_utils.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJS_DIR)/manual_init.o: srcs/exec/manual_init.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJS_DIR)/new_exec.o: srcs/exec/new_exec.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJS_DIR)/redirections.o: srcs/exec/redirections.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJS_DIR)/resources.o: srcs/exec/resources.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJS_DIR)/utils.o: srcs/exec/utils.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-# Règles pour srcs/builtins/
-$(OBJS_DIR)/builtins_utils.o: srcs/builtins/builtins_utils.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJS_DIR)/cd.o: srcs/builtins/cd.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJS_DIR)/echo.o: srcs/builtins/echo.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJS_DIR)/env.o: srcs/builtins/env.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJS_DIR)/exit.o: srcs/builtins/exit.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJS_DIR)/pwd.o: srcs/builtins/pwd.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJS_DIR)/unset.o: srcs/builtins/unset.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJS_DIR)/export.o: srcs/builtins/export.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJS_DIR)/export_sorting.o: srcs/builtins/export_sorting.c | $(OBJS_DIR)
-	$(CC) $(CFLAGS) -c $< -o $@
-
-# Nettoyage des fichiers objets
+# Nettoyage des objets
 clean:
-	rm -rf $(OBJS_DIR)
+	rm -rf $(OBJ_DIR)
 	@make clean -C $(LIBFT_DIR)
 
 # Nettoyage complet
@@ -155,10 +84,7 @@ clean_test_files:
 
 # Affichage de la structure pour debug
 debug:
-	@echo "ROOT_SRCS: $(ROOT_SRCS)"
-	@echo "EXEC_SRCS: $(EXEC_SRCS)"
-	@echo "BUILTINS_SRCS: $(BUILTINS_SRCS)"
 	@echo "SRCS: $(SRCS)"
-	@echo "OBJS: $(OBJS)"
+	@echo "OBJ: $(OBJ)"
 
 .PHONY: all clean fclean re test clean_test_files debug
