@@ -57,3 +57,9 @@ void	cleanup_shell(t_sh *shell)
 		return;
 	free_envl(&shell->envl);
 }
+
+void	clean_exit(t_sh *shell)
+{
+	cleanup_shell(shell);
+	exit(shell->exit_status);
+}
