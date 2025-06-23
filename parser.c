@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/23 18:01:19 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/23 18:09:29 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,10 @@ t_command	*create_node_cmd(t_token **exp_lst)
 			if ((*exp_lst)->next && (*exp_lst)->next->next)
 				(*exp_lst) = (*exp_lst)->next->next;
 			else
+			{
+				(*exp_lst) = (*exp_lst)->next;
 				break ;
+			}
 		}
 		else
 		{
@@ -110,25 +113,25 @@ t_command	*create_node_cmd(t_token **exp_lst)
 	return (cmd);
 }
 
-int	parse_ast(t_token *tok_lst, t_ast **ast)
+int	parse_ast(t_token *exp_lst, t_ast **ast)
 {
-	(*ast)->cmd = create_node_cmd(&tok_lst);
+	(*ast)->cmd = create_node_cmd(&exp_lst);
 	(*ast)->type = CMD;
-	while (tok_lst)
+	while (exp_lst)
 	{
 		printf("TEST 4\n");
-		if (tok_lst && tok_lst->type == PIPE)
+		if (exp_lst && exp_lst->type == PIPE)
 		{
 			printf("TEST PIPE\n");
 			create_node_pipe(ast);
-			tok_lst = tok_lst->next;
+			exp_lst = exp_lst->next;
 		}
 		printf("TEST 5\n");
-		if (tok_lst && tok_lst->type == WORD)
+		if (exp_lst && exp_lst->type == WORD)
 		{
 			printf("TEST CMD\n");
 			(*ast)->right = malloc(sizeof(t_ast));
-			(*ast)->right->cmd = create_node_cmd(&tok_lst);
+			(*ast)->right->cmd = create_node_cmd(&exp_lst);
 			(*ast)->right->type = CMD;
 		}
 		printf("TEST 8\n");
