@@ -31,14 +31,17 @@ char	*get_env_var(char *name, char **env)
 	return (paths);
 } */
 
-char	**get_paths(t_env *envl)
+char	**get_paths(t_command *cmd, t_env *envl)
 {
 	char	*env_path;
 	char	**paths;
 
 	env_path = get_envl_var("PATH", envl);
 	if (!env_path)
+	{
+		printf_fd(2, "minishell: %s: No such file or directory", cmd->cmd_name);
 		return (NULL);
+	}
 	paths = ft_split(env_path, ':');
 	free(env_path);
 	return (paths);
@@ -88,7 +91,7 @@ int	execute_binary(t_command *cmd, t_env *envl)
 
 	if (!cmd || !envl)
 		return (1);
-	paths = get_paths(envl);
+	paths = get_paths(cmd, envl);
 	if (!paths)
 		return (1);
 	cmd_path = find_cmd_path(paths, cmd->cmd_name);
@@ -96,7 +99,6 @@ int	execute_binary(t_command *cmd, t_env *envl)
 	if (!cmd_path)
 		return (CMD_NOT_FOUND);
 	env = convert_envl_to_env(envl);
-	print_env_array(env);
 	execve(cmd_path, cmd->args, env);
 	perror("execve");
 	free(cmd_path);

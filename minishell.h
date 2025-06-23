@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/06/23 14:56:39 by agaland          ###   ########.fr       */
+/*   Updated: 2025/06/23 16:55:31 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ int							fork_single_binary(t_command *cmd, t_sh *shell);
 /* Path and environment handling */
 char						*get_env_var(char *name, char **env);
 int							set_env_var(char *name, char **env, char *path);
-char						**get_paths(t_env *envl);
+char						**get_paths(t_command *cmd, t_env *envl);
 char						*find_cmd_path(char **paths, char *cmd_name);
 
 /* Redirections */
