@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/06/23 18:14:06 by agaland          ###   ########.fr       */
+/*   Updated: 2025/06/23 18:42:41 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ typedef struct s_sh
 {
 	char					**env;
 	t_env					*envl;
-	bool in_pipeline; // assigner a false par defaut
+	bool 					in_pipeline; // assigner a false par defaut
 	char					*current_dir;
 	int						saved_stdin;
 	int						saved_stdout;
