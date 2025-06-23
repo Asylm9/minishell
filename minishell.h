@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/06/23 16:55:31 by agaland          ###   ########.fr       */
+/*   Updated: 2025/06/23 18:04:01 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ typedef struct s_token
 
 typedef struct s_redirect
 {
-	t_redir_type			type;
+	t_token_type			type;
 	char *target; // fichier ou delimiteur si heredoc
 	int fd;       // pour heredoc
 	t_redirect				*next;
@@ -235,7 +235,8 @@ int	set_env_var(char *name, char **env, char *value); */
 
 /* Utils */
 int							ft_strcmp(const char *s1, const char *s2);
-char						*ft_charjoin(char const *s1, char const *s2, char c);
+char						*ft_charjoin(char const *s1, char const *s2,
+								char c);
 // void	error_message(const char *msg);
 
 /* List utils */
@@ -246,7 +247,7 @@ t_env						*find_last_node(t_env *head);
 t_env						*add_back_node(t_env *new_node, t_env *head);
 
 /* Resources */
-//void						free_pipes(int **pipes, int i);
+// void						free_pipes(int **pipes, int i);
 void						free_array(char **array, int i);
 void						free_envl(t_env **head);
 void						cleanup_shell(t_sh *shell);
