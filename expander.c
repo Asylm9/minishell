@@ -6,99 +6,99 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/21 22:12:23 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/23 16:50:02 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	expand_var(char *input, char **result, t_sh *shell)
-{
-	int		i;
-	char	*var;
+// int	expand_var(char *input, char **result, t_sh *shell)
+// {
+// 	int		i;
+// 	char	*var;
 
-	i = 1;
-	if (input[i] == '?')
-	{
-		*result = ft_itoa(shell->exit_status);
-		if (!(*result))
-			return (ERROR);
-	}
-	while (ft_isalnum(input[i]) || input[i] == '_')
-		i++;
-	var = ft_substr(input, 0, i);
-	(*result) = getenv(var + 1);
-	free(var);
-	if ((*result) == NULL)
-		return (ERROR);
-	return (SUCCESS);
-}
+// 	i = 1;
+// 	if (input[i] == '?')
+// 	{
+// 		*result = ft_itoa(shell->exit_status);
+// 		if (!(*result))
+// 			return (ERROR);
+// 	}
+// 	while (ft_isalnum(input[i]) || input[i] == '_')
+// 		i++;
+// 	var = ft_substr(input, 0, i);
+// 	(*result) = getenv(var + 1);
+// 	free(var);
+// 	if ((*result) == NULL)
+// 		return (ERROR);
+// 	return (SUCCESS);
+// }
 
-char	*expand_token(char *input, t_sh *shell)
-{
-	char	*result;
-	char	*buffer;
-	char	*tmp;
-	int		pos;
-	int		start;
+// char	*expand_token(char *input, t_sh *shell)
+// {
+// 	char	*result;
+// 	char	*buffer;
+// 	char	*tmp;
+// 	int		pos;
+// 	int		start;
 
-	result = ft_calloc(1, 1);
-	buffer = NULL;
-	tmp = NULL;
-	pos = 0;
-	start = 0;
-	while (input[pos] != '\0')
-	{
-		if (input[pos] == '$')
-		{
-			buffer = ft_substr(input, start, pos - start);
-			tmp = ft_fstrjoin(&result, &buffer, 0);
-			if (result)
-			{
-				free(result);
-				result = NULL;
-			}
-			if (buffer)
-			{
-				free(buffer);
-				buffer = NULL;
-			}
-			if (expand_var(input + pos, &buffer, shell))
-				result = ft_strdup("");
-			if (buffer)
-			{
-				result = ft_fstrjoin(&tmp, &buffer, 1);
-				tmp = NULL;
-				// Do NOT free buffer if it comes from getenv!
-			}
-			else
-			{
-				if (result)
-				{
-					free(result);
-					result = NULL;
-				}
-				result = tmp;
-			}
-			pos++;
-			while ((ft_isalnum(input[pos]) || input[pos] == '_'
-					|| input[pos] == '?') && input[pos])
-			{
-				pos++;
-				if (input[pos - 1] == '?')
-					break ;
-			}
-			start = pos;
-		}
-		else
-			pos++;
-	}
-	buffer = ft_substr(input, start, pos - start);
-	tmp = ft_fstrjoin(&result, &buffer, 0);
-	free(result);
-	free(buffer);
-	return (tmp);
-}
+// 	result = ft_calloc(1, 1);
+// 	buffer = NULL;
+// 	tmp = NULL;
+// 	pos = 0;
+// 	start = 0;
+// 	while (input[pos] != '\0')
+// 	{
+// 		if (input[pos] == '$')
+// 		{
+// 			buffer = ft_substr(input, start, pos - start);
+// 			tmp = ft_fstrjoin(&result, &buffer, 0);
+// 			if (result)
+// 			{
+// 				free(result);
+// 				result = NULL;
+// 			}
+// 			if (buffer)
+// 			{
+// 				free(buffer);
+// 				buffer = NULL;
+// 			}
+// 			if (expand_var(input + pos, &buffer))
+// 				result = ft_strdup("");
+// 			if (buffer)
+// 			{
+// 				result = ft_fstrjoin(&tmp, &buffer, 1);
+// 				tmp = NULL;
+// 				// Do NOT free buffer if it comes from getenv!
+// 			}
+// 			else
+// 			{
+// 				if (result)
+// 				{
+// 					free(result);
+// 					result = NULL;
+// 				}
+// 				result = tmp;
+// 			}
+// 			pos++;
+// 			while ((ft_isalnum(input[pos]) || input[pos] == '_'
+// 					|| input[pos] == '?') && input[pos])
+// 			{
+// 				pos++;
+// 				if (input[pos - 1] == '?')
+// 					break ;
+// 			}
+// 			start = pos;
+// 		}
+// 		else
+// 			pos++;
+// 	}
+// 	buffer = ft_substr(input, start, pos - start);
+// 	tmp = ft_fstrjoin(&result, &buffer, 0);
+// 	free(result);
+// 	free(buffer);
+// 	return (tmp);
+// }
 
 char	*trim_quotes(char *input)
 {
