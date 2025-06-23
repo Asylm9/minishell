@@ -46,7 +46,7 @@ int	redirect_in(t_redirect *redir)
 {
 	int fd;
 
-	if (redir->type != HEREDOC)
+	if (redir->type != REDIR_HEREDOC)
 		fd = open(redir->target, O_RDONLY);
 	else
 		fd = redir->fd;
@@ -65,9 +65,9 @@ int	redirect_out(t_redirect *redir)
 {
 	int fd;
 
-	if (redir->type == OUT)
+	if (redir->type == REDIR_OUT)
 		fd = open(redir->target, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	else if (redir->type == APPEND)
+	else if (redir->type == REDIR_APPEND)
 		fd = open(redir->target, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
 		return (perror("open"), ERROR);
@@ -89,12 +89,12 @@ int	apply_redirections(t_command *cmd)
 	redir = cmd->redirections;
 	while (redir)
 	{
-		if (redir->type == IN || redir->type == HEREDOC)
+		if (redir->type == REDIR_IN || redir->type == REDIR_HEREDOC)
 		{
 			if (redirect_in(redir) != SUCCESS)
 				return (ERROR);
 		}
-		else if (redir->type == OUT || redir->type == APPEND)
+		else if (redir->type == REDIR_OUT || redir->type == REDIR_APPEND)
 		{
 			if (redirect_out(redir) != SUCCESS)
 				return (ERROR);
