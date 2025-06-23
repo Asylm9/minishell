@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/23 18:09:29 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/23 18:16:53 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,13 +90,13 @@ t_command	*create_node_cmd(t_token **exp_lst)
 			|| (*exp_lst)->type == REDIR_HEREDOC || (*exp_lst)->type == REDIR_IN
 			|| (*exp_lst)->type == REDIR_OUT)
 		{
-			if ((*exp_lst)->next && (*exp_lst)->next->next)
-				(*exp_lst) = (*exp_lst)->next->next;
-			else
-			{
-				(*exp_lst) = (*exp_lst)->next;
-				break ;
-			}
+			// if ((*exp_lst)->next && (*exp_lst)->next->next)
+			(*exp_lst) = (*exp_lst)->next->next;
+			// else
+			// {
+			// 	(*exp_lst) = (*exp_lst)->next;
+			// 	break ;
+			// }
 		}
 		else
 		{
