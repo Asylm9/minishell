@@ -16,4 +16,6 @@ test
 bash-5.1$ grep t < infile.txt
 test
 
+echo pif > output.txt < output.txt cat
+grep "pif" < output.txt > matches.txt
 

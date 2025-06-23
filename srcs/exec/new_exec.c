@@ -28,7 +28,6 @@ int	execute_command(t_command *cmd, t_sh *shell)
 	}
 	if (is_builtin(cmd->cmd_name))
 		return (handle_builtin(cmd, shell));
-	printf("in pipeline %d\n", shell->in_pipeline);
 	if (shell->in_pipeline)
 		handle_binary_pipeline(cmd, shell);
 	else
