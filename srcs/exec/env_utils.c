@@ -1,5 +1,58 @@
 # include "../../minishell.h"
 
+void	print_env_array(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env[i])
+	{
+		printf("%s\n", env[i]);
+		i++;
+	}
+}
+
+int	list_size(t_env *envl)
+{
+	int	size;
+
+	size = 0;
+	while (envl != NULL)
+	{
+		size++;
+		envl = envl->next;
+	}
+	return (size);
+}
+
+char	**convert_envl_to_env(t_env *envl)
+{
+	char	**env;
+	t_env	*current;
+	int		i;
+
+	env = malloc(sizeof(char *) * (list_size(envl) + 1));
+	if (!env)
+		return (NULL);
+	current = envl;
+	i = 0;
+	while (current)
+	{
+		if (current->value)
+		{
+			env[i] = ft_charjoin(current->key, current->value, '=');
+		}
+		else
+			env[i] = ft_strdup(current->key);
+		if (!env[i])
+			return (free_array(env, i), NULL);
+		current = current->next;
+		i++;
+	}
+	env[i] = NULL;
+	return (env);
+}
+
 t_env	*init_env_list(char **env)
 {
 	char	**var;

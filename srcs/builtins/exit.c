@@ -24,7 +24,7 @@ int	builtin_exit(char **args, t_sh *shell)
 {
 	int	code;
 
-	printf("exit\n");
+	printf_fd(1, "exit\n");
 	if (!args)
 		code = shell->exit_status;
 	else if (!args[1])
@@ -45,8 +45,7 @@ int	builtin_exit(char **args, t_sh *shell)
 		else
 			code = ft_atoi(args[1]);
 	}
-	
-	cleanup_shell(shell);
+	//cleanup_shell(shell);
 	exit(code);
 	return (SUCCESS);
 }

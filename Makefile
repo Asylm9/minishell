@@ -39,8 +39,7 @@ OBJ = $(SRCS:$(SRCDIR)/%.c=$(OBJ_DIR)/%.o)
 
 # Libft path
 LIBFT_DIR = libft
-LIBFT = $(LIBFT_DIR)/libft.a# Compilation du programme principal
-
+LIBFT = $(LIBFT_DIR)/libft.a
 # Librairies à linker
 LIBS = $(LIBFT) -lreadline -lhistory
 

@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/06/22 15:49:43 by agaland          ###   ########.fr       */
+/*   Updated: 2025/06/23 14:56:39 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,7 @@ int							execute_ast(t_ast *ast, t_sh *shell);
 int							execute_command(t_command *cmd, t_sh *shell);
 int							execute_pipeline(t_ast *ast, t_sh *shell);
 int							process_wait_status(int status);
-int							execute_binary(t_command *cmd, char **env);
+int							execute_binary(t_command *cmd, t_env *env);
 
 /* Exec utils */
 pid_t						process_left_child(t_ast *ast, t_sh *shell,
@@ -192,7 +192,7 @@ int							fork_single_binary(t_command *cmd, t_sh *shell);
 /* Path and environment handling */
 char						*get_env_var(char *name, char **env);
 int							set_env_var(char *name, char **env, char *path);
-char						**get_paths(char **env);
+char						**get_paths(t_env *envl);
 char						*find_cmd_path(char **paths, char *cmd_name);
 
 /* Redirections */
@@ -225,6 +225,7 @@ int							builtin_env(t_sh *shell);
 int							builtin_exit(char **args, t_sh *shell);
 
 /* Env utils */
+char						**convert_envl_to_env(t_env *envl);
 t_env						*init_env_list(char **env);
 int							add_new_entry(char *key, char *value, t_env **envl);
 char						*get_envl_var(char *name, t_env *envl);
@@ -245,12 +246,13 @@ t_env						*find_last_node(t_env *head);
 t_env						*add_back_node(t_env *new_node, t_env *head);
 
 /* Resources */
-void						free_pipes(int **pipes, int i);
+//void						free_pipes(int **pipes, int i);
 void						free_array(char **array, int i);
 void						free_envl(t_env **head);
 void						cleanup_shell(t_sh *shell);
 
 /* Testing */
+void						print_env_array(char **env);
 void						init_redir(t_redirect *redir);
 void						init_cmd_struct(t_command *cmd, char **av,
 								t_redirect *redir);

@@ -18,12 +18,25 @@ char	*get_env_var(char *name, char **env)
 	return (NULL);
 }
 
-char	**get_paths(char **env)
+/* char	**get_paths(char **env)
 {
 	char	*env_path;
 	char	**paths;
 
 	env_path = get_env_var("PATH", env);
+	if (!env_path)
+		return (NULL);
+	paths = ft_split(env_path, ':');
+	free(env_path);
+	return (paths);
+} */
+
+char	**get_paths(t_env *envl)
+{
+	char	*env_path;
+	char	**paths;
+
+	env_path = get_envl_var("PATH", envl);
 	if (!env_path)
 		return (NULL);
 	paths = ft_split(env_path, ':');
@@ -67,20 +80,23 @@ char	*find_cmd_path(char **paths, char *cmd_name)
 	return (NULL);
 }
 
-int	execute_binary(t_command *cmd, char **env)
+int	execute_binary(t_command *cmd, t_env *envl)
 {
 	char	**paths;
 	char	*cmd_path;
+	char	**env;
 
-	if (!cmd || !env)
+	if (!cmd || !envl)
 		return (1);
-	paths = get_paths(env);
+	paths = get_paths(envl);
 	if (!paths)
 		return (1);
 	cmd_path = find_cmd_path(paths, cmd->cmd_name);
 	free_array(paths, -1);
 	if (!cmd_path)
 		return (CMD_NOT_FOUND);
+	env = convert_envl_to_env(envl);
+	print_env_array(env);
 	execve(cmd_path, cmd->args, env);
 	perror("execve");
 	free(cmd_path);

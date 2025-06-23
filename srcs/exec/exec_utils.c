@@ -50,7 +50,7 @@ void	handle_binary_pipeline(t_command *cmd, t_sh *shell)
 {
 	if (apply_redirections(cmd) == ERROR)
 		exit(1);
-	exit(execute_binary(cmd, shell->env));
+	exit(execute_binary(cmd, shell->envl));
 }
 
 int	fork_single_binary(t_command *cmd, t_sh *shell)
@@ -65,7 +65,7 @@ int	fork_single_binary(t_command *cmd, t_sh *shell)
 	{
 		if (apply_redirections(cmd) == ERROR)
 			exit(1);
-		exit(execute_binary(cmd, shell->env));
+		exit(execute_binary(cmd, shell->envl));
 	}
 	waitpid(pid, &status, 0);
 	return (process_wait_status(status));
