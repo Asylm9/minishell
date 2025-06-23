@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/06/23 18:04:01 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/23 18:14:06 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,14 +66,6 @@ typedef enum e_expand
 	EXPAND,
 	NO_EXPAND
 }							t_expand;
-
-typedef enum e_redir_type
-{
-	IN,
-	OUT,
-	APPEND,
-	HEREDOC
-}							t_redir_type;
 
 typedef struct s_token
 {

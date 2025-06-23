@@ -38,6 +38,7 @@ int	handle_builtin(t_command *cmd, t_sh *shell)
 
 	if (cmd->redirections && !shell->in_pipeline)
 		save_or_restore_fds(shell, 's');
+	//apply_redirections(cmd);
 	ret = execute_builtin(cmd, shell);
 	if (cmd->redirections && !shell->in_pipeline)
 		save_or_restore_fds(shell, 'r');

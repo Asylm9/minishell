@@ -144,7 +144,7 @@ char	*expand_token(char *input, t_sh *shell)
 
 void	init_heredoc(t_redirect *redir, char *delimiter)
 {
-	redir->type = HEREDOC;
+	redir->type = REDIR_HEREDOC;
 	redir->target = ft_strdup(delimiter);
 	redir->fd = -1;
 }
