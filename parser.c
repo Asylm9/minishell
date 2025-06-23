@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/21 20:17:14 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/23 18:01:19 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ t_command	*create_node_cmd(t_token **exp_lst)
 				cmd->redirections = cmd->redirections->next;
 				cmd->redirections->target = (*exp_lst)->next->value;
 			}
+			cmd->redirections->type = (*exp_lst)->type;
 			(*exp_lst) = (*exp_lst)->next;
 		}
 		(*exp_lst) = (*exp_lst)->next;
