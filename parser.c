@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/23 18:16:53 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/23 18:22:32 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ void	print_ast(t_ast *ast)
 	printf("Type:\n");
 	if (!ast)
 		return ;
-	if (ast->type == CMD && ast->cmd)
+	if (ast && ast->type == CMD && ast->cmd)
 	{
 		if (ast->cmd->cmd_name == NULL)
 			printf("	Command:\n		Name: NULL\n");
