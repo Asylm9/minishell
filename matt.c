@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/24 19:17:48 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/24 20:05:24 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,20 +35,6 @@ int	check_input(char *input)
 		i++;
 	}
 	return (SUCCESS);
-}
-
-int	is_env_var(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '$')
-			return (1);
-		i++;
-	}
-	return (0);
 }
 
 void	print_token(t_token *tok_lst)
