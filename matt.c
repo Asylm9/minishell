@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/21 20:41:24 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/24 18:03:23 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ int	main(int ac, char **av, char **envp)
 		}
 		printf("TOKENISATION SUCCESSFULL\n");
 		free(input);
-		print_token(tok_lst);
+		// print_token(tok_lst);
 		if (create_token_node(&expanded))
 		{
 			free_tok_lst(tok_lst);
@@ -130,7 +130,7 @@ int	main(int ac, char **av, char **envp)
 		printf("EXPANDING LIST\n");
 		expand_list(tok_lst, expanded, &shell);
 		printf("LIST EXPANDED\n");
-		print_token(expanded);
+		// print_token(expanded);
 		ast = malloc(sizeof(t_ast));
 		if (!ast)
 		{

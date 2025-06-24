@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/24 17:57:52 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/24 18:06:03 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,8 +156,11 @@ int	expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell)
 		exp_lst->expand = NO_EXPAND;
 		if (tok_lst->type == REDIR_HEREDOC)
 		{
-			if (tok_lst->next != NULL)
-				exp_lst->value = tok_lst->value;
+			if (tok_lst->next->value)
+			{
+				exp_lst->value = tok_lst->next->value;
+				exp_lst->hd_fd = handle_heredoc(tok_lst->next->value, shell);
+			}
 		}
 		if (tok_lst->expand == NO_EXPAND)
 		{
