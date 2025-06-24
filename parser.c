@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/24 13:09:58 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/24 13:59:58 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,18 @@ int	create_node_pipe(t_ast **ast)
 	new_ast->right = NULL;
 	*ast = new_ast;
 	return (SUCCESS);
+}
+
+void	free_redir(t_redirect *redirection)
+{
+	t_redirect	*current;
+
+	current = redirection;
+	while (redirection->next)
+	{
+		redirection = redirection->next;
+		free(current);
+	}
 }
 
 t_command	*create_node_cmd(t_token **exp_lst)

@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/23 16:50:02 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/24 14:42:46 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ int	is_pipe_redir(char *str)
 int	expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell)
 {
 	if (!exp_lst)
-		return (1);
+		return (ERROR);
 	while (tok_lst)
 	{
 		exp_lst->expand = NO_EXPAND;
