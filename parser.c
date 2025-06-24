@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/24 18:17:44 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/24 19:11:03 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,24 +119,18 @@ int	parse_ast(t_token *exp_lst, t_ast **ast)
 	(*ast)->type = CMD;
 	while (exp_lst)
 	{
-		printf("TEST 4\n");
 		if (exp_lst && exp_lst->type == PIPE)
 		{
-			printf("TEST PIPE\n");
 			create_node_pipe(ast);
 			exp_lst = exp_lst->next;
 		}
-		printf("TEST 5\n");
 		if (exp_lst && exp_lst->type == WORD)
 		{
-			printf("TEST CMD\n");
 			(*ast)->right = malloc(sizeof(t_ast));
 			(*ast)->right->cmd = create_node_cmd(&exp_lst);
 			(*ast)->right->type = CMD;
 		}
-		printf("TEST 8\n");
 	}
-	printf("PARSING DONE\n");
 	return (SUCCESS);
 }
 void	print_ast(t_ast *ast)

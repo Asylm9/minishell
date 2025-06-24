@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:05:28 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/24 18:18:29 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/24 19:12:30 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,8 +165,6 @@ int	tokenize_input(t_token *tok_lst, const char *input)
 		create_token_node(&tok_lst);
 		if (!tok_lst->next)
 			return (ERROR);
-		printf("Token created: %s, type: %d, expand: %d\n", tok_lst->value,
-			tok_lst->type, tok_lst->expand);
 		tok_lst = tok_lst->next;
 		start = end + 1;
 	}
