@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/24 20:49:47 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/24 20:54:27 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ char	*expand_token(char *input, t_sh *shell)
 		}
 		else if (input[pos] == '"')
 		{
+			pos++;
 			while (input[pos] != '"')
 			{
 				pos++;
@@ -142,7 +143,7 @@ char	*expand_token(char *input, t_sh *shell)
 					return (NULL);
 				}
 			}
-			buffer = ft_substr(input, start + 1, pos - start - 1);
+			result = ft_substr(input, start + 1, pos - start - 1);
 			pos++;
 			start = pos;
 		}

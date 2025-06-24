@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   zone_test.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:55:02 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/18 19:33:47 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/24 20:54:04 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,20 +56,6 @@
 // 	return (result);
 // }
 
-int	is_env_var(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '$')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
 // char	*trim_quotes(char *input)
 // {
 // 	char	*result;
@@ -103,58 +89,69 @@ int	is_env_var(char *str)
 
 int	main(int ac, char **av, char **envp)
 {
-	t_token		*test;
-	t_token		*test2;
-	t_token		*test2_2;
-	t_token		*test2_5;
-	t_token		*test3;
-	t_token		*test4;
-	t_token		*test5;
-	t_command	*cmd;
+	char	*str;
+	char	*result;
+	t_sh	shell;
 
-	test = malloc(sizeof(t_token));
-	test2 = malloc(sizeof(t_token));
-	test2_2 = malloc(sizeof(t_token));
-	test2_5 = malloc(sizeof(t_token));
-	test3 = malloc(sizeof(t_token));
-	test4 = malloc(sizeof(t_token));
-	test5 = malloc(sizeof(t_token));
-	cmd = malloc(sizeof(t_command));
-	test->type = WORD;
-	test->value = "cat";
-	test->next = test2;
-	test2->type = WORD;
-	test2->value = "-l";
-	test2->next = test2_2;
-	test2_2->type = WORD;
-	test2_2->value = "-a";
-	test2_2->next = test2_5;
-	test2_5->type = REDIR_IN;
-	test2_5->value = NULL;
-	test2_5->next = test3;
-	test3->type = WORD;
-	test3->value = "output.txt";
-	test3->next = test4;
-	test4->type = REDIR_IN;
-	test4->value = NULL;
-	test4->next = test5;
-	test5->type = WORD;
-	test5->value = "input.txt";
-	test5->next = NULL;
-	if (create_cmd(test, &cmd) == 0)
-	{
-		printf("cmd created : %s\n", cmd->cmd_name);
-		// for (int i = 0; cmd->args[i] != NULL; i++)
-		printf("args[1] : %s\n", cmd->args[0]);
-		printf("args[1] : %s\n", cmd->args[1]);
-		printf("args[1] : %s\n", cmd->args[2]);
-		printf("args[1] : %s\n", cmd->args[3]);
-		printf("redir : %s\n", cmd->redirections->target);
-		printf("redir : %s\n", cmd->redirections->next->target);
-		return (0);
-	}
-	// print_ast(cmd);
-	return (1);
+	(void)ac;
+	(void)av;
+	init_shell_struct(&shell, envp);
+	str = "'abc'";
+	result = ft_substr(str, 1, 3);
+	printf("%s\n", result);
+	result = expand_token("'ab'\"cdef$HOMEE", &shell);
+	printf("Result post expand : %s\n", result);
+	// t_token		*test;
+	// t_token		*test2;
+	// t_token		*test2_2;
+	// t_token		*test2_5;
+	// t_token		*test3;
+	// t_token		*test4;
+	// t_token		*test5;
+	// t_command	*cmd;
+	// test = malloc(sizeof(t_token));
+	// test2 = malloc(sizeof(t_token));
+	// test2_2 = malloc(sizeof(t_token));
+	// test2_5 = malloc(sizeof(t_token));
+	// test3 = malloc(sizeof(t_token));
+	// test4 = malloc(sizeof(t_token));
+	// test5 = malloc(sizeof(t_token));
+	// cmd = malloc(sizeof(t_command));
+	// test->type = WORD;
+	// test->value = "cat";
+	// test->next = test2;
+	// test2->type = WORD;
+	// test2->value = "-l";
+	// test2->next = test2_2;
+	// test2_2->type = WORD;
+	// test2_2->value = "-a";
+	// test2_2->next = test2_5;
+	// test2_5->type = REDIR_IN;
+	// test2_5->value = NULL;
+	// test2_5->next = test3;
+	// test3->type = WORD;
+	// test3->value = "output.txt";
+	// test3->next = test4;
+	// test4->type = REDIR_IN;
+	// test4->value = NULL;
+	// test4->next = test5;
+	// test5->type = WORD;
+	// test5->value = "input.txt";
+	// test5->next = NULL;
+	// if (create_cmd(test, &cmd) == 0)
+	// {
+	// 	printf("cmd created : %s\n", cmd->cmd_name);
+	// 	// for (int i = 0; cmd->args[i] != NULL; i++)
+	// 	printf("args[1] : %s\n", cmd->args[0]);
+	// 	printf("args[1] : %s\n", cmd->args[1]);
+	// 	printf("args[1] : %s\n", cmd->args[2]);
+	// 	printf("args[1] : %s\n", cmd->args[3]);
+	// 	printf("redir : %s\n", cmd->redirections->target);
+	// 	printf("redir : %s\n", cmd->redirections->next->target);
+	// 	return (0);
+	// }
+	// // print_ast(cmd);
+	// return (1);
 }
 // int i = 0;
 // char *env;
