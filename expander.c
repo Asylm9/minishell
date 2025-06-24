@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/24 20:54:27 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/24 21:27:43 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,16 +118,19 @@ char	*expand_token(char *input, t_sh *shell)
 		else if (input[pos] == '\'')
 		{
 			pos++;
-			while (input[pos] != '\'')
+			while (input[pos] && input[pos] != '\'')
 			{
-				pos++;
 				if (input[pos] == '\0')
 				{
 					printf("unclosed single quote\n");
 					return (NULL);
 				}
+				pos++;
 			}
-			result = ft_substr(input, start + 1, pos - start - 1);
+			if (input[start] == '\'')
+				result = ft_substr(input, start + 1, pos - start - 1);
+			else
+				result = ft_substr(input, start, pos - start);
 			pos++;
 			start = pos;
 		}

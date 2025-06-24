@@ -10,7 +10,7 @@ SRCDIR = .
 OBJ_DIR = objs
 
 # Fichiers sources avec chemins complets
-SRCS =  $(SRCDIR)/zone_test.c \
+SRCS =  $(SRCDIR)/matt.c \
         $(SRCDIR)/token.c \
         $(SRCDIR)/expander.c \
         $(SRCDIR)/parser.c \

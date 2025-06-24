@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/24 20:05:24 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/24 21:36:30 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,8 @@ int	main(int ac, char **av, char **envp)
 		expanded = NULL;
 	}
 }
+
+// CHECK SET TOKEN VALUE FOR QUOTES BUGGED
 
 // execve("/bin/cat", args, NULL);
 
