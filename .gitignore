@@ -37,3 +37,5 @@ vgcore.*
 # Test files
 input.txt
 output.txt
+infile.txt
+outfile.txt
