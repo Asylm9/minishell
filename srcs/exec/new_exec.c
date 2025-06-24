@@ -15,7 +15,8 @@ int	execute_pipeline(t_ast *ast, t_sh *shell)
 	close(pfd[1]);
 	waitpid(pid_left, NULL, 0);
 	waitpid(pid_right, &status, 0);
-	return (process_wait_status(status));
+	shell->exit_status = process_wait_status(status);
+	return (shell->exit_status);
 }
 
 int	execute_command(t_command *cmd, t_sh *shell)

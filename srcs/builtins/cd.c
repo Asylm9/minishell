@@ -32,13 +32,11 @@ int	validate_path(char **args, char *new_path)
 			printf_fd(STDERR, "minishell: cd: HOME not set\n");
 		else if (args[1][0] == '-')
 			printf_fd(STDERR, "minishell: cd: OLDPWD not set\n");
-		else
-			printf_fd(STDERR, "minishell: cd: invalid path\n");
 		return (ERROR);
 	}
 	if (access(new_path, F_OK | X_OK) < 0)
 	{
-		printf_fd(STDERR, "cd: no such file or directory: %s\n", new_path);
+		printf_fd(STDERR, "cd: %s: No such file or directory\n", new_path);
 		return (ERROR);
 	}
 	return (SUCCESS);
