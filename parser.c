@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/23 18:22:32 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/24 13:09:58 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ t_command	*create_node_cmd(t_token **exp_lst)
 {
 	int			i;
 	t_token		*tmp;
-	t_redirect	*tmp_redir;
 	t_command	*cmd;
+	t_redirect	*current;
 
 	i = 0;
 	tmp = (*exp_lst);
@@ -40,30 +40,34 @@ t_command	*create_node_cmd(t_token **exp_lst)
 	if (!cmd)
 		return (NULL);
 	cmd->redirections = NULL;
-	tmp_redir = NULL;
 	while ((*exp_lst) && (*exp_lst)->type != PIPE)
 	{
 		if ((*exp_lst)->type == WORD)
 			i++;
 		else if ((*exp_lst)->next && (*exp_lst)->next->value)
 		{
-			cmd->redirections = malloc(sizeof(t_redirect));
 			if (cmd->redirections == NULL)
-				return (NULL);
-			cmd->redirections->next = NULL;
-			cmd->redirections->target = NULL;
-			tmp_redir = cmd->redirections;
-			if (cmd->redirections->target == NULL)
+			{
+				cmd->redirections = malloc(sizeof(t_redirect));
+				if (cmd->redirections == NULL)
+					return (NULL);
+				cmd->redirections->next = NULL;
+				cmd->redirections->type = (*exp_lst)->type;
 				cmd->redirections->target = (*exp_lst)->next->value;
+				// rajouter fd si heredoc blblblbl
+			}
 			else
 			{
-				cmd->redirections->next = malloc(sizeof(t_redirect));
-				if (cmd->redirections->next == NULL)
+				current = cmd->redirections;
+				while (current->next != NULL)
+					current = current->next;
+				current->next = malloc(sizeof(t_redirect));
+				if (current->next == NULL)
 					return (NULL);
-				cmd->redirections = cmd->redirections->next;
-				cmd->redirections->target = (*exp_lst)->next->value;
+				current->next->type = (*exp_lst)->type;
+				current->next->target = (*exp_lst)->next->value;
+				current->next->next = NULL;
 			}
-			cmd->redirections->type = (*exp_lst)->type;
 			(*exp_lst) = (*exp_lst)->next;
 		}
 		(*exp_lst) = (*exp_lst)->next;
@@ -77,27 +81,12 @@ t_command	*create_node_cmd(t_token **exp_lst)
 	}
 	i = 0;
 	(*exp_lst) = tmp;
-	if ((*exp_lst)->type == WORD)
-	{
-		cmd->cmd_name = (*exp_lst)->value;
-		cmd->args[i] = (*exp_lst)->value;
-		i++;
-		(*exp_lst) = (*exp_lst)->next;
-	}
 	while ((*exp_lst) && (*exp_lst)->type != PIPE)
 	{
 		if ((*exp_lst)->type == REDIR_APPEND
 			|| (*exp_lst)->type == REDIR_HEREDOC || (*exp_lst)->type == REDIR_IN
 			|| (*exp_lst)->type == REDIR_OUT)
-		{
-			// if ((*exp_lst)->next && (*exp_lst)->next->next)
 			(*exp_lst) = (*exp_lst)->next->next;
-			// else
-			// {
-			// 	(*exp_lst) = (*exp_lst)->next;
-			// 	break ;
-			// }
-		}
 		else
 		{
 			if (i == 0)
@@ -107,8 +96,6 @@ t_command	*create_node_cmd(t_token **exp_lst)
 			(*exp_lst) = (*exp_lst)->next;
 		}
 	}
-	if (cmd->redirections)
-		cmd->redirections = tmp_redir;
 	cmd->args[i] = NULL;
 	return (cmd);
 }

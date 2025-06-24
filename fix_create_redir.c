@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fix_create_redir.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/23 22:32:03 by agaland          ###   ########.fr       */
+/*   Updated: 2025/06/24 13:06:27 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ t_command	*create_node_cmd(t_token **exp_lst)
 {
 	int			i;
 	t_token		*tmp;
-	t_redirect	*tmp_redir;
 	t_command	*cmd;
 	t_redirect	*current;
 
@@ -41,7 +40,6 @@ t_command	*create_node_cmd(t_token **exp_lst)
 	if (!cmd)
 		return (NULL);
 	cmd->redirections = NULL;
-	tmp_redir = NULL;
 	while ((*exp_lst) && (*exp_lst)->type != PIPE)
 	{
 		if ((*exp_lst)->type == WORD)
@@ -56,8 +54,7 @@ t_command	*create_node_cmd(t_token **exp_lst)
 				cmd->redirections->next = NULL;
 				cmd->redirections->type = (*exp_lst)->type;
 				cmd->redirections->target = (*exp_lst)->next->value;
-				//rajouter fd si heredoc blblblbl
-				tmp_redir = cmd->redirections;
+				// rajouter fd si heredoc blblblbl
 			}
 			else
 			{
@@ -84,27 +81,12 @@ t_command	*create_node_cmd(t_token **exp_lst)
 	}
 	i = 0;
 	(*exp_lst) = tmp;
-	if ((*exp_lst)->type == WORD)
-	{
-		cmd->cmd_name = (*exp_lst)->value;
-		cmd->args[i] = (*exp_lst)->value;
-		i++;
-		(*exp_lst) = (*exp_lst)->next;
-	}
 	while ((*exp_lst) && (*exp_lst)->type != PIPE)
 	{
 		if ((*exp_lst)->type == REDIR_APPEND
 			|| (*exp_lst)->type == REDIR_HEREDOC || (*exp_lst)->type == REDIR_IN
 			|| (*exp_lst)->type == REDIR_OUT)
-		{
-			// if ((*exp_lst)->next && (*exp_lst)->next->next)
 			(*exp_lst) = (*exp_lst)->next->next;
-			// else
-			// {
-			// 	(*exp_lst) = (*exp_lst)->next;
-			// 	break ;
-			// }
-		}
 		else
 		{
 			if (i == 0)
@@ -114,8 +96,6 @@ t_command	*create_node_cmd(t_token **exp_lst)
 			(*exp_lst) = (*exp_lst)->next;
 		}
 	}
-	if (cmd->redirections)
-		cmd->redirections = tmp_redir;
 	cmd->args[i] = NULL;
 	return (cmd);
 }
@@ -126,24 +106,18 @@ int	parse_ast(t_token *exp_lst, t_ast **ast)
 	(*ast)->type = CMD;
 	while (exp_lst)
 	{
-		printf("TEST 4\n");
 		if (exp_lst && exp_lst->type == PIPE)
 		{
-			printf("TEST PIPE\n");
 			create_node_pipe(ast);
 			exp_lst = exp_lst->next;
 		}
-		printf("TEST 5\n");
 		if (exp_lst && exp_lst->type == WORD)
 		{
-			printf("TEST CMD\n");
 			(*ast)->right = malloc(sizeof(t_ast));
 			(*ast)->right->cmd = create_node_cmd(&exp_lst);
 			(*ast)->right->type = CMD;
 		}
-		printf("TEST 8\n");
 	}
-	printf("PARSING DONE\n");
 	return (SUCCESS);
 }
 void	print_ast(t_ast *ast)
