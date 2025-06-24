@@ -69,5 +69,6 @@ int	fork_single_binary(t_command *cmd, t_sh *shell)
 		exit(execute_binary(cmd, shell->envl));
 	}
 	waitpid(pid, &status, 0);
-	return (process_wait_status(status));
+	shell->exit_status = process_wait_status(status);
+	return (shell->exit_status);
 }

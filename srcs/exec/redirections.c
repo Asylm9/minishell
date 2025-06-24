@@ -70,7 +70,10 @@ int	redirect_out(t_redirect *redir)
 	else if (redir->type == REDIR_APPEND)
 		fd = open(redir->target, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
-		return (perror("open"), ERROR);
+	{
+		printf_fd(STDERR, "minishell: %s: Permission denied\n", redir->target);
+		return (/* perror("open"),  */ERROR);
+	}
 	if (dup2(fd, STDOUT_FILENO) < 0)
 	{
 		close (fd);
