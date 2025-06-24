@@ -6,11 +6,111 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/24 19:13:18 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/24 19:34:33 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	expand_var(char *input, char **result)
+{
+	int		i;
+	char	*var;
+
+	i = 1;
+	while (ft_isalnum(input[i]) || input[i] == '_')
+		i++;
+	var = ft_substr(input, 0, i);
+	(*result) = getenv(var + 1);
+	free(var);
+	if ((*result) == NULL)
+		return (1);
+	return (0);
+}
+
+int	expand_xcode(char **result, t_sh *shell)
+{
+	*result = ft_itoa(shell->exit_status);
+	if (!(*result))
+		return (1);
+	return (0);
+}
+
+char	*expand_token(char *input, t_sh *shell)
+{
+	char	*result;
+	char	*buffer;
+	char	*tmp;
+	int		pos;
+	int		start;
+
+	result = ft_calloc(1, 1);
+	buffer = NULL;
+	tmp = NULL;
+	pos = 0;
+	start = 0;
+	while (input[pos] != '\0')
+	{
+		if (input[pos] == '$')
+		{
+			buffer = ft_substr(input, start, pos - start);
+			tmp = ft_fstrjoin(&result, &buffer, 0);
+			if (result)
+			{
+				free(result);
+				result = NULL;
+			}
+			if (buffer)
+			{
+				free(buffer);
+				buffer = NULL;
+			}
+			if (input[pos + 1] == '?')
+			{
+				if (expand_xcode(&buffer, shell))
+					result = tmp;
+				if (buffer)
+				{
+					result = ft_fstrjoin(&tmp, &buffer, 1);
+					free(buffer);
+					tmp = NULL;
+				}
+			}
+			else if (expand_var(input + pos, &buffer))
+				result = tmp;
+			else
+			{
+				if (buffer)
+				{
+					result = ft_fstrjoin(&tmp, &buffer, 1);
+					tmp = NULL;
+				}
+				else
+				{
+					if (result)
+						free(result);
+					result = tmp;
+				}
+			}
+			pos++;
+			while ((ft_isalnum(input[pos]) || input[pos] == '_'
+					|| input[pos] == '?') && input[pos])
+			{
+				pos++;
+				if (input[pos - 1] == '?')
+					break ;
+			}
+			start = pos;
+		}
+		else
+			pos++;
+	}
+	buffer = ft_substr(input, start, pos - start);
+	tmp = ft_fstrjoin(&result, &buffer, 0);
+	free(result);
+	free(buffer);
+	return (tmp);
+}
 
 char	*trim_quotes(char *input)
 {
