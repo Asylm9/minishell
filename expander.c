@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/24 20:05:15 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/24 20:49:47 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,7 @@ char	*expand_token(char *input, t_sh *shell)
 					result = tmp;
 				if (buffer)
 				{
-					result = ft_fstrjoin(&tmp, &buffer, 1);
-					free(buffer);
+					result = ft_fstrjoin(&tmp, &buffer, 3);
 					tmp = NULL;
 				}
 			}
@@ -114,6 +113,37 @@ char	*expand_token(char *input, t_sh *shell)
 				if (input[pos - 1] == '?')
 					break ;
 			}
+			start = pos;
+		}
+		else if (input[pos] == '\'')
+		{
+			pos++;
+			while (input[pos] != '\'')
+			{
+				pos++;
+				if (input[pos] == '\0')
+				{
+					printf("unclosed single quote\n");
+					return (NULL);
+				}
+			}
+			result = ft_substr(input, start + 1, pos - start - 1);
+			pos++;
+			start = pos;
+		}
+		else if (input[pos] == '"')
+		{
+			while (input[pos] != '"')
+			{
+				pos++;
+				if (input[pos] == '\0')
+				{
+					printf("unclosed double quote\n");
+					return (NULL);
+				}
+			}
+			buffer = ft_substr(input, start + 1, pos - start - 1);
+			pos++;
 			start = pos;
 		}
 		else
