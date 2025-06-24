@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:05:28 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/18 13:02:42 by matthieu         ###   ########.fr       */
+/*   Updated: 2025/06/24 18:18:29 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	create_token_node(t_token **tok_lst)
 	new_token->expand = NO_EXPAND;
 	new_token->type = WORD;
 	new_token->next = NULL;
+	new_token->hd_fd = -1;
 	if (*tok_lst == NULL)
 		*tok_lst = new_token;
 	else
@@ -123,13 +124,9 @@ void	set_token_type(t_token *tok_lst, const char *input, int *end)
 
 int	set_value(t_token *tok_lst, const char *input, int *start, int *end)
 {
-	// printf("input[start] = %c, input[end] = %c\n", input[(*start)],
-	// input[(*end)
-	// - 1]);
 	if (input[(*end)] == '\'' || input[(*end)] == '"')
 	{
 		(*end) -= 2;
-		// printf("input[end] = %c\n", input[(*end)]);
 		tok_lst->value = ft_substr(input, (*start), (*end) - (*start));
 		(*end) += 2;
 	}

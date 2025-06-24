@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/24 13:59:58 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/24 18:17:44 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ t_command	*create_node_cmd(t_token **exp_lst)
 				cmd->redirections->next = NULL;
 				cmd->redirections->type = (*exp_lst)->type;
 				cmd->redirections->target = (*exp_lst)->next->value;
-				// rajouter fd si heredoc blblblbl
+				cmd->redirections->fd = (*exp_lst)->hd_fd;
 			}
 			else
 			{
@@ -78,6 +78,7 @@ t_command	*create_node_cmd(t_token **exp_lst)
 					return (NULL);
 				current->next->type = (*exp_lst)->type;
 				current->next->target = (*exp_lst)->next->value;
+				cmd->redirections->fd = (*exp_lst)->hd_fd;
 				current->next->next = NULL;
 			}
 			(*exp_lst) = (*exp_lst)->next;
