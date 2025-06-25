@@ -38,7 +38,8 @@ int	handle_builtin(t_command *cmd, t_sh *shell)
 
 	if (cmd->redirections && !shell->in_pipeline)
 		save_or_restore_fds(shell, 's');
-	apply_redirections(cmd);
+	if (apply_redirections(cmd) == ERROR)
+		exit(1);
 	ret = execute_builtin(cmd, shell);
 	if (cmd->redirections && !shell->in_pipeline)
 		save_or_restore_fds(shell, 'r');
@@ -51,7 +52,8 @@ void	handle_binary_pipeline(t_command *cmd, t_sh *shell)
 {
 	if (apply_redirections(cmd) == ERROR)
 		exit(1);
-	exit(execute_binary(cmd, shell->envl));
+	shell->exit_status = execute_binary(cmd, shell->envl);
+	exit(shell->exit_status);
 }
 
 int	fork_single_binary(t_command *cmd, t_sh *shell)
