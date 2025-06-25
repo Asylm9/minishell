@@ -47,6 +47,7 @@ static bool	has_quotes(char *delimiter)
 	else
 		return (false);
 }
+
 static char	*process_heredoc_line(char *input, char *delimiter, t_sh *shell)
 {
 	char	*line;
@@ -92,6 +93,7 @@ static int	read_heredoc_content(char *delimiter, t_sh *shell, char **buffer)
 int	handle_heredoc(char *delimiter, t_sh *shell)
 {
 	char	*buffer;
+	char	*temp;
 	int		pfd[2];
 
 	if (pipe(pfd) < 0)
@@ -104,6 +106,12 @@ int	handle_heredoc(char *delimiter, t_sh *shell)
 	}
 	if (buffer)
 	{
+		temp = ft_strjoin(buffer, "\n");
+		if (temp)
+		{
+			free(buffer);
+			buffer = temp;
+		}
 		write(pfd[1], buffer, ft_strlen(buffer));
 		free(buffer);
 	}
