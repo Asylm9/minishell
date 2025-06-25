@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/24 21:27:43 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/25 15:26:32 by matthieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,13 @@ char	*expand_token(char *input, t_sh *shell)
 	start = 0;
 	while (input[pos] != '\0')
 	{
+		if (input[pos] == '\'')
+		{
+			pos++;
+			while (input[pos] && input[pos] != '\'')
+				pos++;
+			pos++;
+		}
 		if (input[pos] == '$')
 		{
 			buffer = ft_substr(input, start, pos - start);
@@ -115,41 +122,31 @@ char	*expand_token(char *input, t_sh *shell)
 			}
 			start = pos;
 		}
-		else if (input[pos] == '\'')
-		{
-			pos++;
-			while (input[pos] && input[pos] != '\'')
-			{
-				if (input[pos] == '\0')
-				{
-					printf("unclosed single quote\n");
-					return (NULL);
-				}
-				pos++;
-			}
-			if (input[start] == '\'')
-				result = ft_substr(input, start + 1, pos - start - 1);
-			else
-				result = ft_substr(input, start, pos - start);
-			pos++;
-			start = pos;
-		}
-		else if (input[pos] == '"')
-		{
-			pos++;
-			while (input[pos] != '"')
-			{
-				pos++;
-				if (input[pos] == '\0')
-				{
-					printf("unclosed double quote\n");
-					return (NULL);
-				}
-			}
-			result = ft_substr(input, start + 1, pos - start - 1);
-			pos++;
-			start = pos;
-		}
+		// else if (input[pos] == '\'')
+		// {
+		// 	pos++;
+		// 	while (input[pos] && input[pos] != '\'')
+		// 		pos++;
+		// 	result = ft_substr(input, start, pos - start);
+		// 	pos++;
+		// 	start = pos;
+		// }
+		// else if (input[pos] == '"')
+		// {
+		// 	pos++;
+		// 	while (input[pos] != '"')
+		// 	{
+		// 		pos++;
+		// 		if (input[pos] == '\0')
+		// 		{
+		// 			printf("unclosed double quote\n");
+		// 			return (NULL);
+		// 		}
+		// 	}
+		// 	result = ft_substr(input, start + 1, pos - start - 1);
+		// 	pos++;
+		// 	start = pos;
+		// }
 		else
 			pos++;
 	}
@@ -167,28 +164,41 @@ char	*trim_quotes(char *input)
 	char	*buffer;
 	int		start;
 	int		end;
+	char	quote;
 
 	start = 0;
 	end = 0;
 	result = NULL;
 	tmp = NULL;
 	buffer = NULL;
+	quote = ' ';
 	while (input[end] && input[end] != '\0')
 	{
-		while (input[end] != '\'' && input[end] != '"' && input[end])
-			end++;
+		if (quote == '\'' || quote == '"')
+		{
+			while (input[end] && input[end] != quote)
+				end++;
+			quote = ' ';
+		}
+		else
+		{
+			while (input[end] != '\'' && input[end] != '"' && input[end])
+				end++;
+			quote = input[end];
+		}
 		tmp = ft_substr(input, start, end - start);
 		if (result)
 		{
-			buffer = result;
+			buffer = ft_strdup(result);
+			free(result);
 			result = ft_fstrjoin(&buffer, &tmp, 3);
 		}
 		else
 			result = tmp; // first chunk, no join needed
 		if (input[end] == '\0')
 			break ;
-		start = end + 1;
 		end++;
+		start = end;
 	}
 	return (result);
 }

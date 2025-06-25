@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:05:28 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/24 19:12:30 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/24 23:48:04 by matthieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	skip_spaces(const char *input, int *pos)
 int	find_end_of_token(const char *input, int *start, int *end)
 {
 	char	quote;
+	(void)start;
 
 	while (input[(*end)] && input[(*end)] != ' ' && input[(*end)] != '|'
 		&& input[(*end)] != '<' && input[(*end)] != '>')
@@ -77,19 +78,19 @@ int	find_end_of_token(const char *input, int *start, int *end)
 			(*end)++;
 			while (input[(*end)] != quote)
 			{
-				(*end)++;
 				if (input[(*end)] == '\0')
 					return (ERROR);
+				(*end)++;
 			}
 			(*end)++;
 		}
 		else
 			(*end)++;
 	}
-	if (input[(*start)] == '\'' || input[(*start)] == '"')
-		(*start)++;
-	if (input[(*end)] == '\'' || input[(*end)] == '"')
-		(*end)--;
+	// if (input[(*start)] == '\'' || input[(*start)] == '"')
+	// 	(*start)++;
+	// if (input[(*end)] == '\'' || input[(*end)] == '"')
+	// 	(*end)--;
 	return (SUCCESS);
 }
 

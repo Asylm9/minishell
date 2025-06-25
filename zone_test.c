@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   zone_test.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 14:55:02 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/24 20:54:04 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/25 15:23:25 by matthieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,16 +91,13 @@ int	main(int ac, char **av, char **envp)
 {
 	char	*str;
 	char	*result;
-	t_sh	shell;
 
 	(void)ac;
 	(void)av;
-	init_shell_struct(&shell, envp);
-	str = "'abc'";
-	result = ft_substr(str, 1, 3);
-	printf("%s\n", result);
-	result = expand_token("'ab'\"cdef$HOMEE", &shell);
-	printf("Result post expand : %s\n", result);
+	(void)envp;
+	str = "gtrdhdh\"ejd\'etgvwre\"gwtgwetg\'gtegret\"gtwegwt\'";
+	result = trim_quotes(str);
+	printf("trimmed : %s\n", result);
 	// t_token		*test;
 	// t_token		*test2;
 	// t_token		*test2_2;
