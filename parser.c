@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/24 19:11:03 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:07:43 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,12 @@ int	parse_ast(t_token *exp_lst, t_ast **ast)
 		{
 			create_node_pipe(ast);
 			exp_lst = exp_lst->next;
+			if (exp_lst->type == REDIR_OUT || exp_lst->type == REDIR_IN || exp_lst->type == REDIR_APPEND || exp_lst->type == REDIR_HEREDOC)
+			{
+				(*ast)->right = malloc(sizeof(t_ast));
+				(*ast)->right->cmd = create_node_cmd(&exp_lst);
+				(*ast)->right->type = CMD;
+			}
 		}
 		if (exp_lst && exp_lst->type == WORD)
 		{
