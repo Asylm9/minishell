@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/25 15:53:26 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/25 19:38:47 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,18 +195,17 @@ int	is_pipe_redir(char *str)
 
 int	expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell)
 {
+	int	advance;
+
 	if (!exp_lst)
 		return (ERROR);
 	while (tok_lst)
 	{
+		advance = 1;
 		exp_lst->expand = NO_EXPAND;
 		if (tok_lst->type == REDIR_HEREDOC)
-		{
 			if (tok_lst->next->value)
-			{
 				exp_lst->hd_fd = handle_heredoc(tok_lst->next->value, shell);
-			}
-		}
 		if (tok_lst->expand == NO_EXPAND)
 		{
 			if (!is_pipe_redir(tok_lst->value))
@@ -218,17 +217,22 @@ int	expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell)
 					return (ERROR);
 				}
 			}
+			exp_lst->type = tok_lst->type;
+		}
+		else if ((ft_strlen(expand_token(tok_lst->value, shell))) != 0)
+		{
+			exp_lst->value = trim_quotes(expand_token(tok_lst->value, shell));
+			exp_lst->type = tok_lst->type;
 		}
 		else
-			exp_lst->value = trim_quotes(expand_token(tok_lst->value, shell));
-		exp_lst->type = tok_lst->type;
+			advance = 0;
 		tok_lst = tok_lst->next;
-		if (tok_lst != NULL)
+		if (tok_lst != NULL && advance)
 		{
 			create_token_node(&exp_lst);
 			exp_lst = exp_lst->next;
 		}
-		else
+		else if (advance)
 		{
 			exp_lst->next = NULL;
 			break ;
