@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/25 22:24:52 by agaland          ###   ########.fr       */
+/*   Updated: 2025/06/26 01:00:06 by matthieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,12 +123,21 @@ int	parse_ast(t_token *exp_lst, t_ast **ast)
 		if (exp_lst && exp_lst->type == PIPE)
 		{
 			create_node_pipe(ast);
-			exp_lst = exp_lst->next;
-			if (exp_lst->type == REDIR_OUT || exp_lst->type == REDIR_IN || exp_lst->type == REDIR_APPEND || exp_lst->type == REDIR_HEREDOC)
+			if (exp_lst->next)
 			{
-				(*ast)->right = malloc(sizeof(t_ast));
-				(*ast)->right->cmd = create_node_cmd(&exp_lst);
-				(*ast)->right->type = CMD;
+				exp_lst = exp_lst->next;
+				if (exp_lst->type == REDIR_OUT || exp_lst->type == REDIR_IN || exp_lst->type == REDIR_APPEND || exp_lst->type == REDIR_HEREDOC)
+				{
+					(*ast)->right = malloc(sizeof(t_ast));
+					(*ast)->right->cmd = create_node_cmd(&exp_lst);
+					(*ast)->right->type = CMD;
+				}
+			}
+			else
+			{
+				exp_lst = exp_lst->next;
+				printf("Error near token '|', missing next command.\n");
+				// return (ERROR);
 			}
 		}
 		if (exp_lst && exp_lst->type == WORD)

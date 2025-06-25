@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   matt.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/25 15:48:21 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/26 00:41:12 by matthieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ int	main(int ac, char **av, char **envp)
 	{
 		input = readline("\033[0;34m\033[1m   Minishell> \033[0m");
 		add_history(input);
-		// printf("Input: %s\n", input);
 		if (check_input(input) == ERROR)
 			return (1);
 		if (create_token_node(&tok_lst))
@@ -107,25 +106,19 @@ int	main(int ac, char **av, char **envp)
 			free(input);
 			return (1);
 		}
-		// printf("TOKENISATION\n");
 		if (tokenize_input(tok_lst, input))
 		{
 			free(input);
 			return (1);
 		}
-		// printf("TOKENISATION SUCCESSFULL\n");
 		free(input);
-		// print_token(tok_lst);
 		if (create_token_node(&expanded))
 		{
 			free_tok_lst(tok_lst);
 			tok_lst = NULL;
 			return (1);
 		}
-		// printf("EXPANDING LIST\n");
 		expand_list(tok_lst, expanded, &shell);
-		// printf("LIST EXPANDED\n");
-		// print_token(expanded);
 		ast = malloc(sizeof(t_ast));
 		if (!ast)
 		{
@@ -137,12 +130,8 @@ int	main(int ac, char **av, char **envp)
 		ast->cmd = malloc(sizeof(t_command));
 		ast->left = NULL;
 		ast->right = NULL;
-		// ast->type = EMPTY;
-		// printf("TEST BF PARSE\n");
-		parse_ast(expanded, &ast);
-		// printf("AST:\n");
-		// print_ast(ast);
-		execute_ast(ast, &shell);
+		if (parse_ast(expanded, &ast) == 0)
+			execute_ast(ast, &shell);
 		free_tok_lst(tok_lst);
 		tok_lst = NULL;
 		free_tok_lst(expanded);
