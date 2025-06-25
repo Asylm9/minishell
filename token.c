@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:05:28 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/25 18:47:28 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/26 01:31:44 by matthieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,8 +146,7 @@ int	tokenize_input(t_token *tok_lst, const char *input)
 	start = 0;
 	while (input[start])
 	{
-		if (skip_spaces(input, &start) == ERROR)
-			return (ERROR);
+		skip_spaces(input, &start);
 		end = start;
 		if (find_end_of_token(input, &start, &end) == ERROR)
 			return (ERROR);
