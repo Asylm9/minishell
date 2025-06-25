@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/06/25 19:45:25 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/25 23:05:13 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,14 @@ typedef struct s_ast		t_ast;
 
 typedef enum e_token_type
 {
+	NOT_SET,
 	WORD,
 	PIPE,
 	REDIR_IN,
 	REDIR_OUT,
 	REDIR_APPEND,
 	REDIR_HEREDOC,
-	CMD,
-	// EMPTY conflit avec macro
+	CMD
 }							t_token_type;
 
 typedef enum e_expand

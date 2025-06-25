@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/25 20:16:26 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/25 23:06:20 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,6 +191,36 @@ int	is_pipe_redir(char *str)
 		i++;
 	}
 	return (ERROR);
+}
+
+/*
+	0 NOT_SET
+	1 WORD,
+	2 PIPE,
+	3 REDIR_IN,
+	4 REDIR_OUT,
+	5 REDIR_APPEND,
+	6 REDIR_HEREDOC,
+	7 CMD,
+*/
+
+int	check_validity(t_token *exp_lst)
+{
+	t_token_type	first;
+	t_token_type	second;
+	t_token_type	third;
+
+	first = NOT_SET;
+	second = NOT_SET;
+	third = NOT_SET;
+	while (exp_lst)
+	{
+		third = second;
+		second = first;
+		first = exp_lst->type;
+		if (first == PIPE && second >= 2)
+			return (ERROR);
+	}
 }
 
 int	expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell)
