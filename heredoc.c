@@ -29,13 +29,6 @@ char	*ft_fstrjoin(char **s1, char **s2, int flag)
 	return (result);
 }
 
-void	init_heredoc(t_redirect *redir, char *delimiter)
-{
-	redir->type = REDIR_HEREDOC;
-	redir->target = ft_strdup(delimiter);
-	redir->fd = -1;
-}
-
 static bool	has_quotes(char *delimiter)
 {
 	int	i;

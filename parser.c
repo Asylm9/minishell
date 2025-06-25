@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/25 16:07:43 by agaland          ###   ########.fr       */
+/*   Updated: 2025/06/25 17:56:16 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ t_command	*create_node_cmd(t_token **exp_lst)
 					return (NULL);
 				current->next->type = (*exp_lst)->type;
 				current->next->target = (*exp_lst)->next->value;
-				cmd->redirections->fd = (*exp_lst)->hd_fd;
+				current->next->fd = (*exp_lst)->hd_fd;
 				current->next->next = NULL;
 			}
 			(*exp_lst) = (*exp_lst)->next;
