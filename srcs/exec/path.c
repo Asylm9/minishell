@@ -46,9 +46,9 @@ char	**get_paths(t_command *cmd, t_env *envl)
 	return (paths);
 }
 
-static char	*is_absolute(char *cmd)
+static char	*is_absolute_or_relative(char *cmd)
 {
-	if (cmd[0] == '/')
+	if (cmd[0] == '/' || cmd[0] == '.')
 	{
 		if (access(cmd, F_OK | X_OK) == 0)
 			return (ft_strdup(cmd)); //pour ne pas risquer de free directement cmd->name plus tard
@@ -65,7 +65,7 @@ char	*find_cmd_path(char **paths, char *cmd_name)
 
 	if (!paths)
 		return (NULL);
-	abs_path = is_absolute(cmd_name);
+	abs_path = is_absolute_or_relative(cmd_name);
 	if (abs_path)
 		return (abs_path);
 	i = 0;
@@ -96,7 +96,10 @@ int	execute_binary(t_command *cmd, t_env *envl)
 	cmd_path = find_cmd_path(paths, cmd->cmd_name);
 	free_array(paths, -1);
 	if (!cmd_path)
+	{
+		printf_fd(STDERR,"minishell: %s: command not found\n", cmd->cmd_name);
 		return (CMD_NOT_FOUND);
+	}
 	env = convert_envl_to_env(envl);
 	execve(cmd_path, cmd->args, env);
 	perror("execve");
