@@ -6,7 +6,7 @@
 /*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/26 00:41:12 by matthieu         ###   ########.fr       */
+/*   Updated: 2025/06/26 01:48:55 by matthieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,43 +99,46 @@ int	main(int ac, char **av, char **envp)
 	{
 		input = readline("\033[0;34m\033[1m   Minishell> \033[0m");
 		add_history(input);
-		if (check_input(input) == ERROR)
-			return (1);
-		if (create_token_node(&tok_lst))
+		if (check_input(input) == SUCCESS)
 		{
+			if (create_token_node(&tok_lst))
+			{
+				free(input);
+				return (1);
+			}
+			if (tokenize_input(tok_lst, input))
+			{
+				free(input);
+				return (1);
+			}
 			free(input);
-			return (1);
-		}
-		if (tokenize_input(tok_lst, input))
-		{
-			free(input);
-			return (1);
-		}
-		free(input);
-		if (create_token_node(&expanded))
-		{
+			if (create_token_node(&expanded))
+			{
+				free_tok_lst(tok_lst);
+				tok_lst = NULL;
+				return (1);
+			}
+			expand_list(tok_lst, expanded, &shell);
+			ast = malloc(sizeof(t_ast));
+			if (!ast)
+			{
+				perror("malloc");
+				free(tok_lst);
+				tok_lst = NULL;
+				return (1);
+			}
+			ast->cmd = malloc(sizeof(t_command));
+			ast->left = NULL;
+			ast->right = NULL;
+			if (parse_ast(expanded, &ast) == 0)
+				execute_ast(ast, &shell);
 			free_tok_lst(tok_lst);
 			tok_lst = NULL;
-			return (1);
+			free_tok_lst(expanded);
+			expanded = NULL;
 		}
-		expand_list(tok_lst, expanded, &shell);
-		ast = malloc(sizeof(t_ast));
-		if (!ast)
-		{
-			perror("malloc");
-			free(tok_lst);
-			tok_lst = NULL;
-			return (1);
-		}
-		ast->cmd = malloc(sizeof(t_command));
-		ast->left = NULL;
-		ast->right = NULL;
-		if (parse_ast(expanded, &ast) == 0)
-			execute_ast(ast, &shell);
-		free_tok_lst(tok_lst);
-		tok_lst = NULL;
-		free_tok_lst(expanded);
-		expanded = NULL;
+		else
+			free(input);
 	}
 }
 
