@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/25 17:56:16 by agaland          ###   ########.fr       */
+/*   Updated: 2025/06/25 22:24:52 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ t_command	*create_node_cmd(t_token **exp_lst)
 	cmd = malloc(sizeof(t_command));
 	if (!cmd)
 		return (NULL);
+	cmd->cmd_name = NULL;
 	cmd->redirections = NULL;
 	while ((*exp_lst) && (*exp_lst)->type != PIPE)
 	{
