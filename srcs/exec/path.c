@@ -43,7 +43,6 @@ char	**get_paths(t_command *cmd, t_env *envl)
 		return (NULL);
 	}
 	paths = ft_split(env_path, ':');
-	free(env_path);
 	return (paths);
 }
 

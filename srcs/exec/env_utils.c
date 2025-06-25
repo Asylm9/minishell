@@ -55,9 +55,10 @@ char	**convert_envl_to_env(t_env *envl)
 
 t_env	*init_env_list(char **env)
 {
-	char	**var;
 	t_env	*new_node;
 	t_env	*head;
+	char	*equal_pos;
+	char	*value;
 	int		i;
 
 	if (!env)
@@ -66,16 +67,18 @@ t_env	*init_env_list(char **env)
 	i = 0;
 	while (env[i])
 	{
-		var = ft_split(env[i], '=');
-		if (!var)
+		equal_pos = ft_strchr(env[i], '=');
+		if (!equal_pos)
 			return (NULL);
-		if (var[1])
-			new_node = create_node(ft_strdup(var[0]), ft_strdup(var[1]));
+		value = equal_pos + 1;
+		equal_pos[0] = '\0';
+		if (value)
+			new_node = create_node(ft_strdup(env[i]), ft_strdup(value));
 		else
-			new_node = create_node(ft_strdup(var[0]), NULL);		
+			new_node = create_node(ft_strdup(env[i]), NULL);		
 		if (!new_node)
 			return (NULL);
-		free_array(var, -1);
+		equal_pos[0] = '=';
 		head = add_back_node(new_node, head);
 		i++;
 	}
