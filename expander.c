@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/25 15:26:32 by matthieu         ###   ########.fr       */
+/*   Updated: 2025/06/25 15:53:26 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ char	*expand_token(char *input, t_sh *shell)
 				pos++;
 			pos++;
 		}
-		if (input[pos] == '$')
+		if (input[pos] == '$' && input[pos + 1] && (ft_isalnum(input[pos + 1])
+				|| input[pos + 1] == '_' || input[pos + 1] == '?'))
 		{
 			buffer = ft_substr(input, start, pos - start);
 			tmp = ft_fstrjoin(&result, &buffer, 0);
@@ -122,31 +123,6 @@ char	*expand_token(char *input, t_sh *shell)
 			}
 			start = pos;
 		}
-		// else if (input[pos] == '\'')
-		// {
-		// 	pos++;
-		// 	while (input[pos] && input[pos] != '\'')
-		// 		pos++;
-		// 	result = ft_substr(input, start, pos - start);
-		// 	pos++;
-		// 	start = pos;
-		// }
-		// else if (input[pos] == '"')
-		// {
-		// 	pos++;
-		// 	while (input[pos] != '"')
-		// 	{
-		// 		pos++;
-		// 		if (input[pos] == '\0')
-		// 		{
-		// 			printf("unclosed double quote\n");
-		// 			return (NULL);
-		// 		}
-		// 	}
-		// 	result = ft_substr(input, start + 1, pos - start - 1);
-		// 	pos++;
-		// 	start = pos;
-		// }
 		else
 			pos++;
 	}

@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/24 21:36:30 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/25 15:48:21 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,20 @@
 
 int	check_input(char *input)
 {
-	int	i;
+	int		i;
+	char	quote;
 
 	i = 0;
 	while (input[i])
 	{
+		if (input[i] == '\'' || input[i] == '"')
+		{
+			quote = input[i];
+			i++;
+			while (input[i] && input[i] != quote)
+				i++;
+			i++;
+		}
 		if (input[i] == '|')
 			if (input[i + 1] == '|')
 				return (ERROR);
