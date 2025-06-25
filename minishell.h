@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/06/25 18:45:41 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/25 19:45:25 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ int							is_env_var(char *str);
 
 /* Expander */
 int							expand_xcode(char **result, t_sh *shell);
-int							expand_var(char *input, char **result);
+int							expand_var(char *input, char **result, t_env *envl);
 char						*expand_token(char *input, t_sh *shell);
 char						*trim_quotes(char *input);
 int							is_pipe_redir(char *str);

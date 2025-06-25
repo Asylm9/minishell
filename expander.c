@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/25 19:38:47 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/25 20:16:26 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	is_env_var(char *str)
 	return (0);
 }
 
-int	expand_var(char *input, char **result)
+int	expand_var(char *input, char **result, t_env *envl)
 {
 	int		i;
 	char	*var;
@@ -34,8 +34,8 @@ int	expand_var(char *input, char **result)
 	i = 1;
 	while (ft_isalnum(input[i]) || input[i] == '_')
 		i++;
-	var = ft_substr(input, 0, i);
-	(*result) = getenv(var + 1);
+	var = ft_substr(input, 1, i - 1);
+	(*result) = get_envl_var(var, envl);
 	free(var);
 	if ((*result) == NULL)
 		return (1);
@@ -97,7 +97,7 @@ char	*expand_token(char *input, t_sh *shell)
 					tmp = NULL;
 				}
 			}
-			else if (expand_var(input + pos, &buffer))
+			else if (expand_var(input + pos, &buffer, shell->envl))
 				result = tmp;
 			else
 			{
