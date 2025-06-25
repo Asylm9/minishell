@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/25 23:06:20 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/25 23:09:19 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,7 +218,7 @@ int	check_validity(t_token *exp_lst)
 		third = second;
 		second = first;
 		first = exp_lst->type;
-		if (first == PIPE && second >= 2)
+		if (first == PIPE && (second >= 2 || second == NOT_SET))
 			return (ERROR);
 	}
 }
