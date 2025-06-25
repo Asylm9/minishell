@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/06/24 18:05:37 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:45:41 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ typedef struct s_sh
 {
 	char					**env;
 	t_env					*envl;
-	bool 					in_pipeline; // assigner a false par defaut
+	bool in_pipeline; // assigner a false par defaut
 	char					*current_dir;
 	int						saved_stdin;
 	int						saved_stdout;
@@ -141,7 +141,7 @@ int							skip_spaces(const char *input, int *start);
 int							find_end_of_token(const char *input, int *start,
 								int *end);
 void						set_token_type(t_token *tok_lst, const char *input,
-								int *end);
+								int *start, int *end);
 int							set_value(t_token *tok_lst, const char *input,
 								int *start, int *end);
 int							tokenize_input(t_token *tok_lst, const char *input);

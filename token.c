@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:05:28 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/24 23:48:04 by matthieu         ###   ########.fr       */
+/*   Updated: 2025/06/25 18:47:28 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ int	skip_spaces(const char *input, int *pos)
 int	find_end_of_token(const char *input, int *start, int *end)
 {
 	char	quote;
-	(void)start;
 
+	(void)start;
 	while (input[(*end)] && input[(*end)] != ' ' && input[(*end)] != '|'
 		&& input[(*end)] != '<' && input[(*end)] != '>')
 	{
@@ -87,30 +87,32 @@ int	find_end_of_token(const char *input, int *start, int *end)
 		else
 			(*end)++;
 	}
-	// if (input[(*start)] == '\'' || input[(*start)] == '"')
-	// 	(*start)++;
-	// if (input[(*end)] == '\'' || input[(*end)] == '"')
-	// 	(*end)--;
 	return (SUCCESS);
 }
 
-void	set_token_type(t_token *tok_lst, const char *input, int *end)
+void	set_token_type(t_token *tok_lst, const char *input, int *start,
+		int *end)
 {
-	if (input[(*end)] == '|')
+	if (input[(*start)] == '|')
+	{
 		tok_lst->type = PIPE;
-	else if (input[(*end)] == '<')
+		(*end)++;
+	}
+	else if (input[(*start)] == '<')
 	{
 		tok_lst->type = REDIR_IN;
-		if (input[(*end) + 1] == '<')
+		(*end)++;
+		if (input[(*end)] == '<')
 		{
 			tok_lst->type = REDIR_HEREDOC;
 			(*end)++;
 		}
 	}
-	else if (input[(*end)] == '>')
+	else if (input[(*start)] == '>')
 	{
 		tok_lst->type = REDIR_OUT;
-		if (input[(*end) + 1] == '>')
+		(*end)++;
+		if (input[(*end)] == '>')
 		{
 			tok_lst->type = REDIR_APPEND;
 			(*end)++;
@@ -125,14 +127,7 @@ void	set_token_type(t_token *tok_lst, const char *input, int *end)
 
 int	set_value(t_token *tok_lst, const char *input, int *start, int *end)
 {
-	if (input[(*end)] == '\'' || input[(*end)] == '"')
-	{
-		(*end) -= 2;
-		tok_lst->value = ft_substr(input, (*start), (*end) - (*start));
-		(*end) += 2;
-	}
-	else
-		tok_lst->value = ft_substr(input, (*start), (*end) - (*start));
+	tok_lst->value = ft_substr(input, (*start), (*end) - (*start));
 	if (!tok_lst->value)
 	{
 		perror("ft_substr failed.\n");
@@ -143,9 +138,9 @@ int	set_value(t_token *tok_lst, const char *input, int *start, int *end)
 
 int	tokenize_input(t_token *tok_lst, const char *input)
 {
-	int	start;
-	int	end;
-	int	i;
+	int start;
+	int end;
+	int i;
 
 	i = 0;
 	start = 0;
@@ -157,7 +152,7 @@ int	tokenize_input(t_token *tok_lst, const char *input)
 		if (find_end_of_token(input, &start, &end) == ERROR)
 			return (ERROR);
 		set_value(tok_lst, input, &start, &end);
-		set_token_type(tok_lst, input, &end);
+		set_token_type(tok_lst, input, &start, &end);
 		i = end;
 		while (input[i] && input[i] == ' ')
 			i++;
@@ -166,86 +161,12 @@ int	tokenize_input(t_token *tok_lst, const char *input)
 		create_token_node(&tok_lst);
 		if (!tok_lst->next)
 			return (ERROR);
+		if (input[end] == ' ')
+			start = end + 1;
+		else
+			start = end;
 		tok_lst = tok_lst->next;
-		start = end + 1;
 	}
 	tok_lst->next = NULL;
 	return (SUCCESS);
 }
-
-// int	tokenize_input(t_token *tok_lst, const char *input)
-// {
-// 	int		start;
-// 	int		end;
-// 	int		i;
-// 	char	quote;
-
-// 	start = 0;
-// 	end = 0;
-// 	while (input[start])
-// 	{
-// 		while (input[start] && input[start] == ' ')
-// 			start++;
-// 		if (input[start] == '\0')
-// 			break ;
-// 		end = start;
-// 		while (input[end] && input[end] != ' ' && input[end] != '|'
-// 			&& input[end] != '<' && input[end] != '>')
-// 			end++;
-// 		if (input[start] == '"' || input[start] == '\'')
-// 		{
-// 			quote = input[start++];
-// 			while (input[end] && input[end] != quote)
-// 				end++;
-// 			if (input[end] == '\0')
-// 				return (ERROR);
-// 		}
-// 		tok_lst->value = ft_substr(input, start, end - start);
-// 		if (!tok_lst->value)
-// 			return (ERROR);
-// 		if (input[end] == '|')
-// 		{
-// 			tok_lst->type = PIPE;
-// 		}
-// 		else if (input[end] == '<')
-// 		{
-// 			if (input[end + 1] == '<')
-// 			{
-// 				tok_lst->type = REDIR_HEREDOC;
-// 				end++;
-// 			}
-// 			else
-// 				tok_lst->type = REDIR_IN;
-// 		}
-// 		else if (input[end] == '>')
-// 		{
-// 			if (input[end + 1] == '>')
-// 			{
-// 				tok_lst->type = REDIR_APPEND;
-// 				end++;
-// 			}
-// 			else
-// 				tok_lst->type = REDIR_OUT;
-// 		}
-// 		else
-// 		{
-// 			tok_lst->type = WORD;
-// 			if (input[end] == '\'' || !is_env_var(tok_lst->value))
-// 				tok_lst->expand = NO_EXPAND;
-// 			else
-// 				tok_lst->expand = EXPAND;
-// 		}
-// 		tok_lst->next = malloc(sizeof(t_token));
-// 		if (!tok_lst->next)
-// 			return (ERROR);
-// 		i = end;
-// 		while (input[i] && input[i] == ' ')
-// 			i++;
-// 		if (input[i] == '\0')
-// 			break ;
-// 		tok_lst = tok_lst->next;
-// 		start = end + 1;
-// 	}
-// 	tok_lst->next = NULL;
-// 	return (SUCCESS);
-// }
