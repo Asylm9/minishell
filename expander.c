@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/26 19:34:44 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/26 21:25:45 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,7 @@ char	*trim_quotes(char *input)
 		end++;
 		start = end;
 	}
+	free(input);
 	return (result);
 }
 

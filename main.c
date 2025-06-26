@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   matt.c                                             :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/26 21:05:52 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/26 21:26:18 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,10 +114,8 @@ int	main(int ac, char **av, char **envp)
 						ast->right = NULL;
 						if (parse_ast(expanded, &ast) == SUCCESS)
 							execute_ast(ast, &shell);
-						// free_ast(ast);
-						free_tok_lst(tok_lst);
+						free_ast(ast);
 						tok_lst = NULL;
-						free_tok_lst(expanded);
 						expanded = NULL;
 					}
 				}
