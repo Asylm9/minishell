@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/06/26 19:49:04 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/26 20:56:29 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,6 @@ typedef struct s_exec // pas sure d'etre utile
 /**************************		Parsing		*****************************/
 
 void						print_token(t_token *tok_lst);
-void						free_tok_lst(t_token *list);
 
 /* Tokenizer */
 
@@ -241,6 +240,11 @@ t_env						*add_back_node(t_env *new_node, t_env *head);
 
 /* Resources */
 // void						free_pipes(int **pipes, int i);
+/* Free */
+void						free_tok_lst(t_token *list);
+void						free_redir(t_redirect *redirection);
+void						free_cmd(t_command *cmd);
+void						free_ast(t_ast *ast);
 void						free_array(char **array, int i);
 void						free_envl(t_env **head);
 void						cleanup_shell(t_sh *shell);

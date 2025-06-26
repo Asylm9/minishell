@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/26 19:44:34 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/26 21:05:52 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int	check_input(char *input)
 			i++;
 			while (input[i] && input[i] != quote)
 				i++;
-			i++;
 		}
 		if (input[i] == '|')
 			if (input[i + 1] == '|')
@@ -62,20 +61,6 @@ void	print_token(t_token *tok_lst)
 			printf("Token %d expand : NO_EXPAND\n", i);
 		tok_lst = tok_lst->next;
 		i++;
-	}
-}
-
-void	free_tok_lst(t_token *list)
-{
-	t_token	*temp;
-
-	while (list->next)
-	{
-		temp = list;
-		list = list->next;
-		if (temp->value)
-			free(temp->value);
-		free(temp);
 	}
 }
 
@@ -129,6 +114,7 @@ int	main(int ac, char **av, char **envp)
 						ast->right = NULL;
 						if (parse_ast(expanded, &ast) == SUCCESS)
 							execute_ast(ast, &shell);
+						// free_ast(ast);
 						free_tok_lst(tok_lst);
 						tok_lst = NULL;
 						free_tok_lst(expanded);
@@ -166,7 +152,7 @@ int	main(int ac, char **av, char **envp)
 				Init_pipe_node()
 			Create_cmd_nodes()
 				Init_cmd_node()
-				Fill_cmd()				CREER FONCTION DE CREATION DE NODE CMD POUR EVITER RELINK ET ECRASER L'ANCIENNE
+				Fill_cmd()
 
 	EXPAND CASES :
 		- $VAR
