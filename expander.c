@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/26 19:22:13 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/26 19:34:44 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,22 @@ char	*expand_token(char *input, t_sh *shell)
 	return (tmp);
 }
 
+void	match_quotes(char *input, int *end, char *quote)
+{
+	if (*quote == '\'' || *quote == '"')
+	{
+		while (input[(*end)] && input[(*end)] != *quote)
+			(*end)++;
+		*quote = ' ';
+	}
+	else
+	{
+		while (input[(*end)] != '\'' && input[(*end)] != '"' && input[(*end)])
+			(*end)++;
+		*quote = input[(*end)];
+	}
+}
+
 char	*trim_quotes(char *input)
 {
 	char	*result;
@@ -150,18 +166,7 @@ char	*trim_quotes(char *input)
 	quote = ' ';
 	while (input[end] && input[end] != '\0')
 	{
-		if (quote == '\'' || quote == '"')
-		{
-			while (input[end] && input[end] != quote)
-				end++;
-			quote = ' ';
-		}
-		else
-		{
-			while (input[end] != '\'' && input[end] != '"' && input[end])
-				end++;
-			quote = input[end];
-		}
+		match_quotes(input, &end, &quote);
 		tmp = ft_substr(input, start, end - start);
 		if (result)
 		{
@@ -216,8 +221,7 @@ int	check_validity(t_token *exp_lst)
 		second = first;
 		first = exp_lst->type;
 		if (first == PIPE && (second >= 2 || !exp_lst->next
-				|| (exp_lst->next->type != WORD
-					&& exp_lst->next->type != REDIR_OUT)))
+				|| (exp_lst->next->type != 1 && exp_lst->next->type != 4)))
 			return (ERROR);
 		else
 			return (SUCCESS);
