@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/26 01:21:48 by matthieu         ###   ########.fr       */
+/*   Updated: 2025/06/26 17:13:26 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,24 +204,28 @@ int	is_pipe_redir(char *str)
 	7 CMD,
 */
 
-// int	check_validity(t_token *exp_lst)
-// {
-// 	t_token_type	first;
-// 	t_token_type	second;
-// 	t_token_type	third;
+int	check_validity(t_token *exp_lst)
+{
+	t_token_type	first;
+	t_token_type	second;
 
-// 	first = NOT_SET;
-// 	second = NOT_SET;
-// 	third = NOT_SET;
-// 	while (exp_lst)
-// 	{
-// 		third = second;
-// 		second = first;
-// 		first = exp_lst->type;
-// 		if (first == PIPE && (second >= 2 || second == NOT_SET))
-// 			return (ERROR);
-// 	}
-// }
+	first = NOT_SET;
+	second = NOT_SET;
+	while (exp_lst)
+	{
+		second = first;
+		first = exp_lst->type;
+		if (first == PIPE && (second >= 2 || second == NOT_SET
+				|| !exp_lst->next))
+			return (ERROR);
+		else
+			return (SUCCESS);
+		if (second >= 3 && first != WORD)
+			return (ERROR);
+		exp_lst = exp_lst->next;
+	}
+	return (SUCCESS);
+}
 
 int	expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell)
 {

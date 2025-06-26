@@ -39,4 +39,4 @@ input.txt
 output.txt
 infile.txt
 outfile.txt
-minishell_tester/
+minishell_tester/test_files/invalid_permission

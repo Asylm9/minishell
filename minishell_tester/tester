@@ -13,6 +13,7 @@ else
 		"pipes"
 		"redirects"
 		"extras"
+		"custom"
 	)
 fi
 
