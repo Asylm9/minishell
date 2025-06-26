@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/26 17:13:26 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/26 19:22:13 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,8 +215,9 @@ int	check_validity(t_token *exp_lst)
 	{
 		second = first;
 		first = exp_lst->type;
-		if (first == PIPE && (second >= 2 || second == NOT_SET
-				|| !exp_lst->next))
+		if (first == PIPE && (second >= 2 || !exp_lst->next
+				|| (exp_lst->next->type != WORD
+					&& exp_lst->next->type != REDIR_OUT)))
 			return (ERROR);
 		else
 			return (SUCCESS);
@@ -233,44 +234,55 @@ int	expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell)
 
 	if (!exp_lst)
 		return (ERROR);
+	if (exp_lst->type == PIPE)
+	{
+		return (ERROR);
+	}
 	while (tok_lst)
 	{
-		advance = 1;
-		exp_lst->expand = NO_EXPAND;
-		if (tok_lst->type == REDIR_HEREDOC)
-			if (tok_lst->next->value)
-				exp_lst->hd_fd = handle_heredoc(tok_lst->next->value, shell);
-		if (tok_lst->expand == NO_EXPAND)
+		if (check_validity(tok_lst) == SUCCESS)
 		{
-			if (!is_pipe_redir(tok_lst->value))
+			advance = 1;
+			exp_lst->expand = NO_EXPAND;
+			if (tok_lst->type == REDIR_HEREDOC)
+				if (tok_lst->next->value)
+					exp_lst->hd_fd = handle_heredoc(tok_lst->next->value,
+							shell);
+			if (tok_lst->expand == NO_EXPAND)
 			{
-				exp_lst->value = trim_quotes(ft_strdup(tok_lst->value));
-				if (!exp_lst->value)
+				if (!is_pipe_redir(tok_lst->value))
 				{
-					free(exp_lst);
-					return (ERROR);
+					exp_lst->value = trim_quotes(ft_strdup(tok_lst->value));
+					if (!exp_lst->value)
+					{
+						free(exp_lst);
+						return (ERROR);
+					}
 				}
+				exp_lst->type = tok_lst->type;
 			}
-			exp_lst->type = tok_lst->type;
-		}
-		else if ((ft_strlen(expand_token(tok_lst->value, shell))) != 0)
-		{
-			exp_lst->value = trim_quotes(expand_token(tok_lst->value, shell));
-			exp_lst->type = tok_lst->type;
+			else if ((ft_strlen(expand_token(tok_lst->value, shell))) != 0)
+			{
+				exp_lst->value = trim_quotes(expand_token(tok_lst->value,
+							shell));
+				exp_lst->type = tok_lst->type;
+			}
+			else
+				advance = 0;
+			tok_lst = tok_lst->next;
+			if (tok_lst != NULL && advance)
+			{
+				create_token_node(&exp_lst);
+				exp_lst = exp_lst->next;
+			}
+			else if (advance)
+			{
+				exp_lst->next = NULL;
+				break ;
+			}
 		}
 		else
-			advance = 0;
-		tok_lst = tok_lst->next;
-		if (tok_lst != NULL && advance)
-		{
-			create_token_node(&exp_lst);
-			exp_lst = exp_lst->next;
-		}
-		else if (advance)
-		{
-			exp_lst->next = NULL;
-			break ;
-		}
+			return (ERROR);
 	}
 	return (SUCCESS);
 }
