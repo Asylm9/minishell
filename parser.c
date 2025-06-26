@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/26 01:00:06 by matthieu         ###   ########.fr       */
+/*   Updated: 2025/06/26 19:46:46 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,7 @@ t_command	*create_node_cmd(t_token **exp_lst)
 	(*exp_lst) = tmp;
 	while ((*exp_lst) && (*exp_lst)->type != PIPE)
 	{
-		if ((*exp_lst)->type == REDIR_APPEND
-			|| (*exp_lst)->type == REDIR_HEREDOC || (*exp_lst)->type == REDIR_IN
-			|| (*exp_lst)->type == REDIR_OUT)
+		if ((*exp_lst)->type >= 3 && (*exp_lst)->type <= 6)
 			(*exp_lst) = (*exp_lst)->next->next;
 		else
 		{
@@ -126,7 +124,7 @@ int	parse_ast(t_token *exp_lst, t_ast **ast)
 			if (exp_lst->next)
 			{
 				exp_lst = exp_lst->next;
-				if (exp_lst->type == REDIR_OUT || exp_lst->type == REDIR_IN || exp_lst->type == REDIR_APPEND || exp_lst->type == REDIR_HEREDOC)
+				if (exp_lst->type >= 3 && exp_lst->type <= 6)
 				{
 					(*ast)->right = malloc(sizeof(t_ast));
 					(*ast)->right->cmd = create_node_cmd(&exp_lst);
@@ -149,6 +147,7 @@ int	parse_ast(t_token *exp_lst, t_ast **ast)
 	}
 	return (SUCCESS);
 }
+
 void	print_ast(t_ast *ast)
 {
 	printf("Type:\n");

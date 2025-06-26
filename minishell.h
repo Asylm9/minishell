@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/06/25 23:05:13 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/26 19:49:04 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,8 @@ typedef struct s_token
 typedef struct s_redirect
 {
 	t_token_type			type;
-	char *target; // fichier ou delimiteur si heredoc
-	int fd;       // pour heredoc
+	char					*target;
+	int						fd;
 	t_redirect				*next;
 }							t_redirect;
 
@@ -105,7 +105,7 @@ typedef struct s_sh
 {
 	char					**env;
 	t_env					*envl;
-	bool in_pipeline; // assigner a false par defaut
+	bool					in_pipeline;
 	char					*current_dir;
 	int						saved_stdin;
 	int						saved_stdout;
@@ -122,10 +122,10 @@ typedef struct s_ast
 
 typedef struct s_exec // pas sure d'etre utile
 {
-	pid_t *pids;
-	t_command *current;
 	int i;
 	int status;
+	pid_t *pids;
+	t_command *current;
 }							t_exec;
 
 /**************************		Parsing		*****************************/
@@ -202,7 +202,7 @@ int							execute_builtin(t_command *cmd, t_sh *shell);
 /* Builtin implementations */
 int							builtin_echo(char **args);
 
-int	builtin_cd(char **args, t_sh *shell); // double pointeur??
+int							builtin_cd(char **args, t_sh *shell);
 
 int							builtin_pwd(void);
 

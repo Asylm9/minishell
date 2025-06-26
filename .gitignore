@@ -40,3 +40,4 @@ output.txt
 infile.txt
 outfile.txt
 minishell_tester/test_files/invalid_permission
+grep

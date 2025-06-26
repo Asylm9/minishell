@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:05:28 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/26 01:31:44 by matthieu         ###   ########.fr       */
+/*   Updated: 2025/06/26 19:50:40 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,9 +138,9 @@ int	set_value(t_token *tok_lst, const char *input, int *start, int *end)
 
 int	tokenize_input(t_token *tok_lst, const char *input)
 {
-	int start;
-	int end;
-	int i;
+	int	start;
+	int	end;
+	int	i;
 
 	i = 0;
 	start = 0;
