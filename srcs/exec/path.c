@@ -127,8 +127,8 @@ int	execute_binary(t_command *cmd, t_sh *shell)
 	execve(cmd_path, cmd->args, env);
 	printf_fd(STDERR,"minishell: %s: %s\n", cmd_path, strerror(errno));
 	free(cmd_path);
-	free(env);
-	cleanup_shell(shell);
+	//free_envl(&shell->envl);
+	free_array(env, -1);
 	return (EXECVE_ERR);
 }
 
