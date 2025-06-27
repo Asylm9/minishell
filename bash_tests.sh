@@ -19,3 +19,14 @@ test
 echo pif > output.txt < output.txt cat
 grep "pif" < output.txt > matches.txt
 
+
+WTF:
+Test 321/174: ❌ $HOMEdskjhfkdshfsd' 
+mini exit code = 1
+bash exit code = 2
+mini error = ()
+bash error = ( unexpected EOF while looking for matching `'')
+
+
+
+

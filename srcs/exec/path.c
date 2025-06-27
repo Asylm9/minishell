@@ -36,6 +36,14 @@ char	**get_paths(t_command *cmd, t_env *envl)
 	char	*env_path;
 	char	**paths;
 
+	if (!cmd->cmd_name)
+		return (NULL);
+	if (cmd->cmd_name[0] == '\0')
+	{
+		paths = malloc(sizeof(cmd->cmd_name) + 1);
+		paths[0] = ft_strdup("");
+		return (paths);
+	}
 	env_path = get_envl_var("PATH", envl);
 	if (!env_path)
 	{
@@ -63,7 +71,7 @@ char	*find_cmd_path(char **paths, char *cmd_name)
 	char	*abs_path;
 	int		i;
 
-	if (!paths)
+	if (!paths || *paths[0] == '\0')
 		return (NULL);
 	abs_path = is_absolute_or_relative(cmd_name);
 	if (abs_path)
