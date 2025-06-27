@@ -92,13 +92,13 @@ char	*find_cmd_path(char **paths, char *cmd_name)
 	return (NULL);
 }
 
-int	execute_binary(t_command *cmd, t_env *envl)
+int	execute_binary(t_command *cmd, t_sh *shell)
 {
 	char	**paths;
 	char	*cmd_path;
 	char	**env;
 
-	if (!cmd || !envl)
+	if (!cmd || !shell->envl)
 		return (1);
 	if (is_absolute_or_relative(cmd->cmd_name))
 	{
@@ -112,7 +112,7 @@ int	execute_binary(t_command *cmd, t_env *envl)
 	}
 	else
 	{
-		paths = get_paths(cmd, envl);
+		paths = get_paths(cmd, shell->envl);
 		if (!paths)
 			return (1);
 		cmd_path = find_cmd_path(paths, cmd->cmd_name);
@@ -123,10 +123,12 @@ int	execute_binary(t_command *cmd, t_env *envl)
 			return (CMD_NOT_FOUND);
 		}
 	}
-	env = convert_envl_to_env(envl);
+	env = convert_envl_to_env(shell->envl);
 	execve(cmd_path, cmd->args, env);
 	printf_fd(STDERR,"minishell: %s: %s\n", cmd_path, strerror(errno));
 	free(cmd_path);
+	free(env);
+	cleanup_shell(shell);
 	return (EXECVE_ERR);
 }
 

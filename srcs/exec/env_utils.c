@@ -76,7 +76,7 @@ t_env	*init_env_list(char **env)
 		if (value && strcmp(env[i], "SHLVL") == 0)
 		{
 			level = atoi(value) + 1;
-			new_node = create_node(ft_strdup(env[i]), ft_strdup(ft_itoa(level)));
+			new_node = create_node(ft_strdup(env[i]), ft_itoa(level));
 		}		
 		else if (value)
 			new_node = create_node(ft_strdup(env[i]), ft_strdup(value));
@@ -179,4 +179,6 @@ void	init_shell_struct(t_sh *shell, char **envp)
 	shell->saved_stdout = -1;
 	shell->exit_status = 0;
 	shell->envl = init_env_list(shell->env);
+	free_array(shell->env, -1);
+	shell->env = NULL;
 }

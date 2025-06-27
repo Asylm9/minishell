@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/06/26 20:56:29 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/27 17:41:53 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ int							execute_ast(t_ast *ast, t_sh *shell);
 int							execute_command(t_command *cmd, t_sh *shell);
 int							execute_pipeline(t_ast *ast, t_sh *shell);
 int							process_wait_status(int status);
-int							execute_binary(t_command *cmd, t_env *env);
+int							execute_binary(t_command *cmd, t_sh *shell);
 
 /* Exec utils */
 pid_t						process_left_child(t_ast *ast, t_sh *shell,
