@@ -235,53 +235,61 @@ int	check_validity(t_token *exp_lst)
 
 int	expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell)
 {
+	int		advance;
 	char	*input;
 	t_token	*new_line;
 
 	new_line = NULL;
-	if (!exp_lst || exp_lst->type == PIPE)
+	if (!exp_lst)
 		return (ERROR);
-
+	if (exp_lst->type == PIPE)
+		return (ERROR);
 	while (tok_lst)
 	{
-		if (check_validity(tok_lst) != SUCCESS)
+		if (check_validity(tok_lst) == SUCCESS)
 		{
-			printf("Error near exp_lst '|', missing next command.\n");
-			return (ERROR);
-		}
-
-		exp_lst->expand = NO_EXPAND;
-
-		if (tok_lst->type == REDIR_HEREDOC && tok_lst->next && tok_lst->next->value)
-			exp_lst->hd_fd = handle_heredoc(tok_lst->next->value, shell);
-
-		if (tok_lst->expand == NO_EXPAND)
-		{
-			if (!is_pipe_redir(tok_lst->value))
+			advance = 1;
+			exp_lst->expand = NO_EXPAND;
+			if (tok_lst->type == REDIR_HEREDOC)
+				if (tok_lst->next->value)
+					exp_lst->hd_fd = handle_heredoc(tok_lst->next->value,
+							shell);
+			if (tok_lst->expand == NO_EXPAND)
 			{
-				exp_lst->value = trim_quotes(ft_strdup(tok_lst->value));
-				if (!exp_lst->value)
+				if (!is_pipe_redir(tok_lst->value))
 				{
-					free(exp_lst);
-					return (ERROR);
+					exp_lst->value = trim_quotes(ft_strdup(tok_lst->value));
+					if (!exp_lst->value)
+					{
+						free(exp_lst);
+						return (ERROR);
+					}
 				}
+				exp_lst->type = tok_lst->type;
+			}
+			else if ((ft_strlen(expand_token(tok_lst->value, shell))) != 0)
+			{
+				exp_lst->value = trim_quotes(expand_token(tok_lst->value,
+							shell));
+				exp_lst->type = tok_lst->type;
+			}
+			else
+				advance = 0;
+			tok_lst = tok_lst->next;
+			if (tok_lst != NULL && advance)
+			{
+				create_token_node(&exp_lst);
+				exp_lst = exp_lst->next;
+			}
+			else if (advance)
+			{
+				exp_lst->next = NULL;
+				break ;
 			}
 		}
-		else if ((ft_strlen(expand_token(tok_lst->value, shell))) != 0)
+		else if (tok_lst->type == PIPE)
 		{
-			exp_lst->value = trim_quotes(expand_token(tok_lst->value, shell));
-		}
-		else
-		{
-			tok_lst = tok_lst->next;
-			continue;
-		}
-
-		exp_lst->type = tok_lst->type;
-
-		// Gestion du pipe
-		if (tok_lst->type == PIPE)
-		{
+			exp_lst->type = PIPE;
 			create_token_node(&exp_lst);
 			exp_lst = exp_lst->next;
 			input = readline(">");
@@ -289,19 +297,11 @@ int	expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell)
 			tokenize_input(new_line, input);
 			expand_list(new_line, exp_lst, shell);
 			tok_lst = tok_lst->next;
-			continue;
-		}
-
-		tok_lst = tok_lst->next;
-		if (tok_lst)
-		{
-			create_token_node(&exp_lst);
-			exp_lst = exp_lst->next;
 		}
 		else
 		{
-			exp_lst->next = NULL;
-			break;
+			printf("Error near exp_lst '|', missing next command.\n");
+			return (ERROR);
 		}
 	}
 	return (SUCCESS);
