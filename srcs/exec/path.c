@@ -91,6 +91,16 @@ char	*find_cmd_path(char **paths, char *cmd_name)
 	}
 	return (NULL);
 }
+int check_file_type(char *path)
+{
+    struct	stat file_stat;
+    
+    if (stat(path, &file_stat) < 0)
+        return (-1);
+    if (S_ISDIR(file_stat.st_mode))
+        return (1);
+    return (0);
+}
 
 int	execute_binary(t_command *cmd, t_sh *shell)
 {
@@ -125,7 +135,10 @@ int	execute_binary(t_command *cmd, t_sh *shell)
 	}
 	env = convert_envl_to_env(shell->envl);
 	execve(cmd_path, cmd->args, env);
-	printf_fd(STDERR,"minishell: %s: %s\n", cmd_path, strerror(errno));
+	if (check_file_type(cmd_path) == 1)
+		printf_fd(STDERR,"minishell: %s: Is a directory\n", cmd_path);
+	else
+		printf_fd(STDERR,"minishell: %s: %s\n", cmd_path, strerror(errno));
 	free(cmd_path);
 	//free_envl(&shell->envl);
 	free_array(env, -1);
