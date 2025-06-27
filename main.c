@@ -6,40 +6,11 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/27 14:32:25 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/27 18:18:43 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	check_input(char *input)
-{
-	int		i;
-	char	quote;
-
-	i = 0;
-	while (input[i])
-	{
-		if (input[i] == '\'' || input[i] == '"')
-		{
-			quote = input[i];
-			i++;
-			while (input[i] && input[i] != quote)
-				i++;
-		}
-		if (input[i] == '|')
-			if (input[i + 1] == '|')
-				return (ERROR);
-		if (input[i] == '<')
-			if (input[i + 1] == '|' || input[i + 1] == '>')
-				return (ERROR);
-		if (input[i] == '>')
-			if (input[i + 1] == '|' || input[i + 1] == '<')
-				return (ERROR);
-		i++;
-	}
-	return (SUCCESS);
-}
 
 void	print_token(t_token *tok_lst)
 {
@@ -80,7 +51,7 @@ int	main(int ac, char **av, char **envp)
 	{
 		input = readline("\033[0;34m\033[1mMinishell> \033[0m");
 		add_history(input);
-		if (check_input(input) == SUCCESS)
+		if (check_input(input, &shell) == SUCCESS)
 		{
 			if (create_token_node(&tok_lst) == ERROR)
 				free(input);
