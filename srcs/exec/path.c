@@ -40,8 +40,9 @@ char	**get_paths(t_command *cmd, t_env *envl)
 		return (NULL);
 	if (cmd->cmd_name[0] == '\0')
 	{
-		paths = malloc(sizeof(cmd->cmd_name) + 1);
+		paths = malloc(sizeof(char *) * 2);
 		paths[0] = ft_strdup("");
+		paths[1] = NULL;
 		return (paths);
 	}
 	env_path = get_envl_var("PATH", envl);
@@ -75,7 +76,7 @@ char	*find_cmd_path(char **paths, char *cmd_name)
 	char	*test_path;
 	int		i;
 
-	if (!paths || *paths[0] == '\0')
+	if (!paths || !paths[0] || paths[0][0] == '\0')
 		return (NULL);
 	i = 0;
 	while (paths[i])
@@ -105,6 +106,7 @@ int	execute_binary(t_command *cmd, t_env *envl)
 		if (access(cmd_path, F_OK | X_OK) < 0)
 		{
 			printf_fd(STDERR,"minishell: %s: %s\n", cmd_path, strerror(errno));
+			free(cmd_path);
 			return (CMD_NOT_FOUND);
 		}
 	}

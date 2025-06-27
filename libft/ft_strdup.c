@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/18 16:27:18 by agaland           #+#    #+#             */
-/*   Updated: 2024/11/01 21:51:51 by agaland          ###   ########.fr       */
+/*   Updated: 2025/06/27 17:12:59 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*ft_strdup(const char *s1)
 	char	*dup;
 	size_t	len;
 
+	if (!s1)
+		return (NULL);
 	len = ft_strlen(s1);
 	dup = (char *) malloc((len + 1) * sizeof(char));
 	if (!dup)
