@@ -20,7 +20,6 @@ SRCS =  $(SRCDIR)/main.c \
         $(SRCDIR)/srcs/exec/path.c \
         $(SRCDIR)/srcs/exec/exec_utils.c \
         $(SRCDIR)/srcs/exec/list_utils.c \
-        $(SRCDIR)/srcs/exec/manual_init.c \
         $(SRCDIR)/srcs/exec/new_exec.c \
         $(SRCDIR)/srcs/exec/redirections.c \
         $(SRCDIR)/srcs/exec/resources.c \

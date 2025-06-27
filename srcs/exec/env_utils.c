@@ -60,6 +60,7 @@ t_env	*init_env_list(char **env)
 	char	*equal_pos;
 	char	*value;
 	int		i;
+	int		level;
 
 	if (!env)
 		return (NULL);
@@ -72,7 +73,12 @@ t_env	*init_env_list(char **env)
 			return (NULL);
 		value = equal_pos + 1;
 		equal_pos[0] = '\0';
-		if (value)
+		if (value && strcmp(env[i], "SHLVL") == 0)
+		{
+			level = atoi(value) + 1;
+			new_node = create_node(ft_strdup(env[i]), ft_strdup(ft_itoa(level)));
+		}		
+		else if (value)
 			new_node = create_node(ft_strdup(env[i]), ft_strdup(value));
 		else
 			new_node = create_node(ft_strdup(env[i]), NULL);		
@@ -148,4 +154,29 @@ int	set_envl_var(char *name, t_env **envl, char *value)
 		current = current->next;
 	}
 	return (add_new_entry(name, value, envl));
+}
+
+void	init_shell_struct(t_sh *shell, char **envp)
+{
+	int	count;
+	int	i;
+
+	count = 0;
+	while(envp[count])
+		count++;
+	shell->env = malloc(sizeof(char *) * (count + 1));
+	if (!shell->env)
+		return;
+	i = 0;
+	while (envp[i])
+	{
+		shell->env[i] = ft_strdup(envp[i]);
+		i++;
+	}
+	shell->env[i] = NULL;
+	shell->in_pipeline = false;
+	shell->saved_stdin = -1;
+	shell->saved_stdout = -1;
+	shell->exit_status = 0;
+	shell->envl = init_env_list(shell->env);
 }
