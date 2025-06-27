@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/26 21:26:18 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/27 03:24:02 by matthieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,11 @@ int	check_input(char *input)
 			if (input[i + 1] == '|')
 				return (ERROR);
 		if (input[i] == '<')
-		{
 			if (input[i + 1] == '|' || input[i + 1] == '>')
 				return (ERROR);
-		}
 		if (input[i] == '>')
-		{
 			if (input[i + 1] == '|' || input[i + 1] == '<')
 				return (ERROR);
-		}
 		i++;
 	}
 	return (SUCCESS);

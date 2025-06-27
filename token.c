@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:05:28 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/26 19:50:40 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/27 03:28:59 by matthieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,10 +119,8 @@ void	set_token_type(t_token *tok_lst, const char *input, int *start,
 		}
 	}
 	else
-	{
 		if (!(input[(*end)] == '\'' || !is_env_var(tok_lst->value)))
 			tok_lst->expand = EXPAND;
-	}
 }
 
 int	set_value(t_token *tok_lst, const char *input, int *start, int *end)

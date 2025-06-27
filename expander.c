@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/26 21:25:45 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/27 03:25:46 by matthieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,9 +240,7 @@ int	expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell)
 	if (!exp_lst)
 		return (ERROR);
 	if (exp_lst->type == PIPE)
-	{
 		return (ERROR);
-	}
 	while (tok_lst)
 	{
 		if (check_validity(tok_lst) == SUCCESS)
