@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/27 03:14:50 by matthieu         ###   ########.fr       */
+/*   Updated: 2025/06/27 13:41:00 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ static int	count_args(t_token *exp_lst)
 
 static char	**fill_args(t_token **exp_lst, int argc, char **cmd_name)
 {
-	char		**args;
-	int			i;
-	t_token		*tmp;
+	char	**args;
+	int		i;
+	t_token	*tmp;
 
 	args = malloc(sizeof(char *) * (argc + 1));
 	i = 0;
@@ -78,8 +78,8 @@ static char	**fill_args(t_token **exp_lst, int argc, char **cmd_name)
 		else
 		{
 			if (i == 0 && cmd_name)
-				*cmd_name = tmp->value;
-			args[i++] = tmp->value;
+				*cmd_name = ft_strdup(tmp->value);
+			args[i++] = ft_strdup(tmp->value);
 			tmp = tmp->next;
 		}
 	}
@@ -101,7 +101,8 @@ t_command	*create_node_cmd(t_token **exp_lst)
 	cmd->redirections = NULL;
 	while (*exp_lst && (*exp_lst)->type != PIPE)
 	{
-		if ((*exp_lst)->type >= 3 && (*exp_lst)->next && (*exp_lst)->next->value)
+		if ((*exp_lst)->type >= 3 && (*exp_lst)->next
+			&& (*exp_lst)->next->value)
 		{
 			cmd->redirections = add_redirection(cmd->redirections, *exp_lst);
 			*exp_lst = (*exp_lst)->next;

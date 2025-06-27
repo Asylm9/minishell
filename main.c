@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/27 03:24:02 by matthieu         ###   ########.fr       */
+/*   Updated: 2025/06/27 13:56:34 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,13 @@ int	main(int ac, char **av, char **envp)
 		{
 			if (create_token_node(&tok_lst) == ERROR)
 				free(input);
-			else if (tokenize_input(tok_lst, input) == ERROR)
+			else if (tokenize_input(tok_lst, input) == ERROR
+				|| (tok_lst->value == NULL && tok_lst->next == NULL))
+			{
+				if (tok_lst)
+					free_tok_lst(tok_lst);
 				free(input);
+			}
 			else
 			{
 				free(input);
@@ -111,6 +116,9 @@ int	main(int ac, char **av, char **envp)
 						if (parse_ast(expanded, &ast) == SUCCESS)
 							execute_ast(ast, &shell);
 						free_ast(ast);
+						free_tok_lst(tok_lst);
+						free_tok_lst(expanded);
+						ast = NULL;
 						tok_lst = NULL;
 						expanded = NULL;
 					}

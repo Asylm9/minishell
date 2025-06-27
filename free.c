@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 20:42:02 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/26 21:36:42 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/27 14:17:46 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@ void	free_tok_lst(t_token *list)
 		list = list->next;
 		if (temp->value)
 			free(temp->value);
-		free(temp);
+		// if (temp)
+		// 	free(temp);
+		temp = NULL;
 	}
 }
 
@@ -39,8 +41,8 @@ void	free_redir(t_redirect *redirection)
 			if (current->target)
 				free(current->target);
 			free(current);
+			current = NULL;
 		}
-		free(redirection);
 	}
 }
 
@@ -50,19 +52,20 @@ void	free_cmd(t_command *cmd)
 
 	if (cmd)
 	{
-		i = 1;
+		i = 0;
 		if (cmd->cmd_name)
-			free(cmd->cmd_name);
-		while (cmd->args[i])
 		{
-			free(cmd->args[i]);
-			i++;
+			free(cmd->cmd_name);
+			cmd->cmd_name = NULL;
 		}
+		while (cmd->args[i])
+			free(cmd->args[i++]);
 		if (cmd->args)
 			free(cmd->args);
 		if (cmd->redirections)
 			free_redir(cmd->redirections);
 		free(cmd);
+		cmd = NULL;
 	}
 }
 
@@ -77,5 +80,6 @@ void	free_ast(t_ast *ast)
 		if (ast->left)
 			free_ast(ast->left);
 		free(ast);
+		ast = NULL;
 	}
 }
