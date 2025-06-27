@@ -54,7 +54,7 @@ char	**get_paths(t_command *cmd, t_env *envl)
 	return (paths);
 }
 
-static char	*is_absolute_or_relative(char *cmd)
+/* static char	*is_absolute_or_relative(char *cmd)
 {
 	if (cmd[0] == '/' || cmd[0] == '.')
 	{
@@ -63,19 +63,20 @@ static char	*is_absolute_or_relative(char *cmd)
 		return (NULL);
 	}
 	return (NULL);
+} */
+
+static bool	is_absolute_or_relative(char *cmd)
+{
+	return (cmd[0] == '/' || cmd[0] == '.');
 }
 
 char	*find_cmd_path(char **paths, char *cmd_name)
 {
 	char	*test_path;
-	char	*abs_path;
 	int		i;
 
 	if (!paths || *paths[0] == '\0')
 		return (NULL);
-	abs_path = is_absolute_or_relative(cmd_name);
-	if (abs_path)
-		return (abs_path);
 	i = 0;
 	while (paths[i])
 	{
@@ -98,19 +99,31 @@ int	execute_binary(t_command *cmd, t_env *envl)
 
 	if (!cmd || !envl)
 		return (1);
-	paths = get_paths(cmd, envl);
-	if (!paths)
-		return (1);
-	cmd_path = find_cmd_path(paths, cmd->cmd_name);
-	free_array(paths, -1);
-	if (!cmd_path)
+	if (is_absolute_or_relative(cmd->cmd_name))
 	{
-		printf_fd(STDERR,"minishell: %s: command not found\n", cmd->cmd_name);
-		return (CMD_NOT_FOUND);
+		cmd_path = ft_strdup(cmd->cmd_name);
+		if (access(cmd_path, F_OK | X_OK) < 0)
+		{
+			printf_fd(STDERR,"minishell: %s: %s\n", cmd_path, strerror(errno));
+			return (CMD_NOT_FOUND);
+		}
+	}
+	else
+	{
+		paths = get_paths(cmd, envl);
+		if (!paths)
+			return (1);
+		cmd_path = find_cmd_path(paths, cmd->cmd_name);
+		free_array(paths, -1);
+		if (!cmd_path)
+		{
+			printf_fd(STDERR,"minishell: %s: command not found\n", cmd->cmd_name);
+			return (CMD_NOT_FOUND);
+		}
 	}
 	env = convert_envl_to_env(envl);
 	execve(cmd_path, cmd->args, env);
-	perror("execve");
+	printf_fd(STDERR,"minishell: %s: %s\n", cmd_path, strerror(errno));
 	free(cmd_path);
 	return (EXECVE_ERR);
 }
