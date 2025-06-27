@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/06/27 17:41:53 by agaland          ###   ########.fr       */
+/*   Updated: 2025/06/27 18:20:46 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ void						print_token(t_token *tok_lst);
 
 /* Tokenizer */
 
+int							check_input(char *input, t_sh *shell);
 int							create_token_list(t_token **tok_lst);
 int							create_token_node(t_token **tok_lst);
 int							skip_spaces(const char *input, int *start);
