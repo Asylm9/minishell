@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/26 20:51:42 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/27 03:14:50 by matthieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,77 +27,88 @@ int	create_node_pipe(t_ast **ast)
 	return (SUCCESS);
 }
 
-t_command	*create_node_cmd(t_token **exp_lst)
+static t_redirect	*add_redirection(t_redirect *redir, t_token *exp_lst)
 {
-	int			i;
-	t_token		*tmp;
-	t_command	*cmd;
-	t_redirect	*current;
+	t_redirect	*new_redir;
+	t_redirect	*tmp;
+
+	new_redir = malloc(sizeof(t_redirect));
+	if (!new_redir)
+		return (NULL);
+	new_redir->type = exp_lst->type;
+	new_redir->target = exp_lst->next->value;
+	new_redir->fd = exp_lst->hd_fd;
+	new_redir->next = NULL;
+	if (!redir)
+		return (new_redir);
+	tmp = redir;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new_redir;
+	return (redir);
+}
+
+static int	count_args(t_token *exp_lst)
+{
+	int	i;
 
 	i = 0;
-	tmp = (*exp_lst);
+	while (exp_lst && exp_lst->type != PIPE)
+	{
+		if (exp_lst->type == WORD)
+			i++;
+		exp_lst = exp_lst->next;
+	}
+	return (i);
+}
+
+static char	**fill_args(t_token **exp_lst, int argc, char **cmd_name)
+{
+	char		**args;
+	int			i;
+	t_token		*tmp;
+
+	args = malloc(sizeof(char *) * (argc + 1));
+	i = 0;
+	tmp = *exp_lst;
+	while (tmp && tmp->type != PIPE)
+	{
+		if (tmp->type >= 3 && tmp->type <= 6)
+			tmp = tmp->next->next;
+		else
+		{
+			if (i == 0 && cmd_name)
+				*cmd_name = tmp->value;
+			args[i++] = tmp->value;
+			tmp = tmp->next;
+		}
+	}
+	args[i] = NULL;
+	return (args);
+}
+
+t_command	*create_node_cmd(t_token **exp_lst)
+{
+	t_token		*tmp;
+	t_command	*cmd;
+
+	tmp = *exp_lst;
 	cmd = malloc(sizeof(t_command));
 	if (!cmd)
 		return (NULL);
 	cmd->cmd_name = NULL;
 	cmd->args = NULL;
 	cmd->redirections = NULL;
-	while ((*exp_lst) && (*exp_lst)->type != PIPE)
+	while (*exp_lst && (*exp_lst)->type != PIPE)
 	{
-		if ((*exp_lst)->type == WORD)
-			i++;
-		else if ((*exp_lst)->next && (*exp_lst)->next->value)
+		if ((*exp_lst)->type >= 3 && (*exp_lst)->next && (*exp_lst)->next->value)
 		{
-			if (cmd->redirections == NULL)
-			{
-				cmd->redirections = malloc(sizeof(t_redirect));
-				if (cmd->redirections == NULL)
-					return (NULL);
-				cmd->redirections->next = NULL;
-				cmd->redirections->type = (*exp_lst)->type;
-				cmd->redirections->target = (*exp_lst)->next->value;
-				cmd->redirections->fd = (*exp_lst)->hd_fd;
-			}
-			else
-			{
-				current = cmd->redirections;
-				while (current->next != NULL)
-					current = current->next;
-				current->next = malloc(sizeof(t_redirect));
-				if (current->next == NULL)
-					return (NULL);
-				current->next->type = (*exp_lst)->type;
-				current->next->target = (*exp_lst)->next->value;
-				current->next->fd = (*exp_lst)->hd_fd;
-				current->next->next = NULL;
-			}
-			(*exp_lst) = (*exp_lst)->next;
+			cmd->redirections = add_redirection(cmd->redirections, *exp_lst);
+			*exp_lst = (*exp_lst)->next;
 		}
-		(*exp_lst) = (*exp_lst)->next;
+		*exp_lst = (*exp_lst)->next;
 	}
-	cmd->args = malloc(sizeof(char *) * (i + 1));
-	if (!cmd->args)
-	{
-		// Free redirections if needed
-		free(cmd);
-		return (NULL);
-	}
-	i = 0;
-	(*exp_lst) = tmp;
-	while ((*exp_lst) && (*exp_lst)->type != PIPE)
-	{
-		if ((*exp_lst)->type >= 3 && (*exp_lst)->type <= 6)
-			(*exp_lst) = (*exp_lst)->next->next;
-		else
-		{
-			if (i == 0)
-				cmd->cmd_name = (*exp_lst)->value;
-			cmd->args[i] = (*exp_lst)->value;
-			i++;
-			(*exp_lst) = (*exp_lst)->next;
-		}
-	}
-	cmd->args[i] = NULL;
+	cmd->args = fill_args(&tmp, count_args(tmp), &cmd->cmd_name);
 	return (cmd);
 }
 
@@ -123,7 +134,7 @@ int	parse_ast(t_token *exp_lst, t_ast **ast)
 			else
 			{
 				exp_lst = exp_lst->next;
-				printf("Error near token '|', missing next command.\n");
+				printf("Error near exp_lst '|', missing next command.\n");
 				// return (ERROR);
 			}
 		}
