@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/27 17:01:19 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/27 19:03:52 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,14 @@ int	expand_var(char *input, char **result, t_env *envl)
 	char	*var;
 
 	i = 1;
-	while (ft_isalnum(input[i]) || input[i] == '_')
-		i++;
-	var = ft_substr(input, 1, i - 1);
+	if (input[i] >= '0' && input[i] <= '9')
+		var = ft_substr(input, 1, 1);
+	else
+	{
+		while (ft_isalnum(input[i]) || input[i] == '_')
+			i++;
+		var = ft_substr(input, 1, i - 1);
+	}
 	(*result) = get_envl_var(var, envl);
 	free(var);
 	if ((*result) == NULL)
@@ -114,13 +119,16 @@ char	*expand_token(char *input, t_sh *shell)
 				}
 			}
 			pos++;
-			while ((ft_isalnum(input[pos]) || input[pos] == '_'
-					|| input[pos] == '?') && input[pos])
-			{
+			if (input[pos] >= '0' && input[pos] <= '9')
 				pos++;
-				if (input[pos - 1] == '?')
-					break ;
-			}
+			else
+				while ((ft_isalnum(input[pos]) || input[pos] == '_'
+						|| input[pos] == '?') && input[pos])
+				{
+					pos++;
+					if (input[pos - 1] == '?')
+						break ;
+				}
 			start = pos;
 		}
 		else
