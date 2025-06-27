@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/27 13:56:34 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/27 14:32:25 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,8 @@ int	main(int ac, char **av, char **envp)
 						if (parse_ast(expanded, &ast) == SUCCESS)
 							execute_ast(ast, &shell);
 						free_ast(ast);
-						free_tok_lst(tok_lst);
-						free_tok_lst(expanded);
+						// free_tok_lst(tok_lst);
+						// free_tok_lst(expanded);
 						ast = NULL;
 						tok_lst = NULL;
 						expanded = NULL;
