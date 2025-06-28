@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/27 14:37:13 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/28 18:36:22 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,8 @@ int	parse_ast(t_token *exp_lst, t_ast **ast)
 			(*ast)->right->type = CMD;
 		}
 	}
+	if (!(*ast)->left && !(*ast)->right && !(*ast)->cmd->cmd_name)
+		return (ERROR);
 	return (SUCCESS);
 }
 
