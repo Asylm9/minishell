@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:18:33 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/28 18:22:05 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/28 19:37:06 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ int	check_input(char *input, t_sh *shell)
 			{
 				if (ft_isalnum(input[i]) || input[i] == '$')
 					valid = 1;
+				if (input[i] == '\0')
+					return (ERROR);
 				i++;
 			}
 		}
