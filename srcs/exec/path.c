@@ -38,6 +38,7 @@ char	**get_paths(t_command *cmd, t_env *envl)
 
 	if (!cmd->cmd_name)
 		return (NULL);
+	// verifier utilite
 	if (cmd->cmd_name[0] == '\0')
 	{
 		paths = malloc(sizeof(char *) * 2);
@@ -91,11 +92,11 @@ char	*find_cmd_path(char **paths, char *cmd_name)
 	}
 	return (NULL);
 }
-int check_file_type(char *path)
+int	check_file_type(char *path)
 {
     struct	stat file_stat;
     
-    if (stat(path, &file_stat) < 0)
+	if (stat(path, &file_stat) < 0)
         return (-1);
     if (S_ISDIR(file_stat.st_mode))
         return (1);

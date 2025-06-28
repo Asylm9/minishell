@@ -21,7 +21,7 @@ int	execute_pipeline(t_ast *ast, t_sh *shell)
 
 int	execute_command(t_command *cmd, t_sh *shell)
 {
-	if (!cmd || !cmd->cmd_name)
+	if (!cmd)
 	{
 		if (shell->in_pipeline)
 			exit(0);
