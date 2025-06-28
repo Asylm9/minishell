@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/27 19:03:52 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/28 17:07:59 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -307,10 +307,7 @@ int	expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell)
 			tok_lst = tok_lst->next;
 		}
 		else
-		{
-			printf("Error near exp_lst '|', missing next command.\n");
 			return (ERROR);
-		}
 	}
 	return (SUCCESS);
 }

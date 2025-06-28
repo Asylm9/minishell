@@ -6,11 +6,25 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:18:33 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/27 18:18:53 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/28 18:22:05 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	is_empty(char *input)
+{
+	int	i;
+
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] != ' ')
+			return (ERROR);
+		i++;
+	}
+	return (SUCCESS);
+}
 
 int	check_input(char *input, t_sh *shell)
 {
@@ -23,6 +37,8 @@ int	check_input(char *input, t_sh *shell)
 	i = 0;
 	size = 0;
 	valid = 0;
+	if (is_empty(input) == SUCCESS || ft_strlen(input) == 0)
+		return (ERROR);
 	while (input[i])
 	{
 		if (ft_isalnum(input[i]) || input[i] == '$')
@@ -59,6 +75,11 @@ int	check_input(char *input, t_sh *shell)
 				shell->exit_status = 2;
 				return (ERROR);
 			}
+		if (input[i] == '!' && ft_strlen(input) == 1)
+		{
+			shell->exit_status = 1;
+			return (ERROR);
+		}
 		i++;
 	}
 	if (valid == 1)
