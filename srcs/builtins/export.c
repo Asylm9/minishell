@@ -38,6 +38,7 @@ static int	handle_append_export(char *key, char *new_value, t_env **envl)
 	else
 	{
 		joined_value = ft_strjoin(value, new_value);
+		free(value);
 		if (!joined_value)
 			return (ERROR);
 		ret = set_envl_var(key, envl, joined_value);

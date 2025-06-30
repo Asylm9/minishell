@@ -70,6 +70,7 @@ int	builtin_cd(char **args, t_sh *shell)
 	// changer current directory
 	if (chdir(new_path) < 0)
 		return (BUILTIN_ERR);
+	free(new_path); //car ajout de dupe dan get_envl_var)
 	if (update_pwds(shell, curr_dir) != 0)
 		return (BUILTIN_ERR);
 	return (SUCCESS);
