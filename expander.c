@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/28 18:35:04 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/30 14:52:34 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,64 +77,88 @@ char	*expand_token(char *input, t_sh *shell)
 				pos++;
 			pos++;
 		}
-		if (input[pos] == '$' && input[pos + 1] && (ft_isalnum(input[pos + 1])
-				|| input[pos + 1] == '_' || input[pos + 1] == '?'))
+		if (input[pos] == '$' /* && input[pos + 1] && (ft_isalnum(input[pos
+					+ 1])
+				|| input[pos + 1] == '_' || input[pos + 1] == '?') */)
 		{
-			buffer = ft_substr(input, start, pos - start);
-			tmp = ft_fstrjoin(&result, &buffer, 0);
-			if (result)
+			if (input[pos + 1] && (ft_isalnum(input[pos + 1]) || input[pos
+					+ 1] == '_' || input[pos + 1] == '?'))
 			{
-				free(result);
-				result = NULL;
-			}
-			if (buffer)
-			{
-				free(buffer);
-				buffer = NULL;
-			}
-			if (input[pos + 1] == '?')
-			{
-				if (expand_xcode(&buffer, shell))
+				buffer = ft_substr(input, start, pos - start);
+				tmp = ft_fstrjoin(&result, &buffer, 0);
+				if (result)
+				{
+					free(result);
+					result = NULL;
+				}
+				if (buffer)
+				{
+					free(buffer);
+					buffer = NULL;
+				}
+				if (input[pos + 1] == '?')
+				{
+					if (expand_xcode(&buffer, shell))
+						result = tmp;
+					if (buffer)
+					{
+						result = ft_fstrjoin(&tmp, &buffer, 3);
+						tmp = NULL;
+					}
+				}
+				else if (expand_var(input + pos, &buffer, shell->envl))
 					result = tmp;
-				if (buffer)
-				{
-					result = ft_fstrjoin(&tmp, &buffer, 3);
-					tmp = NULL;
-				}
-			}
-			else if (expand_var(input + pos, &buffer, shell->envl))
-				result = tmp;
-			else
-			{
-				if (buffer)
-				{
-					result = ft_fstrjoin(&tmp, &buffer, 1);
-					tmp = NULL;
-				}
 				else
 				{
-					if (result)
-						free(result);
-					result = tmp;
+					if (buffer)
+					{
+						result = ft_fstrjoin(&tmp, &buffer, 1);
+						tmp = NULL;
+					}
+					else
+					{
+						if (result)
+							free(result);
+						result = tmp;
+					}
+				}
+				pos++;
+				if (input[pos] >= '0' && input[pos] <= '9')
+					pos++;
+				else
+					while ((ft_isalnum(input[pos]) || input[pos] == '_'
+							|| input[pos] == '?') && input[pos])
+					{
+						pos++;
+						if (input[pos - 1] == '?')
+							break ;
+					}
+				start = pos;
+			}
+			else
+			{
+				pos++;
+				buffer = ft_substr(input, start, pos - start);
+				tmp = ft_fstrjoin(&result, &buffer, 0);
+				if (result)
+				{
+					free(result);
+					result = NULL;
+				}
+				if (buffer)
+				{
+					free(buffer);
+					buffer = NULL;
 				}
 			}
-			pos++;
-			if (input[pos] >= '0' && input[pos] <= '9')
-				pos++;
-			else
-				while ((ft_isalnum(input[pos]) || input[pos] == '_'
-						|| input[pos] == '?') && input[pos])
-				{
-					pos++;
-					if (input[pos - 1] == '?')
-						break ;
-				}
 			start = pos;
 		}
 		else
 			pos++;
 	}
 	buffer = ft_substr(input, start, pos - start);
+	if (tmp)
+		result = tmp;
 	tmp = ft_fstrjoin(&result, &buffer, 0);
 	free(result);
 	free(buffer);
