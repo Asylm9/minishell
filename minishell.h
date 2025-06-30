@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/06/27 18:58:48 by agaland          ###   ########.fr       */
+/*   Updated: 2025/06/30 13:23:52 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,6 +256,7 @@ void						print_env_array(char **env);
 void						init_redir(t_redirect *redir);
 void						init_cmd_struct(t_command *cmd, char **av,
 								t_redirect *redir);
+int							init_minimal_shell(t_sh *shell);
 void						init_shell_struct(t_sh *shell, char **envp);
 
 #endif

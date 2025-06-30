@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/27 18:18:43 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/06/30 14:44:51 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,12 @@ int	main(int ac, char **av, char **envp)
 	t_ast	*ast;
 	t_sh	shell;
 
-	init_shell_struct(&shell, envp);
+	if (!envp || !*envp)
+	{
+		init_minimal_shell(&shell);
+	}
+	else
+		init_shell_struct(&shell, envp);
 	tok_lst = NULL;
 	expanded = NULL;
 	if (ac > 1)

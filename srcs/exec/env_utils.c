@@ -78,7 +78,7 @@ t_env	*init_env_list(char **env)
 			level = atoi(value) + 1;
 			new_node = create_node(ft_strdup(env[i]), ft_itoa(level));
 		}		
-		else if (value)
+		if (value)
 			new_node = create_node(ft_strdup(env[i]), ft_strdup(value));
 		else
 			new_node = create_node(ft_strdup(env[i]), NULL);		
@@ -156,6 +156,38 @@ int	set_envl_var(char *name, t_env **envl, char *value)
 	return (add_new_entry(name, value, envl));
 }
 
+int	init_minimal_shell(t_sh *shell)
+{
+	char	buffer[PATH_MAX];
+	char	*pwd_var;
+
+	shell->env = malloc(sizeof(char *) * 3);
+	if (!shell->env)
+		return (ERROR);
+	if (!getcwd(buffer, sizeof(buffer)))
+	{
+		printf_fd(STDERR, "%s\n", strerror(errno));
+		free(shell->env);
+		return (ERROR);
+	}
+	pwd_var = ft_strjoin("PWD=", buffer);
+	if (!pwd_var)
+		return (free(shell->env), ERROR);
+	shell->env[0] = ft_strdup("SHLVL=1");
+	if (!shell->env[0])
+		return (free(pwd_var), free(shell->env), ERROR);
+	shell->env[1] = pwd_var;
+	shell->env[2] = NULL;
+	shell->in_pipeline = false;
+	shell->saved_stdin = -1;
+	shell->saved_stdout = -1;
+	shell->exit_status = 0;
+	shell->envl = init_env_list(shell->env);
+		free_array(shell->env, -1);
+	shell->env = NULL;
+	return (SUCCESS);
+}
+
 void	init_shell_struct(t_sh *shell, char **envp)
 {
 	int	count;
@@ -166,7 +198,7 @@ void	init_shell_struct(t_sh *shell, char **envp)
 		count++;
 	shell->env = malloc(sizeof(char *) * (count + 1));
 	if (!shell->env)
-		return;
+		return ;
 	i = 0;
 	while (envp[i])
 	{
