@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 19:51:03 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/01 00:37:07 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/01 00:55:07 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,39 +63,6 @@ static bool	has_quotes(char *delimiter)
 	else
 		return (false);
 }
-
-/* static bool delimiter_matches(char *delimiter, char *input)
-{
-    int del_i = 0;
-    int input_i = 0;
-    
-    if (!delimiter || !input)
-        return (false);
-    
-    while (delimiter[del_i])
-    {
-        // Skipper les quotes dans le délimiteur
-        if (delimiter[del_i] == '"' || delimiter[del_i] == '\'')
-        {
-            del_i++;
-            continue;
-        }
-        
-        // Si input est fini mais pas délimiteur (sans quotes)
-        if (!input[input_i])
-            return (false);
-            
-        // Comparer les caractères
-        if (delimiter[del_i] != input[input_i])
-            return (false);
-            
-        del_i++;
-        input_i++;
-    }
-    
-    // input doit être fini aussi
-    return (input[input_i] == '\0');
-} */
 
 int	del_compare(const char *s1, const char *s2)
 {
@@ -188,31 +155,3 @@ int	handle_heredoc(char *delimiter, t_sh *shell)
 	close(pfd[1]);
 	return (pfd[0]);
 }
-
-/* int main(void)
-{
-	t_redirect redir;
-	t_sh	shell;
-	char buffer[1024];
-	int	bytes_read;
-
-	shell.exit_status = 0;
-	init_heredoc(&redir, "EOF");
-	printf("del: %s\n", redir.target);
-	redir.fd = handle_heredoc(redir.target, &shell);
-	if (redir.fd > 0)
-	{
-		printf("**** Contenu du heredoc ****\n");
-		while ((bytes_read = read(redir.fd, buffer, sizeof(buffer) - 1)) > 0)
-		{
-			buffer[bytes_read] = '\0';
-			printf("%s", buffer);
-		}
-		printf("\n**** Fin ****\n");
-		close(redir.fd);
-	}
-	else
-		printf("Heredoc error\n");
-	free(redir.target);
-	return (0);
-} */
