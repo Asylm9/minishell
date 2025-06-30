@@ -1,4 +1,4 @@
-# include "../../minishell.h"
+#include "../../minishell.h"
 
 void	print_env_array(char **env)
 {
@@ -77,11 +77,11 @@ t_env	*init_env_list(char **env)
 		{
 			level = atoi(value) + 1;
 			new_node = create_node(ft_strdup(env[i]), ft_itoa(level));
-		}		
+		}
 		if (value)
 			new_node = create_node(ft_strdup(env[i]), ft_strdup(value));
 		else
-			new_node = create_node(ft_strdup(env[i]), NULL);		
+			new_node = create_node(ft_strdup(env[i]), NULL);
 		if (!new_node)
 			return (NULL);
 		equal_pos[0] = '=';
@@ -97,7 +97,7 @@ int	add_new_entry(char *key, char *value, t_env **envl)
 	char	*key_copy;
 	char	*value_copy;
 
-	//uniquement appele depuis set_envl_var pour l'instant:pas besoin de reverifier !key,!value!,env
+	// uniquement appele depuis set_envl_var pour l'instant:pas besoin de reverifier !key,!value!,env
 	key_copy = ft_strdup(key);
 	if (!key_copy)
 		return (ERROR);
@@ -125,7 +125,7 @@ char	*get_envl_var(char *name, t_env *envl)
 	while (current)
 	{
 		if (ft_strcmp(current->key, name) == 0)
-			return (current->value);
+			return (ft_strdup(current->value));
 		current = current->next;
 	}
 	return (NULL);
@@ -145,7 +145,7 @@ int	set_envl_var(char *name, t_env **envl, char *value)
 			free(current->value);
 			if (value)
 				current->value = ft_strdup(value);
-			else 
+			else
 				current->value = NULL;
 			if (value && !current->value)
 				return (ERROR);
@@ -183,7 +183,7 @@ int	init_minimal_shell(t_sh *shell)
 	shell->saved_stdout = -1;
 	shell->exit_status = 0;
 	shell->envl = init_env_list(shell->env);
-		free_array(shell->env, -1);
+	free_array(shell->env, -1);
 	shell->env = NULL;
 	return (SUCCESS);
 }
@@ -194,7 +194,7 @@ void	init_shell_struct(t_sh *shell, char **envp)
 	int	i;
 
 	count = 0;
-	while(envp[count])
+	while (envp[count])
 		count++;
 	shell->env = malloc(sizeof(char *) * (count + 1));
 	if (!shell->env)
