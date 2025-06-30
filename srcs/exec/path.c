@@ -18,19 +18,6 @@ char	*get_env_var(char *name, char **env)
 	return (NULL);
 }
 
-/* char	**get_paths(char **env)
-{
-	char	*env_path;
-	char	**paths;
-
-	env_path = get_env_var("PATH", env);
-	if (!env_path)
-		return (NULL);
-	paths = ft_split(env_path, ':');
-	free(env_path);
-	return (paths);
-} */
-
 char	**get_paths(t_command *cmd, t_env *envl)
 {
 	char	*env_path;
@@ -69,7 +56,7 @@ char	**get_paths(t_command *cmd, t_env *envl)
 
 static bool	is_absolute_or_relative(char *cmd)
 {
-	return (cmd[0] == '/' || cmd[0] == '.');
+	return (ft_strchr(cmd, '/') || /* cmd[0] == '/' || */ cmd[0] == '.');
 }
 
 char	*find_cmd_path(char **paths, char *cmd_name)
@@ -96,6 +83,7 @@ int	check_file_type(char *path)
 {
     struct	stat file_stat;
     
+	//gerer retour erreur
 	if (stat(path, &file_stat) < 0)
         return (-1);
     if (S_ISDIR(file_stat.st_mode))
@@ -145,19 +133,3 @@ int	execute_binary(t_command *cmd, t_sh *shell)
 	free_array(env, -1);
 	return (EXECVE_ERR);
 }
-
-/* int	main(int ac, char **av, char **envp)
-{
-	t_command	cmd;
-	t_redirect	redir;
-	int			status;
-
-
-	status = 0;
-	if (ac < 2)
-		return (0);
-	init_redir(&redir);
-	init_cmd_struct(&cmd, &av[1], &redir);
-	status = execute_binary(&cmd, envp);
-	return (status);
-} */
