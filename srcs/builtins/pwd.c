@@ -6,7 +6,7 @@ int	builtin_pwd(void)
 	if (!getcwd(buffer, sizeof(buffer)))
 	{
 		perror("getcwd");
-		return (BUILTIN_ERR);
+		return (ERROR);
 	}
 	ft_putendl_fd(buffer, 1);
 	return (SUCCESS);

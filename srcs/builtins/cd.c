@@ -47,7 +47,7 @@ int	update_pwds(t_sh *shell, char *curr_dir)
 	// actualiser OLDPWD avec current
 	set_envl_var("OLDPWD", &shell->envl, curr_dir);
 	if (!getcwd(curr_dir, PATH_MAX))
-		return (perror("getcwd"), BUILTIN_ERR);
+		return (perror("getcwd"), ERROR);
 	// actualiser PWD avec current
 	set_envl_var("PWD", &shell->envl, curr_dir);
 	return (SUCCESS);

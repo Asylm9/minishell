@@ -21,6 +21,12 @@ grep "pif" < output.txt > matches.txt
 
 #############################################
 
+<< e cat > file.txt | << d cat >> file.txt
+-> comportement de bash: parfois append passe avant out, parfois l'inverse
+-> MsH : toujours out execute en dernier (contenu d'un seul des heredoc)
+
+#############################################
+
 attention '\n' parasite -> 18: ast->right->cmd->redirections->target = 0x555555596f80 "out.txt\n"
 
 #############################################
