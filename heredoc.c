@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 19:51:03 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/26 19:51:34 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/01 00:37:07 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,27 +44,85 @@ char	*ft_fstrjoin(char **s1, char **s2, int flag)
 static bool	has_quotes(char *delimiter)
 {
 	int	i;
-	int	count;
+	int	dquote;
+	int	squote;
 
 	i = 0;
-	count = 0;
+	dquote = 0;
+	squote = 0;
 	while (delimiter[i])
 	{
 		if (delimiter[i] == '"')
-			count++;
+			dquote++;
+		if (delimiter[i] == '\'')
+			squote++;
 		i++;
 	}
-	if (count >= 2)
+	if (dquote >= 2 || squote >= 2)
 		return (true);
 	else
 		return (false);
+}
+
+/* static bool delimiter_matches(char *delimiter, char *input)
+{
+    int del_i = 0;
+    int input_i = 0;
+    
+    if (!delimiter || !input)
+        return (false);
+    
+    while (delimiter[del_i])
+    {
+        // Skipper les quotes dans le délimiteur
+        if (delimiter[del_i] == '"' || delimiter[del_i] == '\'')
+        {
+            del_i++;
+            continue;
+        }
+        
+        // Si input est fini mais pas délimiteur (sans quotes)
+        if (!input[input_i])
+            return (false);
+            
+        // Comparer les caractères
+        if (delimiter[del_i] != input[input_i])
+            return (false);
+            
+        del_i++;
+        input_i++;
+    }
+    
+    // input doit être fini aussi
+    return (input[input_i] == '\0');
+} */
+
+int	del_compare(const char *s1, const char *s2)
+{
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	while (s1[i] || s2[j])
+	{
+		while (s1[i] == '"' || s1[i] == '\'')
+			i++;
+		if (!s1[i] && !s2[j])
+			return (0);
+		if ((!s1[i] || !s2[j]) || s1[i] != s2[j])
+			return ((unsigned char) s1[i] - (unsigned char) s2[j]);
+		i++; 
+		j++; 
+	}
+	return (0);
 }
 
 static char	*process_heredoc_line(char *input, char *delimiter, t_sh *shell)
 {
 	char	*line;
 
-	if (ft_strcmp(delimiter, input) == 0)
+	if (del_compare(delimiter, input) == 0)
 	{
 		free(input);
 		return (NULL);
