@@ -103,9 +103,12 @@ int	execute_binary(t_command *cmd, t_sh *shell)
 	if (is_absolute_or_relative(cmd->cmd_name))
 	{
 		cmd_path = ft_strdup(cmd->cmd_name);
-		if (access(cmd_path, F_OK | X_OK) < 0)
+		if (access(cmd_path, F_OK) < 0)
 		{
-			printf_fd(STDERR,"minishell: %s: %s\n", cmd_path, strerror(errno));
+			if (access(cmd_path, X_OK) < 0)
+				printf_fd(STDERR,"minishell: %s: %s\n", cmd_path, strerror(errno));
+			else
+				printf_fd(STDERR,"minishell: %s: command not found\n", cmd->cmd_name);
 			free(cmd_path);
 			return (CMD_NOT_FOUND);
 		}
