@@ -78,7 +78,7 @@ t_env	*init_env_list(char **env)
 			level = atoi(value) + 1;
 			new_node = create_node(ft_strdup(env[i]), ft_itoa(level));
 		}
-		if (value)
+		else if (value)
 			new_node = create_node(ft_strdup(env[i]), ft_strdup(value));
 		else
 			new_node = create_node(ft_strdup(env[i]), NULL);
@@ -173,7 +173,7 @@ int	init_minimal_shell(t_sh *shell)
 	pwd_var = ft_strjoin("PWD=", buffer);
 	if (!pwd_var)
 		return (free(shell->env), ERROR);
-	shell->env[0] = ft_strdup("SHLVL=1");
+	shell->env[0] = ft_strdup("SHLVL=0");
 	if (!shell->env[0])
 		return (free(pwd_var), free(shell->env), ERROR);
 	shell->env[1] = pwd_var;
