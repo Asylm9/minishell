@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/30 14:44:51 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/01 11:31:19 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	main(int ac, char **av, char **envp)
 				|| (tok_lst->value == NULL && tok_lst->next == NULL))
 			{
 				if (tok_lst)
-					free_tok_lst(tok_lst);
+					free_tok_lst(&tok_lst);
 				free(input);
 			}
 			else
@@ -72,7 +72,7 @@ int	main(int ac, char **av, char **envp)
 				free(input);
 				if (create_token_node(&expanded) == ERROR)
 				{
-					free_tok_lst(tok_lst);
+					free_tok_lst(&tok_lst);
 					tok_lst = NULL;
 				}
 				else if (expand_list(tok_lst, expanded, &shell) == SUCCESS)

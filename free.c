@@ -3,29 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 20:42:02 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/27 14:17:46 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/01 11:29:53 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_tok_lst(t_token *list)
+void	free_tok_lst(t_token **list)
 {
 	t_token	*temp;
 
-	while (list)
+	if (!list)
+		return;
+	while (*list)
 	{
-		temp = list;
-		list = list->next;
-		if (temp->value)
-			free(temp->value);
-		// if (temp)
-		// 	free(temp);
-		temp = NULL;
+		temp = (*list)->next;
+		if ((*list)->value)
+			free((*list)->value);
+		free(*list);
+		*list = temp;
 	}
+	*list = NULL;
 }
 
 void	free_redir(t_redirect *redirection)
