@@ -1,0 +1,57 @@
+echo
+echo -n
+echo Hola
+echoHola
+echo-nHola
+echo -nHola
+echo Hola -n
+echo Hola Que Tal
+echo         Hola
+echo    Hola     Que    Tal
+echo      \n hola
+echo "         " | cat -e
+echo           | cat -e
+""''echo hola""'''' que""'' tal""''
+echo -n -n
+echo -p
+echo -nnnnn
+echo -n -nnn -nnnn
+echo -n-nnn -nnnn
+echo --------n
+echo > <
+echo | |
+EechoE
+.echo.
+>echo>
+<echo<
+>>echo>>
+|echo|
+|echo -n hola
+
+echo "hola"
+echo 'hola'
+echo ''hola''
+echo ''h'o'la''
+echo "''h'o'la''"
+echo "'"h'o'la"'"
+echo"'hola'"
+echo "'hola'"
+echo '"hola"'
+echo '''ho"''''l"a'''
+echo hola""""""""""""
+echo hola"''''''''''"
+echo hola''''''''''''
+echo hola'""""""""""'
+e"cho hola"
+e'cho hola'
+echo "hola     " | cat -e
+echo ""hola
+echo "" hola
+echo ""             hola
+echo ""hola
+echo "" hola
+echo hola""bonjour
+"e"'c'ho 'b'"o"nj"o"'u'r
+""e"'c'ho 'b'"o"nj"o"'u'r"
+Ctlr-C
+holaCtlr-C

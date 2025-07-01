@@ -13,7 +13,9 @@ else
 		"pipes"
 		"redirects"
 		"extras"
-		"custom"
+		"basic"
+		"echo"
+		"expand"
 	)
 fi
 
