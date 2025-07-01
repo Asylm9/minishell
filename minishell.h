@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/06/30 13:23:52 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/01 11:31:04 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,7 +243,7 @@ t_env						*add_back_node(t_env *new_node, t_env *head);
 /* Resources */
 // void						free_pipes(int **pipes, int i);
 /* Free */
-void						free_tok_lst(t_token *list);
+void						free_tok_lst(t_token **list);
 void						free_redir(t_redirect *redirection);
 void						free_cmd(t_command *cmd);
 void						free_ast(t_ast *ast);
