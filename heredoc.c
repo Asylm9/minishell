@@ -1,45 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   heredoc.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/26 19:51:03 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/01 00:55:07 by agaland          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "minishell.h"
-
-char	*ft_fstrjoin(char **s1, char **s2, int flag)
-{
-	size_t	len1;
-	size_t	len2;
-	char	*result;
-
-	len1 = 0;
-	len2 = 0;
-	if (s1 && *s1)
-		len1 = ft_strlen(*s1);
-	if (s2 && *s2)
-		len2 = ft_strlen(*s2);
-	result = (char *)malloc(len1 + len2 + 1);
-	if (!result)
-		return (NULL);
-	if (s1 && *s1)
-		ft_memcpy(result, *s1, len1);
-	if (s2 && *s2)
-		ft_memcpy(result + len1, *s2, len2);
-	result[len1 + len2] = '\0';
-	if (flag == 1 || flag == 3)
-		if (s1 && *s1)
-			free(*s1);
-	if (flag == 2 || flag == 3)
-		if (s2 && *s2)
-			free(*s2);
-	return (result);
-}
 
 static bool	has_quotes(char *delimiter)
 {
