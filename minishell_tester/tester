@@ -9,18 +9,19 @@ if [[ $1 ]]; then
 	)
 else
 	test_lists=(
-		"builtins"
-		"pipes"
-		"redirects"
-		"extras"
-		"basic"
-		"echo"
-		"expand"
+		"builtins.test"
+		"pipes.test"
+		"redirects.test"
+		"extras.test"
+		"basic.test"
+		"echo.test"
+		"expand.test"
+		"export.test"
 	)
 fi
 
-if [[ $1 == "wildcards"  || $1 == "bonus" ]]; then
-	MINISHELL_PATH="../minishell_bonus"
+if [[ $1 == "wildcards.test"  || $1 == "bonus.test" ]]; then
+	MINISHELL_PATH="../minishell_bonus.test"
 fi
 
 BOLD="\e[1m"

@@ -1,0 +1,39 @@
+export       HOLA=bonjour
+env
+export $DONTEXIST
+export | grep "HOME"
+export ""
+export =
+export %
+export $?
+export ?=2
+export 9HOLA=
+export HOL@=bonjour
+export HOL\~A=bonjour
+export -HOLA=bonjour
+export --HOLA=bonjour
+export HOLA-=bonjour
+export HO-LA=bonjour
+export HOL.A=bonjour
+export HOL\\\$A=bonjour
+export HO\\\\LA=bonjour
+export HOL}A=bonjour
+export HOL{A=bonjour
+export HO*LA=bonjour
+export HO#LA=bonjour
+export HO@LA=bonjour
+export HO!LA=bonjour
+export +HOLA=bonjour
+export HOL+A=bonjour
+"export HOLA+=bonjour
+env"
+"export HOLA=bonjour
+export HOLA+=bonjour
+env"
+"exportHOLA=bonjour
+env"
+export HOLA =bonjour
+export HOLA = bonjour
+export HOLA=bon!jour
+"export HOLA=bonjour=casse-toi
+echo $HOLA"
