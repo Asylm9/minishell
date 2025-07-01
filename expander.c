@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/06/30 14:52:34 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/01 18:29:35 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,9 +256,9 @@ int	check_validity(t_token *exp_lst)
 		if (first == PIPE && (second >= 2 || !exp_lst->next
 				|| (exp_lst->next->type != 1 && exp_lst->next->type != 4)))
 			return (ERROR);
-		else
-			return (SUCCESS);
 		if (second >= 3 && first != WORD)
+			return (ERROR);
+		if (first == 6 && (!exp_lst->next || exp_lst->next->type != WORD))
 			return (ERROR);
 		exp_lst = exp_lst->next;
 	}
