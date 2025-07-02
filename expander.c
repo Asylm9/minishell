@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/01 18:29:35 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/02 12:59:26 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,98 @@ char	*expand_token(char *input, t_sh *shell)
 				pos++;
 			pos++;
 		}
-		if (input[pos] == '$' /* && input[pos + 1] && (ft_isalnum(input[pos
-					+ 1])
-				|| input[pos + 1] == '_' || input[pos + 1] == '?') */)
+		if (input[pos] == '"')
+		{
+			pos++;
+			while (input[pos] && input[pos] != '"')
+			{
+				if (input[pos] == '$')
+				{
+					if (input[pos + 1] && (ft_isalnum(input[pos + 1])
+							|| input[pos + 1] == '_' || input[pos + 1] == '?'))
+					{
+						buffer = ft_substr(input, start, pos - start);
+						tmp = ft_fstrjoin(&result, &buffer, 0);
+						if (result)
+						{
+							free(result);
+							result = NULL;
+						}
+						if (buffer)
+						{
+							free(buffer);
+							buffer = NULL;
+						}
+						if (input[pos + 1] == '?')
+						{
+							if (expand_xcode(&buffer, shell))
+								result = tmp;
+							if (buffer)
+							{
+								result = ft_fstrjoin(&tmp, &buffer, 3);
+								tmp = NULL;
+							}
+						}
+						else if (expand_var(input + pos, &buffer, shell->envl))
+							result = tmp;
+						else
+						{
+							if (buffer)
+							{
+								result = ft_fstrjoin(&tmp, &buffer, 1);
+								tmp = NULL;
+							}
+							else
+							{
+								if (result)
+									free(result);
+								result = tmp;
+							}
+						}
+						pos++;
+						if (input[pos] >= '0' && input[pos] <= '9')
+							pos++;
+						else
+							while ((ft_isalnum(input[pos]) || input[pos] == '_'
+									|| input[pos] == '?') && input[pos])
+							{
+								pos++;
+								if (input[pos - 1] == '?')
+									break ;
+							}
+						start = pos;
+					}
+					else if (input[pos + 1] && input[pos + 1] != ':'
+						&& input[pos + 1] != '=' && input[pos + 1] != '"'
+						&& input[pos + 1] != ' ')
+					{
+						pos++;
+						buffer = ft_strdup("");
+						tmp = ft_fstrjoin(&result, &buffer, 0);
+					}
+					else
+					{
+						pos++;
+						buffer = ft_substr(input, start, pos - start);
+						tmp = ft_fstrjoin(&result, &buffer, 0);
+						if (result)
+						{
+							free(result);
+							result = NULL;
+						}
+						if (buffer)
+						{
+							free(buffer);
+							buffer = NULL;
+						}
+					}
+					start = pos;
+				}
+				else
+					pos++;
+			}
+		}
+		if (input[pos] == '$')
 		{
 			if (input[pos + 1] && (ft_isalnum(input[pos + 1]) || input[pos
 					+ 1] == '_' || input[pos + 1] == '?'))
@@ -134,6 +223,13 @@ char	*expand_token(char *input, t_sh *shell)
 							break ;
 					}
 				start = pos;
+			}
+			else if (input[pos + 1] && input[pos + 1] != ':' && input[pos
+				+ 1] != '=' && input[pos + 1] != ' ')
+			{
+				pos++;
+				buffer = ft_strdup("");
+				tmp = ft_fstrjoin(&result, &buffer, 0);
 			}
 			else
 			{
