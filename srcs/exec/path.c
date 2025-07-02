@@ -1,23 +1,5 @@
 #include "../../minishell.h"
 
-char	*get_env_var(char *name, char **env)
-{
-	int		i;
-	int		len;
-
-	if (!name || !env)
-		return (NULL);
-	len = ft_strlen(name);
-	i = 0;
-	while (env[i])
-	{
-		if (ft_strncmp(env[i], name, len) == 0 && env[i][len] == '=')
-			return (ft_strdup(env[i] + len + 1));
-		i++;
-	}
-	return (NULL);
-}
-
 char	**get_paths(t_command *cmd, t_env *envl)
 {
 	char	*env_path;
@@ -44,17 +26,6 @@ char	**get_paths(t_command *cmd, t_env *envl)
 	return (paths);
 }
 
-/* static char	*is_absolute_or_relative(char *cmd)
-{
-	if (cmd[0] == '/' || cmd[0] == '.')
-	{
-		if (access(cmd, F_OK | X_OK) == 0)
-			return (ft_strdup(cmd)); //pour ne pas risquer de free directement cmd->name plus tard
-		return (NULL);
-	}
-	return (NULL);
-} */
-
 static bool	is_absolute_or_relative(char *cmd)
 {
 	return (ft_strchr(cmd, '/') || /* cmd[0] == '/' || */ cmd[0] == '.');
@@ -80,6 +51,7 @@ char	*find_cmd_path(char **paths, char *cmd_name)
 	}
 	return (NULL);
 }
+
 int	check_file_type(char *path)
 {
     struct	stat file_stat;

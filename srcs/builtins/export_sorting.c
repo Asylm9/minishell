@@ -17,6 +17,29 @@ int	count_elements(t_env *envl)
 	return (n);
 }
 
+void	print_exp_list(t_env *envl)
+{
+	t_env	**ptr_array;
+	int		count;
+	int		i;
+
+	count = count_elements(envl);
+	ptr_array = init_temp_array(envl, count);
+	if (!ptr_array)
+		return;
+	sort_env_list(ptr_array, count);
+	i = 0;
+	while (i < count)
+	{
+		if (!ptr_array[i]->value)
+			printf("export %s\n", ptr_array[i]->key);
+		else
+			printf("export %s=\"%s\"\n", ptr_array[i]->key, ptr_array[i]->value); // gestion "" = sparadrap :v
+		i++;
+	}
+	free(ptr_array);
+}
+
 t_env	**init_temp_array(t_env *envl, int count)
 {
 	t_env	**ptr_array;

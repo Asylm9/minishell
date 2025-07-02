@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/01 11:31:04 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/02 12:10:56 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,14 +121,6 @@ typedef struct s_ast
 	t_ast					*right;
 }							t_ast;
 
-typedef struct s_exec // pas sure d'etre utile
-{
-	int i;
-	int status;
-	pid_t *pids;
-	t_command *current;
-}							t_exec;
-
 /**************************		Parsing		*****************************/
 
 void						print_token(t_token *tok_lst);
@@ -234,6 +226,7 @@ char						*ft_charjoin(char const *s1, char const *s2,
 // void	error_message(const char *msg);
 
 /* List utils */
+int							list_size(t_env *envl);
 void						print_env_list(t_env *envl);
 void						print_exp_list(t_env *envl);
 t_env						*create_node(char *key, char *value);

@@ -1,10 +1,6 @@
 export       HOLA=bonjour
-env
-export $DONTEXIST
-export | grep "HOME"
 export ""
 export =
-export %
 export $?
 export ?=2
 export 9HOLA=
@@ -16,7 +12,6 @@ export HOLA-=bonjour
 export HO-LA=bonjour
 export HOL.A=bonjour
 export HOL\\\$A=bonjour
-export HO\\\\LA=bonjour
 export HOL}A=bonjour
 export HOL{A=bonjour
 export HO*LA=bonjour

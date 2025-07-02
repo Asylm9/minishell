@@ -1,30 +1,5 @@
 #include "../../minishell.h"
 
-void	print_env_array(char **env)
-{
-	int	i;
-
-	i = 0;
-	while (env[i])
-	{
-		printf("%s\n", env[i]);
-		i++;
-	}
-}
-
-int	list_size(t_env *envl)
-{
-	int	size;
-
-	size = 0;
-	while (envl != NULL)
-	{
-		size++;
-		envl = envl->next;
-	}
-	return (size);
-}
-
 char	**convert_envl_to_env(t_env *envl)
 {
 	char	**env;
@@ -214,3 +189,15 @@ void	init_shell_struct(t_sh *shell, char **envp)
 	free_array(shell->env, -1);
 	shell->env = NULL;
 }
+
+/* void	print_env_array(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env[i])
+	{
+		printf("%s\n", env[i]);
+		i++;
+	}
+} */

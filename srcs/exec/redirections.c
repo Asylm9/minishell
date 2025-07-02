@@ -1,20 +1,5 @@
 # include "../../minishell.h"
 
-/* int	setup_pipes_redirections(int **pipes, int nb_pipes, int i)
-{
-	if (i > 0)
-	{
-		if (dup2(pipes[i - 1][0], STDIN_FILENO) < 0) //le premier pipe devient le stdin de la 2ere CMD et ainsi de suite (read end)
-			return (1);
-	}
-	if (i < nb_pipes)
-	{
-		if (dup2(pipes[i][1], STDOUT_FILENO) < 0) //idem avec stdin si pas derniere CMD (write end)
-			return (1);
-	}
-	return (0);
-} */
-
 int	save_or_restore_fds(t_sh *shell, char flag)
 {
 	if (flag == 's')

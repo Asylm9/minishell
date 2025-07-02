@@ -1,39 +1,16 @@
 # include "../../minishell.h"
 
-void	print_env_list(t_env *envl)
+int	list_size(t_env *envl)
 {
-	t_env	*current;
+	int	size;
 
-	current = envl;
-	while (current)
+	size = 0;
+	while (envl != NULL)
 	{
-		if (current->value != NULL) //skip les var ne devant etre affichees que par export
-			printf("%s=%s\n", current->key, current->value);
-		current = current->next;
+		size++;
+		envl = envl->next;
 	}
-}
-
-void	print_exp_list(t_env *envl)
-{
-	t_env	**ptr_array;
-	int		count;
-	int		i;
-
-	count = count_elements(envl);
-	ptr_array = init_temp_array(envl, count);
-	if (!ptr_array)
-		return;
-	sort_env_list(ptr_array, count);
-	i = 0;
-	while (i < count)
-	{
-		if (!ptr_array[i]->value)
-			printf("export %s\n", ptr_array[i]->key);
-		else
-			printf("export %s=\"%s\"\n", ptr_array[i]->key, ptr_array[i]->value); // gestion "" = sparadrap :v
-		i++;
-	}
-	free(ptr_array);
+	return (size);
 }
 
 t_env	*create_node(char *key, char *value)

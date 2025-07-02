@@ -9,20 +9,6 @@ int	process_wait_status(int status)
 	return (ERROR);
 }
 
-int	ft_strcmp(const char *s1, const char *s2)
-{
-	size_t	i;
-
-	i = 0;
-	while (s1[i] || s2[i])
-	{
-		if (s1[i] != s2[i])
-			return ((unsigned char) s1[i] - (unsigned char) s2[i]);
-		i++;
-	}
-	return (0);
-}
-
 char	*ft_charjoin(char const *s1, char const *s2, char c)
 {
 	size_t	len1;
