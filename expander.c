@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/02 14:32:57 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/02 15:56:03 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -350,9 +350,12 @@ int	check_validity(t_token *exp_lst)
 	{
 		second = first;
 		first = exp_lst->type;
-		if (first == PIPE && (second >= 2 || !exp_lst->next
-				|| (exp_lst->next->type != 1 && exp_lst->next->type != 4)))
+		if (first == PIPE && (second >= 2 || (exp_lst->next
+					&& (exp_lst->next->type != 1 && exp_lst->next->type != 4))
+				|| !exp_lst->next))
 			return (ERROR);
+		else
+			return (SUCCESS);
 		if (second >= 3 && first != WORD)
 			return (ERROR);
 		if (first == 6 && (!exp_lst->next || exp_lst->next->type != WORD))
@@ -418,14 +421,17 @@ int	expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell)
 		}
 		else if (tok_lst->type == PIPE)
 		{
-			exp_lst->type = PIPE;
-			create_token_node(&exp_lst);
-			exp_lst = exp_lst->next;
-			input = readline(">");
-			create_token_node(&new_line);
-			tokenize_input(new_line, input);
-			expand_list(new_line, exp_lst, shell);
-			tok_lst = tok_lst->next;
+			if (!tok_lst->next)
+			{
+				exp_lst->type = PIPE;
+				create_token_node(&exp_lst);
+				exp_lst = exp_lst->next;
+				input = readline(">");
+				create_token_node(&new_line);
+				tokenize_input(new_line, input);
+				expand_list(new_line, exp_lst, shell);
+				tok_lst = tok_lst->next;
+			}
 		}
 		else
 			return (ERROR);
