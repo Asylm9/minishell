@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:18:33 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/01 18:15:36 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/02 14:47:56 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,15 @@ int	check_input(char *input, t_sh *shell)
 		return (ERROR);
 	while (input[i])
 	{
-		if (ft_isalnum(input[i]) || input[i] == '$')
+		if (ft_isalnum(input[i]) || input[i] == '$' || input[i] == '.')
 		{
+			if (input[i] == '.' && (input[i + 1] == '\0' || input[i
+					+ 1] == ' '))
+			{
+				shell->exit_status = 2;
+				printf_fd(STDERR, " filename argument required\n");
+				return (ERROR);
+			}
 			valid = 1;
 			size++;
 		}

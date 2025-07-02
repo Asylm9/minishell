@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/02 12:59:26 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/02 14:32:57 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ char	*expand_token(char *input, t_sh *shell)
 					if (buffer)
 					{
 						result = ft_fstrjoin(&tmp, &buffer, 3);
-						tmp = NULL;
+						tmp = result;
 					}
 				}
 				else if (expand_var(input + pos, &buffer, shell->envl))
@@ -234,6 +234,7 @@ char	*expand_token(char *input, t_sh *shell)
 			else
 			{
 				pos++;
+				result = tmp;
 				buffer = ft_substr(input, start, pos - start);
 				tmp = ft_fstrjoin(&result, &buffer, 0);
 				if (result)
