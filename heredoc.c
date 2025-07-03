@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 static bool	has_quotes(char *delimiter)
@@ -69,9 +68,20 @@ static int	read_heredoc_content(char *delimiter, t_sh *shell, char **buffer)
 	char	*temp;
 
 	*buffer = NULL;
+	g_sig = 0;
+	signal(SIGINT, handle_here_sig);
 	while (1)
 	{
 		input = readline("> ");
+		if (g_sig == SIGINT)
+        {
+            free(input);
+            free(*buffer);
+            *buffer = NULL;
+            // Handler du shell à remettre
+            signal(SIGINT, handle_sigint);
+            return (1);
+        }
 		if (!input)
 			break ;
 		line = process_heredoc_line(input, delimiter, shell);
@@ -84,34 +94,52 @@ static int	read_heredoc_content(char *delimiter, t_sh *shell, char **buffer)
 		free(*buffer);
 		*buffer = temp;
 	}
+    signal(SIGINT, handle_sigint);
 	return (0);
 }
 
 int	handle_heredoc(char *delimiter, t_sh *shell)
 {
-	char	*buffer;
-	char	*temp;
-	int		pfd[2];
+    char	*buffer;
+    char	*temp;
+    int		pfd[2];
+    int		pid;
+    int		status;
 
-	if (pipe(pfd) < 0)
-		return (1);
-	if (read_heredoc_content(delimiter, shell, &buffer) != SUCCESS)
-	{
-		close(pfd[0]);
-		close(pfd[1]);
-		return (1);
-	}
-	if (buffer)
-	{
-		temp = ft_strjoin(buffer, "\n");
-		if (temp)
-		{
-			free(buffer);
-			buffer = temp;
-		}
-		write(pfd[1], buffer, ft_strlen(buffer));
-		free(buffer);
-	}
-	close(pfd[1]);
-	return (pfd[0]);
+    if (pipe(pfd) < 0)
+        return (1);
+    signal(SIGINT, SIG_IGN);
+    pid = fork();
+    if (pid == 0)
+    {
+        signal(SIGINT, handle_here_sig); // handler dans le child
+        if (read_heredoc_content(delimiter, shell, &buffer) != SUCCESS)
+        {
+            close(pfd[0]);
+            close(pfd[1]);
+            _exit(1);
+        }
+        if (buffer)
+        {
+            temp = ft_strjoin(buffer, "\n");
+            if (temp)
+            {
+                free(buffer);
+                buffer = temp;
+            }
+            write(pfd[1], buffer, ft_strlen(buffer));
+            free(buffer);
+        }
+        close(pfd[0]);
+        close(pfd[1]);
+        _exit(0); // <-- succès
+    }
+    else
+    {
+        close(pfd[1]); // le parent n'écrit pas
+        waitpid(pid, &status, 0);
+        signal(SIGINT, handle_sigint);
+    }
+    shell->exit_status = process_wait_status(status);
+    return (pfd[0]);
 }

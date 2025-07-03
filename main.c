@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/01 11:31:19 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/03 20:33:18 by matthieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,34 @@ void	print_token(t_token *tok_lst)
 	}
 }
 
+
+volatile sig_atomic_t g_sig = 0;
+
+void	rd(void)
+{
+	write(1, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+}
+
+void	handle_here_sig(int sig)
+{
+	g_sig = sig;
+	write(1, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+	rl_done = 1;
+}
+
+void	handle_sigint(int sig)
+{
+	rd();
+	(void)sig;
+}
+
+
 int	main(int ac, char **av, char **envp)
 {
 	char	*input;
@@ -52,6 +80,8 @@ int	main(int ac, char **av, char **envp)
 		fprintf(stderr, "Usage: %s\n", av[0]);
 		return (1);
 	}
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, handle_sigint);
 	while (1)
 	{
 		input = readline("\033[0;34m\033[1mMinishell> \033[0m");
