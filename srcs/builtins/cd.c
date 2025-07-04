@@ -1,4 +1,4 @@
-# include "../../minishell.h"
+#include "../../minishell.h"
 
 static char	*set_new_path(char **args, t_sh *shell)
 {

@@ -1,6 +1,4 @@
-# include "../../minishell.h"
-
-/* Compter le nombre de variables d'environnement */
+#include "../../minishell.h"
 
 int	count_elements(t_env *envl)
 {
@@ -26,7 +24,7 @@ void	print_exp_list(t_env *envl)
 	count = count_elements(envl);
 	ptr_array = init_temp_array(envl, count);
 	if (!ptr_array)
-		return;
+		return ;
 	sort_env_list(ptr_array, count);
 	i = 0;
 	while (i < count)
@@ -34,7 +32,8 @@ void	print_exp_list(t_env *envl)
 		if (!ptr_array[i]->value)
 			printf("export %s\n", ptr_array[i]->key);
 		else
-			printf("export %s=\"%s\"\n", ptr_array[i]->key, ptr_array[i]->value); // gestion "" = sparadrap :v
+			printf("export %s=\"%s\"\n", ptr_array[i]->key,
+				ptr_array[i]->value);
 		i++;
 	}
 	free(ptr_array);

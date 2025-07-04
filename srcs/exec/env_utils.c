@@ -34,7 +34,8 @@ int	add_new_entry(char *key, char *value, t_env **envl)
 	char	*key_copy;
 	char	*value_copy;
 
-	// uniquement appele depuis set_envl_var pour l'instant:pas besoin de reverifier !key,!value!,env
+	if (!key)
+		return (ERROR);
 	key_copy = ft_strdup(key);
 	if (!key_copy)
 		return (ERROR);

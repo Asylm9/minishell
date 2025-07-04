@@ -38,7 +38,7 @@ t_env	*init_env_list(char **env)
 	return (head);
 }
 
-int	init_minimal_shell(t_sh *shell)
+static int	init_minimal_shell(t_sh *shell)
 {
 	char	buffer[PATH_MAX];
 	char	*pwd_var;
@@ -60,17 +60,10 @@ int	init_minimal_shell(t_sh *shell)
 		return (free(pwd_var), free(shell->env), ERROR);
 	shell->env[1] = pwd_var;
 	shell->env[2] = NULL;
-	shell->in_pipeline = false;
-	shell->saved_stdin = -1;
-	shell->saved_stdout = -1;
-	shell->exit_status = 0;
-	shell->envl = init_env_list(shell->env);
-	free_array(shell->env, -1);
-	shell->env = NULL;
 	return (SUCCESS);
 }
 
-void	init_shell_struct(t_sh *shell, char **envp)
+static int	init_env_array(t_sh *shell, char **envp)
 {
 	int	count;
 	int	i;
@@ -80,7 +73,7 @@ void	init_shell_struct(t_sh *shell, char **envp)
 		count++;
 	shell->env = malloc(sizeof(char *) * (count + 1));
 	if (!shell->env)
-		return ;
+		return (ERROR);
 	i = 0;
 	while (envp[i])
 	{
@@ -88,6 +81,19 @@ void	init_shell_struct(t_sh *shell, char **envp)
 		i++;
 	}
 	shell->env[i] = NULL;
+	return (SUCCESS);
+}
+
+int	init_shell(t_sh *shell, char **envp)
+{
+	int	ret;
+
+	if (!envp || !*envp)
+		ret = init_minimal_shell(shell);
+	else
+		ret = init_env_array(shell, envp);
+	if (ret != SUCCESS)
+		return (ERROR);
 	shell->in_pipeline = false;
 	shell->saved_stdin = -1;
 	shell->saved_stdout = -1;
@@ -95,4 +101,7 @@ void	init_shell_struct(t_sh *shell, char **envp)
 	shell->envl = init_env_list(shell->env);
 	free_array(shell->env, -1);
 	shell->env = NULL;
+	if (shell->envl)
+		return (ERROR);
+	return (SUCCESS);
 }

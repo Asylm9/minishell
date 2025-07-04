@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/04 18:07:55 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/04 21:01:43 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,6 @@ int	main(int ac, char **av, char **envp)
 	t_sh	shell;
 
 	ast = NULL;
-	if (!envp || !*envp)
-	{
-		init_minimal_shell(&shell);
-	}
-	else
-		init_shell_struct(&shell, envp);
 	tok_lst = NULL;
 	expanded = NULL;
 	if (ac > 1)
@@ -55,6 +49,7 @@ int	main(int ac, char **av, char **envp)
 		fprintf(stderr, "Usage: %s\n", av[0]);
 		return (1);
 	}
+	init_shell(&shell, envp);
 	set_main_signals();
 	while (1)
 	{

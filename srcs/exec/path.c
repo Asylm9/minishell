@@ -18,7 +18,8 @@ char	**get_paths(t_command *cmd, t_env *envl)
 	env_path = get_envl_var("PATH", envl);
 	if (!env_path)
 	{
-		printf_fd(2, "minishell: %s: No such file or directory\n", cmd->cmd_name);
+		printf_fd(2, "minishell: %s: No such file or directory\n",
+			cmd->cmd_name);
 		return (NULL);
 	}
 	paths = ft_split(env_path, ':');
@@ -28,7 +29,7 @@ char	**get_paths(t_command *cmd, t_env *envl)
 
 static bool	is_absolute_or_relative(char *cmd)
 {
-	return (ft_strchr(cmd, '/') || /* cmd[0] == '/' || */ cmd[0] == '.');
+	return (ft_strchr(cmd, '/') || cmd[0] == '.');
 }
 
 char	*find_cmd_path(char **paths, char *cmd_name)
@@ -54,14 +55,12 @@ char	*find_cmd_path(char **paths, char *cmd_name)
 
 int	check_file_type(char *path)
 {
-    struct	stat file_stat;
-    
-	//gerer retour erreur
-	if (stat(path, &file_stat) < 0)
-        return (-1);
-    if (S_ISDIR(file_stat.st_mode))
-        return (1);
-    return (0);
+	struct stat	file_stat;
+
+	stat(path, &file_stat);
+	if (S_ISDIR(file_stat.st_mode))
+		return (1);
+	return (0);
 }
 
 int	execute_binary(t_command *cmd, t_sh *shell)
@@ -78,9 +77,11 @@ int	execute_binary(t_command *cmd, t_sh *shell)
 		if (access(cmd_path, F_OK) < 0)
 		{
 			if (access(cmd_path, X_OK) < 0)
-				printf_fd(STDERR,"minishell: %s: %s\n", cmd_path, strerror(errno));
+				printf_fd(STDERR, "minishell: %s: %s\n", cmd_path,
+					strerror(errno));
 			else
-				printf_fd(STDERR,"minishell: %s: command not found\n", cmd->cmd_name);
+				printf_fd(STDERR, "minishell: %s: command not found\n",
+					cmd->cmd_name);
 			free(cmd_path);
 			return (CMD_NOT_FOUND);
 		}
@@ -94,18 +95,20 @@ int	execute_binary(t_command *cmd, t_sh *shell)
 		free_array(paths, -1);
 		if (!cmd_path)
 		{
-			printf_fd(STDERR,"minishell: %s: command not found\n", cmd->cmd_name);
+			printf_fd(STDERR, "minishell: %s: command not found\n",
+				cmd->cmd_name);
 			return (CMD_NOT_FOUND);
 		}
 	}
 	env = convert_envl_to_env(shell->envl);
 	execve(cmd_path, cmd->args, env);
 	if (check_file_type(cmd_path) == 1)
-		printf_fd(STDERR,"minishell: %s: Is a directory\n", cmd_path);
+		printf_fd(STDERR, "minishell: %s: Is a directory\n", cmd_path);
 	else
-		printf_fd(STDERR,"minishell: %s: %s\n", cmd_path, strerror(errno));
+		printf_fd(STDERR, "minishell: %s: %s\n", cmd_path, strerror(errno));
 	free(cmd_path);
-	//free_envl(&shell->envl);
+	if (shell->in_pipeline)
+		cleanup_shell(shell);
 	free_array(env, -1);
 	return (EXECVE_ERR);
 }
