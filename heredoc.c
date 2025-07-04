@@ -86,7 +86,10 @@ static int	read_heredoc_content(char *delimiter, t_sh *shell, char **buffer)
 		if (!input)
 		{
 			printf_fd(STDIN_FILENO,
-				"bash: warning: here-document at line %d delimited by end-of-file (wanted `%s')\n",count, delimiter);
+						"bash: warning: here-document at line\
+				%d delimited by end-of-file (wanted `%s')\n",
+						count,
+						delimiter);
 			break ;
 		}
 		line = process_heredoc_line(input, delimiter, shell);
@@ -118,7 +121,6 @@ int	handle_heredoc(char *delimiter, t_sh *shell)
 	pid = fork();
 	if (pid == 0)
 	{
-		// signal(SIGINT, handle_here_sig);
 		if (read_heredoc_content(delimiter, shell, &buffer) != SUCCESS)
 		{
 			close(pfd[0]);
@@ -144,7 +146,7 @@ int	handle_heredoc(char *delimiter, t_sh *shell)
 	{
 		close(pfd[1]);
 		waitpid(pid, &status, 0);
-		// signal(SIGINT, handle_sigint);
+		signal(SIGINT, handle_sigint);
 	}
 	shell->exit_status = process_wait_status(status);
 	if (shell->exit_status == 130)
