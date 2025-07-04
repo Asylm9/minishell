@@ -80,13 +80,13 @@ static int	read_heredoc_content(char *delimiter, t_sh *shell, char **buffer)
 			free(input);
 			free(*buffer);
 			*buffer = NULL;
-			// Handler du shell à remettre
 			signal(SIGINT, handle_sigint);
 			return (1);
 		}
 		if (!input)
 		{
-			printf_fd(STDIN_FILENO, "bash: warning: here-document at line %d delimited by end-of-file (wanted `%s')\n", count, delimiter);
+			printf_fd(STDIN_FILENO,
+				"bash: warning: here-document at line %d delimited by end-of-file (wanted `%s')\n",count, delimiter);
 			break ;
 		}
 		line = process_heredoc_line(input, delimiter, shell);
