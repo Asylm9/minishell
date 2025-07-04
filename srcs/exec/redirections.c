@@ -1,4 +1,4 @@
-# include "../../minishell.h"
+#include "../../minishell.h"
 
 int	save_or_restore_fds(t_sh *shell, char flag)
 {
@@ -29,7 +29,7 @@ int	save_or_restore_fds(t_sh *shell, char flag)
 
 int	redirect_in(t_redirect *redir)
 {
-	int fd;
+	int	fd;
 
 	if (redir->type != REDIR_HEREDOC)
 		fd = open(redir->target, O_RDONLY);
@@ -48,7 +48,7 @@ int	redirect_in(t_redirect *redir)
 
 int	redirect_out(t_redirect *redir)
 {
-	int fd;
+	int	fd;
 
 	if (redir->type == REDIR_OUT)
 		fd = open(redir->target, O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -57,7 +57,7 @@ int	redirect_out(t_redirect *redir)
 	if (fd < 0)
 	{
 		printf_fd(STDERR, "minishell: %s: Permission denied\n", redir->target);
-		return (/* perror("open"),  */ERROR);
+		return (ERROR);
 	}
 	if (dup2(fd, STDOUT_FILENO) < 0)
 	{
@@ -70,10 +70,10 @@ int	redirect_out(t_redirect *redir)
 
 int	apply_redirections(t_command *cmd)
 {
-	t_redirect *redir;
+	t_redirect	*redir;
 
 	if (!cmd->redirections)
-		return (0); //pas d'erreur si pas de redirections
+		return (0);
 	redir = cmd->redirections;
 	while (redir)
 	{

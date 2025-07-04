@@ -1,4 +1,4 @@
-# include "../../minishell.h"
+#include "../../minishell.h"
 
 int	list_size(t_env *envl)
 {
