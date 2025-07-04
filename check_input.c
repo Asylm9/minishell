@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_input.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:18:33 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/02 16:24:28 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/04 16:20:27 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,13 @@ int	is_empty(char *input)
 	int	i;
 
 	i = 0;
-	while (input[i])
-	{
-		if (input[i] != ' ')
-			return (ERROR);
-		i++;
-	}
+	if (input)
+		while (input[i])
+		{
+			if (input[i] != ' ')
+				return (ERROR);
+			i++;
+		}
 	return (SUCCESS);
 }
 

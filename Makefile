@@ -12,6 +12,7 @@ OBJ_DIR = objs
 # Fichiers sources avec chemins complets
 SRCS =  $(SRCDIR)/main.c \
         $(SRCDIR)/init.c \
+        $(SRCDIR)/signal.c \
         $(SRCDIR)/check_input.c \
         $(SRCDIR)/token.c \
         $(SRCDIR)/expander.c \

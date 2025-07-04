@@ -66,8 +66,10 @@ static int	read_heredoc_content(char *delimiter, t_sh *shell, char **buffer)
 	char	*input;
 	char	*line;
 	char	*temp;
+	int		count;
 
 	*buffer = NULL;
+	count = 1;
 	g_sig = 0;
 	signal(SIGINT, handle_here_sig);
 	while (1)
@@ -83,7 +85,10 @@ static int	read_heredoc_content(char *delimiter, t_sh *shell, char **buffer)
 			return (1);
 		}
 		if (!input)
+		{
+			printf_fd(STDIN_FILENO, "bash: warning: here-document at line %d delimited by end-of-file (wanted `%s')\n", count, delimiter);
 			break ;
+		}
 		line = process_heredoc_line(input, delimiter, shell);
 		if (!line)
 			break ;
@@ -93,6 +98,7 @@ static int	read_heredoc_content(char *delimiter, t_sh *shell, char **buffer)
 			return (free(*buffer), 1);
 		free(*buffer);
 		*buffer = temp;
+		count++;
 	}
 	signal(SIGINT, handle_sigint);
 	return (0);
