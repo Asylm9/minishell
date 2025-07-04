@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/04 14:35:24 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/04 20:50:50 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ char	*expand_token(char *input, t_sh *shell)
 					pos++;
 			}
 		}
-		if (input[pos] == '$')
+		else if (input[pos] == '$')
 		{
 			if (input[pos + 1] && (ft_isalnum(input[pos + 1]) || input[pos
 					+ 1] == '_' || input[pos + 1] == '?'))
@@ -365,12 +365,46 @@ int	check_validity(t_token *exp_lst)
 	return (SUCCESS);
 }
 
+size_t	count_nb_words(char const *s, char c)
+{
+	size_t	i;
+	size_t	count;
+	char	quote;
+
+	i = 0;
+	count = 1;
+	if (!s)
+		return (0);
+	while (s[i])
+	{
+		if (s[i] == '"' || s[i] == '\'')
+		{
+			quote = s[i++];
+			while (s[i] != quote)
+				i++;
+			i++;
+		}
+		while (s[i] == c)
+			i++;
+		if (s[i] != '\0')
+			count++;
+		while (s[i] != c && s[i] != '\0')
+			i++;
+	}
+	return (count);
+}
+
 int	expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell)
 {
 	int		advance;
+	int		count;
+	int		i;
 	char	*input;
+	char	**splitted;
 	t_token	*new_line;
 
+	count = 0;
+	i = 0;
 	new_line = NULL;
 	if (!exp_lst)
 		return (ERROR);
@@ -405,9 +439,27 @@ int	expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell)
 			}
 			else if ((ft_strlen(expand_token(tok_lst->value, shell))) != 0)
 			{
-				exp_lst->value = trim_quotes(expand_token(tok_lst->value,
-							shell));
-				exp_lst->type = tok_lst->type;
+				count = count_words(expand_token(tok_lst->value, shell), ' ');
+				if (count > 1)
+				{
+					splitted = ft_split(trim_quotes(expand_token(tok_lst->value,
+									shell)), ' ');
+					while (count != 0)
+					{
+						exp_lst->value = splitted[i];
+						exp_lst->type = WORD;
+						create_token_node(&exp_lst);
+						exp_lst = exp_lst->next;
+						i++;
+						count--;
+					}
+				}
+				else
+				{
+					exp_lst->value = trim_quotes(expand_token(tok_lst->value,
+								shell));
+					exp_lst->type = tok_lst->type;
+				}
 			}
 			else
 				advance = 0;
