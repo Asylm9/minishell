@@ -16,7 +16,7 @@ static char	*set_new_path(char **args, t_sh *shell)
 		if (args[1][0] == '-')
 			new_path = get_envl_var("OLDPWD", shell->envl);
 		else
-			new_path = (args[1]);
+			new_path = ft_strdup(args[1]);
 	}
 	return (new_path);
 }
