@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/04 14:27:19 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/04 14:53:54 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ typedef struct s_ast
 void							print_token(t_token *tok_lst);
 
 /* Tokenizer */
+int								is_empty(char *input);
 
 int								check_input(char *input, t_sh *shell);
 int								create_token_list(t_token **tok_lst);

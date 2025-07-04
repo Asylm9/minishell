@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/04 14:26:50 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/04 14:54:30 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,8 @@ int	main(int ac, char **av, char **envp)
 	while (1)
 	{
 		input = readline("\033[0;34m\033[1mMinishell> \033[0m");
-		add_history(input);
+		if (is_empty(input))
+			add_history(input);
 		if (check_input(input, &shell) == SUCCESS)
 		{
 			if (create_token_node(&tok_lst) == ERROR)
