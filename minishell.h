@@ -6,7 +6,7 @@
 /*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/03 20:19:43 by matthieu         ###   ########.fr       */
+/*   Updated: 2025/07/04 11:55:30 by matthieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,11 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
+# include <sys/ioctl.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
+# include <termios.h>
 # include <unistd.h>
 
 # define SUCCESS 0

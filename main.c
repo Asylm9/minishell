@@ -6,7 +6,7 @@
 /*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/03 20:33:18 by matthieu         ###   ########.fr       */
+/*   Updated: 2025/07/04 13:05:46 by matthieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	handle_here_sig(int sig)
 	rl_on_new_line();
 	rl_redisplay();
 	rl_done = 1;
+	ioctl(STDIN_FILENO, TIOCSTI, "\n");
 }
 
 void	handle_sigint(int sig)
