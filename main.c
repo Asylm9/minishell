@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/03 20:33:18 by matthieu         ###   ########.fr       */
+/*   Updated: 2025/07/04 14:24:41 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ void	print_token(t_token *tok_lst)
 	}
 }
 
-
-volatile sig_atomic_t g_sig = 0;
+volatile sig_atomic_t	g_sig = 0;
 
 void	rd(void)
 {
@@ -45,11 +44,9 @@ void	rd(void)
 void	handle_here_sig(int sig)
 {
 	g_sig = sig;
-	write(1, "\n", 1);
 	rl_replace_line("", 0);
 	rl_on_new_line();
-	rl_redisplay();
-	rl_done = 1;
+	ioctl(STDIN_FILENO, TIOCSTI, "\n");
 }
 
 void	handle_sigint(int sig)
@@ -57,7 +54,6 @@ void	handle_sigint(int sig)
 	rd();
 	(void)sig;
 }
-
 
 int	main(int ac, char **av, char **envp)
 {
@@ -128,6 +124,10 @@ int	main(int ac, char **av, char **envp)
 						tok_lst = NULL;
 						expanded = NULL;
 					}
+				}
+				else
+				{
+					free_tok_lst(&tok_lst);
 				}
 			}
 		}
