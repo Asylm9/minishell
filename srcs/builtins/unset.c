@@ -1,4 +1,4 @@
-# include "../../minishell.h"
+#include "../../minishell.h"
 
 static void	delete_env_var(t_env *current, t_env **head)
 {
@@ -21,11 +21,6 @@ static void	delete_env_var(t_env *current, t_env **head)
 	if (current->value)
 		free(current->value);
 	free(current);
-/* 	printf("prev key: %s, prev value: %s\n", prev->key, prev->value);
-	printf("next key: %s, next->value: %s\n", prev->next->key, prev->next->value);
-	printf("\n---------------------------------------------\n");
-	printf("next key: %s, next value: %s\n", next->key, next->value);
-	printf("prev key: %s, prev->value: %s\n", next->key, next->value); */
 }
 
 int	builtin_unset(char **args, t_env **envl)
@@ -34,7 +29,7 @@ int	builtin_unset(char **args, t_env **envl)
 	int		i;
 
 	if (!args[1])
-		return (SUCCESS); //ne se passe rien/retour de la ligne de commande
+		return (SUCCESS);
 	i = 1;
 	while (args[i])
 	{
@@ -50,5 +45,5 @@ int	builtin_unset(char **args, t_env **envl)
 		}
 		i++;
 	}
-	return (SUCCESS); // si variable non trouve return avec 0, pas d'erreur
+	return (SUCCESS);
 }

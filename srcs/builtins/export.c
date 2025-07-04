@@ -1,4 +1,4 @@
-# include "../../minishell.h"
+#include "../../minishell.h"
 
 static int	validate_format_export(char **args, int i)
 {
@@ -6,12 +6,13 @@ static int	validate_format_export(char **args, int i)
 
 	if (!ft_isalpha(args[i][0]) && args[i][0] != '_')
 	{
-		if (args[i][0]== '-')
+		if (args[i][0] == '-')
 		{
 			printf_fd(2, "minishell: export: `%s': invalid option\n", args[i]);
 			return (BUILTIN_ERR);
 		}
-		printf_fd(2, "minishell: export: `%s': not a valid identifier\n", args[i]);
+		printf_fd(2, "minishell: export: `%s': not a valid identifier\n",
+			args[i]);
 		return (ERROR);
 	}
 	j = 1;

@@ -1,8 +1,9 @@
-# include "../../minishell.h"
+#include "../../minishell.h"
 
 int	builtin_pwd(void)
 {
-	char	buffer[PATH_MAX]; //normalement present dans limits.h
+	char	buffer[PATH_MAX];
+
 	if (!getcwd(buffer, sizeof(buffer)))
 	{
 		perror("getcwd");
