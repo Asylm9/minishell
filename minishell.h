@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/04 14:53:54 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/04 17:14:24 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,8 @@ typedef struct s_ast
 	t_ast						*left;
 	t_ast						*right;
 }								t_ast;
+
+extern volatile sig_atomic_t	g_sig;
 
 /**************************		Parsing		*****************************/
 
@@ -259,7 +261,12 @@ void							init_cmd_struct(t_command *cmd, char **av,
 									t_redirect *redir);
 int								init_minimal_shell(t_sh *shell);
 void							init_shell_struct(t_sh *shell, char **envp);
+
+
 void							handle_here_sig(int sig);
 void							handle_sigint(int sig);
-extern volatile sig_atomic_t	g_sig;
+void							handle_sigquit(int sig);
+int								set_main_signals(void);
+int								set_subprocess_signals(void);
+
 #endif

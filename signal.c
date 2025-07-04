@@ -22,11 +22,16 @@ void	handle_sigint(int sig)
 	reset_readline();
 }
 
-void	handle_sigquit(int sig)
+int	set_main_signals(void)
 {
-	write(1, "exit\n", 5);
-	exit(3);
-	(void)sig;
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
+	return (0);
 }
 
-//set_signals()
+int	set_subprocess_signals(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	return (0);
+}

@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/04 16:55:03 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/04 17:16:12 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,7 @@ int	main(int ac, char **av, char **envp)
 		fprintf(stderr, "Usage: %s\n", av[0]);
 		return (1);
 	}
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, handle_sigint);
+	set_main_signals();
 	while (1)
 	{
 		input = readline("\033[0;34m\033[1mMinishell> \033[0m");
