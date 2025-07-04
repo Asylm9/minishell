@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/04 14:24:41 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/04 14:26:25 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ void	handle_here_sig(int sig)
 	g_sig = sig;
 	rl_replace_line("", 0);
 	rl_on_new_line();
-	ioctl(STDIN_FILENO, TIOCSTI, "\n");
+	rl_redisplay();
+	rl_done = 1;
 }
 
 void	handle_sigint(int sig)
