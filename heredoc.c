@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 static bool	has_quotes(char *delimiter)
@@ -38,9 +37,9 @@ int	del_compare(const char *s1, const char *s2)
 		if (!s1[i] && !s2[j])
 			return (0);
 		if ((!s1[i] || !s2[j]) || s1[i] != s2[j])
-			return ((unsigned char) s1[i] - (unsigned char) s2[j]);
-		i++; 
-		j++; 
+			return ((unsigned char)s1[i] - (unsigned char)s2[j]);
+		i++;
+		j++;
 	}
 	return (0);
 }
@@ -69,9 +68,20 @@ static int	read_heredoc_content(char *delimiter, t_sh *shell, char **buffer)
 	char	*temp;
 
 	*buffer = NULL;
+	g_sig = 0;
+	signal(SIGINT, handle_here_sig);
 	while (1)
 	{
 		input = readline("> ");
+		if (g_sig == SIGINT)
+		{
+			free(input);
+			free(*buffer);
+			*buffer = NULL;
+			// Handler du shell à remettre
+			signal(SIGINT, handle_sigint);
+			return (1);
+		}
 		if (!input)
 			break ;
 		line = process_heredoc_line(input, delimiter, shell);
@@ -84,6 +94,7 @@ static int	read_heredoc_content(char *delimiter, t_sh *shell, char **buffer)
 		free(*buffer);
 		*buffer = temp;
 	}
+	signal(SIGINT, handle_sigint);
 	return (0);
 }
 
@@ -92,26 +103,45 @@ int	handle_heredoc(char *delimiter, t_sh *shell)
 	char	*buffer;
 	char	*temp;
 	int		pfd[2];
+	int		pid;
+	int		status;
 
 	if (pipe(pfd) < 0)
 		return (1);
-	if (read_heredoc_content(delimiter, shell, &buffer) != SUCCESS)
+	signal(SIGINT, SIG_IGN);
+	pid = fork();
+	if (pid == 0)
 	{
+		// signal(SIGINT, handle_here_sig);
+		if (read_heredoc_content(delimiter, shell, &buffer) != SUCCESS)
+		{
+			close(pfd[0]);
+			close(pfd[1]);
+			exit(130);
+		}
+		if (buffer)
+		{
+			temp = ft_strjoin(buffer, "\n");
+			if (temp)
+			{
+				free(buffer);
+				buffer = temp;
+			}
+			write(pfd[1], buffer, ft_strlen(buffer));
+			free(buffer);
+		}
 		close(pfd[0]);
 		close(pfd[1]);
-		return (1);
+		exit(0);
 	}
-	if (buffer)
+	else
 	{
-		temp = ft_strjoin(buffer, "\n");
-		if (temp)
-		{
-			free(buffer);
-			buffer = temp;
-		}
-		write(pfd[1], buffer, ft_strlen(buffer));
-		free(buffer);
+		close(pfd[1]);
+		waitpid(pid, &status, 0);
+		// signal(SIGINT, handle_sigint);
 	}
-	close(pfd[1]);
+	shell->exit_status = process_wait_status(status);
+	if (shell->exit_status == 130)
+		return (shell->exit_status);
 	return (pfd[0]);
 }
