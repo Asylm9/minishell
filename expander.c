@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/04 20:50:50 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/05 17:13:52 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,7 @@ char	*expand_token(char *input, t_sh *shell)
 				else
 					pos++;
 			}
+			pos++;
 		}
 		else if (input[pos] == '$')
 		{
@@ -372,11 +373,13 @@ size_t	count_nb_words(char const *s, char c)
 	char	quote;
 
 	i = 0;
-	count = 1;
+	count = 0;
 	if (!s)
 		return (0);
 	while (s[i])
 	{
+		while (s[i] == c)
+			i++;
 		if (s[i] == '"' || s[i] == '\'')
 		{
 			quote = s[i++];
@@ -439,7 +442,8 @@ int	expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell)
 			}
 			else if ((ft_strlen(expand_token(tok_lst->value, shell))) != 0)
 			{
-				count = count_words(expand_token(tok_lst->value, shell), ' ');
+				count = count_nb_words(expand_token(tok_lst->value, shell),
+						' ');
 				if (count > 1)
 				{
 					splitted = ft_split(trim_quotes(expand_token(tok_lst->value,
