@@ -17,6 +17,10 @@ else
 		"echo.test"
 		"expand.test"
 		"export.test"
+		"pwd.test"
+		"unset.test"
+		"cd.test"
+		"exit.test"
 	)
 fi
 

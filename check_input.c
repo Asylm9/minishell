@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:18:33 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/05 20:16:42 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/05 20:18:12 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ int	check_input(char *input, t_sh *shell)
 	if (delim[0] == '.' && size == 1)
 	{
 		shell->exit_status = 2;
-		printf_fd(STDERR, "minishell: filename argument required");
+		printf_fd(STDERR, "minishell: filename argument required\n");
 		return (ERROR);
 	}
 	if (valid == 1)
