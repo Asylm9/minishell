@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:18:33 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/05 18:47:14 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/05 19:58:26 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,15 @@ int	check_input(char *input, t_sh *shell)
 	while (input[i])
 	{
 		if (ft_isalnum(input[i]) || input[i] == '$' || input[i] == '.'
-			|| input[i] == '-')
+			|| input[i] == '-' || input[i] == '~' || input[i] == '/')
 		{
-			if (input[i] == '.' && (input[i + 1] == '\0' || input[i
-					+ 1] == ' '))
-			{
-				shell->exit_status = 2;
-				printf_fd(STDERR, " filename argument required\n");
-				return (ERROR);
-			}
+			// if (input[i] == '.' && (input[i + 1] == '\0' || input[i
+			// 		+ 1] == ' '))
+			// {
+			// 	shell->exit_status = 2;
+			// 	printf_fd(STDERR, " filename argument required\n");
+			// 	return (ERROR);
+			// }
 			valid = 1;
 			size++;
 		}
@@ -124,6 +124,12 @@ int	check_input(char *input, t_sh *shell)
 	}
 	if (delim[0] == ':')
 		return (ERROR);
+	if (delim[0] == '.' && size == 1)
+	{
+		shell->exit_status = 2;
+		printf_fd(STDERR, " filename argument required");
+		return (ERROR);
+	}
 	if (valid == 1)
 		return (SUCCESS);
 	else
