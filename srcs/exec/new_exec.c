@@ -27,12 +27,14 @@ int	execute_command(t_command *cmd, t_sh *shell)
 			exit(0);
 		return (0);
 	}
+	signal(SIGINT, SIG_IGN);
 	if (is_builtin(cmd->cmd_name))
 		return (handle_builtin(cmd, shell));
 	if (shell->in_pipeline)
 		handle_binary_pipeline(cmd, shell);
 	else
 		return (fork_single_binary(cmd, shell));
+	signal(SIGINT, handle_sigint);
 	return (0);
 }
 
