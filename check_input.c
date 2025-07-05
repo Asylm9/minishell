@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_input.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:18:33 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/04 16:20:27 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/05 16:58:15 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ int	check_input(char *input, t_sh *shell)
 	int		size;
 	bool	valid;
 	char	quote;
+	char	delim[2];
 
-	// char	delim[2];
 	i = 0;
 	size = 0;
 	valid = 0;
@@ -52,7 +52,10 @@ int	check_input(char *input, t_sh *shell)
 		return (ERROR);
 	while (input[i])
 	{
-		if (ft_isalnum(input[i]) || input[i] == '$' || input[i] == '.')
+		if (input[i] != ' ')
+			delim[0] = input[i];
+		if (ft_isalnum(input[i]) || input[i] == '$' || input[i] == '.'
+			|| input[i] == '-')
 		{
 			if (input[i] == '.' && (input[i + 1] == '\0' || input[i
 					+ 1] == ' '))
@@ -119,6 +122,8 @@ int	check_input(char *input, t_sh *shell)
 		}
 		i++;
 	}
+	if (delim[0] == ':')
+		return (ERROR);
 	if (valid == 1)
 		return (SUCCESS);
 	else
