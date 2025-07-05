@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/02 15:33:15 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/05 15:38:02 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,8 +113,15 @@ t_command	*create_node_cmd(t_token **exp_lst)
 	return (cmd);
 }
 
-int	parse_ast(t_token *exp_lst, t_ast **ast)
+int	parse_ast(t_token *exp_lst, t_ast **ast, t_sh *shell)
 {
+	(void)shell;
+	if (exp_lst->type == PIPE)
+	{
+		shell->exit_status = 2;
+		printf_fd(STDERR, " syntax error near unexpected token `|'");
+		return (ERROR);
+	}
 	(*ast)->cmd = create_node_cmd(&exp_lst);
 	(*ast)->type = CMD;
 	while (exp_lst)

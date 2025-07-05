@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/04 20:35:18 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/05 15:33:11 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,8 @@ int								expand_list(t_token *tok_lst, t_token *exp_lst,
 /* Parser */
 int								create_node_pipe(t_ast **ast);
 t_command						*create_node_cmd(t_token **exp_lst);
-int								parse_ast(t_token *tok_lst, t_ast **ast);
+int								parse_ast(t_token *exp_lst, t_ast **ast,
+									t_sh *shell);
 void							print_ast(t_ast *ast);
 
 /**************************		Execution	*****************************/
@@ -260,7 +261,6 @@ void							init_redir(t_redirect *redir);
 void							init_cmd_struct(t_command *cmd, char **av,
 									t_redirect *redir);
 int								init_shell(t_sh *shell, char **envp);
-
 
 void							handle_here_sig(int sig);
 void							handle_sigint(int sig);

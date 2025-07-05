@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/04 21:01:43 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/05 15:43:17 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	main(int ac, char **av, char **envp)
 						ast->cmd = malloc(sizeof(t_command));
 						ast->left = NULL;
 						ast->right = NULL;
-						if (parse_ast(expanded, &ast) == SUCCESS)
+						if (parse_ast(expanded, &ast, &shell) == SUCCESS)
 							execute_ast(ast, &shell);
 						free_ast(ast);
 						// free_tok_lst(tok_lst);

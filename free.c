@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 20:42:02 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/01 11:29:53 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/05 15:41:29 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	free_tok_lst(t_token **list)
 	t_token	*temp;
 
 	if (!list)
-		return;
+		return ;
 	while (*list)
 	{
 		temp = (*list)->next;
@@ -59,10 +59,12 @@ void	free_cmd(t_command *cmd)
 			free(cmd->cmd_name);
 			cmd->cmd_name = NULL;
 		}
-		while (cmd->args[i])
-			free(cmd->args[i++]);
 		if (cmd->args)
+		{
+			while (cmd->args[i])
+				free(cmd->args[i++]);
 			free(cmd->args);
+		}
 		if (cmd->redirections)
 			free_redir(cmd->redirections);
 		free(cmd);
