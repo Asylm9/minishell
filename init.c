@@ -38,70 +38,44 @@ t_env	*init_env_list(char **env)
 	return (head);
 }
 
-static int	init_minimal_shell(t_sh *shell)
+static t_env	*init_minimal_list(t_sh *shell)
 {
+	t_env	*head;
+	t_env	*new_node1;
+	t_env	*new_node2;
 	char	buffer[PATH_MAX];
-	char	*pwd_var;
 
-	shell->env = malloc(sizeof(char *) * 3);
-	if (!shell->env)
-		return (ERROR);
+	head = NULL;
+	shell->envl = malloc(sizeof(t_env *));
+	if (!shell->envl)
+		return (NULL);
 	if (!getcwd(buffer, sizeof(buffer)))
 	{
 		printf_fd(STDERR, "%s\n", strerror(errno));
-		free(shell->env);
-		return (ERROR);
+		return (NULL);
 	}
-	pwd_var = ft_strjoin("PWD=", buffer);
-	if (!pwd_var)
-		return (free(shell->env), ERROR);
-	shell->env[0] = ft_strdup("SHLVL=1");
-	if (!shell->env[0])
-		return (free(pwd_var), free(shell->env), ERROR);
-	shell->env[1] = pwd_var;
-	shell->env[2] = NULL;
-	return (SUCCESS);
-}
-
-static int	init_env_array(t_sh *shell, char **envp)
-{
-	int	count;
-	int	i;
-
-	count = 0;
-	while (envp[count])
-		count++;
-	shell->env = malloc(sizeof(char *) * (count + 1));
-	if (!shell->env)
-		return (ERROR);
-	i = 0;
-	while (envp[i])
-	{
-		shell->env[i] = ft_strdup(envp[i]);
-		i++;
-	}
-	shell->env[i] = NULL;
-	return (SUCCESS);
+	new_node1 = create_node(ft_strdup("PWD"), ft_strdup(buffer));
+	if (!new_node1)
+		return (NULL);
+	head = add_back_node(new_node1, head);
+	new_node2 = create_node(ft_strdup("SHLVL"), ft_strdup("1"));
+	if (!new_node2)
+		return (NULL);
+	head = add_back_node(new_node2, head);
+	return (head);
 }
 
 int	init_shell(t_sh *shell, char **envp)
 {
-	int	ret;
-
 	if (!envp || !*envp)
-		ret = init_minimal_shell(shell);
+		shell->envl = init_minimal_list(shell);
 	else
-		ret = init_env_array(shell, envp);
-	if (ret != SUCCESS)
+		shell->envl = init_env_list(envp);
+	if (!shell->envl)
 		return (ERROR);
 	shell->in_pipeline = false;
 	shell->saved_stdin = -1;
 	shell->saved_stdout = -1;
 	shell->exit_status = 0;
-	shell->envl = init_env_list(shell->env);
-	free_array(shell->env, -1);
-	shell->env = NULL;
-	if (shell->envl)
-		return (ERROR);
 	return (SUCCESS);
 }

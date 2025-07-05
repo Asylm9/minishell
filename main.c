@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/05 17:00:16 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/05 20:35:38 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,11 @@ int	main(int ac, char **av, char **envp)
 		fprintf(stderr, "Usage: %s\n", av[0]);
 		return (1);
 	}
-	init_shell(&shell, envp);
+	if (init_shell(&shell, envp) != SUCCESS)
+	{
+		printf_fd(2, "Shell initialization failed\n");
+		return(cleanup_shell(&shell), ERROR);
+	}
 	set_main_signals();
 	while (1)
 	{

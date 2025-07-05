@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/05 18:24:33 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/05 20:34:36 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ typedef struct s_env
 
 typedef struct s_sh
 {
-	char						**env;
 	t_env						*envl;
 	bool						in_pipeline;
 	char						*current_dir;
