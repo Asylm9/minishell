@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:18:33 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/05 16:58:15 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/05 17:48:25 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@ int	check_input(char *input, t_sh *shell)
 		return (ERROR);
 	while (input[i])
 	{
-		if (input[i] != ' ')
-			delim[0] = input[i];
 		if (ft_isalnum(input[i]) || input[i] == '$' || input[i] == '.'
 			|| input[i] == '-')
 		{
