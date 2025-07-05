@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/05 18:38:30 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/05 20:14:40 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -411,8 +411,12 @@ int	expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell)
 	new_line = NULL;
 	if (!exp_lst)
 		return (ERROR);
-	if (exp_lst->type == PIPE)
+	if (tok_lst->type == PIPE)
+	{
+		shell->exit_status = 2;
+		printf_fd(STDERR, "minishell: syntax error near unexpected token `|'");
 		return (ERROR);
+	}
 	while (tok_lst)
 	{
 		if (check_validity(tok_lst) == SUCCESS)

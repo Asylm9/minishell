@@ -1,6 +1,5 @@
 
 echo test
-cat >| grep test
 :
 !
 >

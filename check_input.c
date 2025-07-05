@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:18:33 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/05 19:58:26 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/05 20:12:14 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ int	check_input(char *input, t_sh *shell)
 			if (input[i] == '\0')
 			{
 				printf_fd(STDERR,
-					" unexpected EOF while looking for matching `%c'", quote);
+					"minishell: unexpected EOF while looking for matching `%c'\n",
+					quote);
 				shell->exit_status = 2;
 				return (ERROR);
 			}
@@ -93,7 +94,8 @@ int	check_input(char *input, t_sh *shell)
 		if (input[i] == '|')
 			if (next_input(&input[i + 1]) == '|')
 			{
-				printf_fd(STDERR, " syntax error near unexpected token `|'\n");
+				printf_fd(STDERR,
+					"minishell: syntax error near unexpected token `|'\n");
 				shell->exit_status = 2;
 				return (ERROR);
 			}
@@ -101,7 +103,8 @@ int	check_input(char *input, t_sh *shell)
 			if (next_input(&input[i + 1]) == '|' || next_input(&input[i
 					+ 1]) == '>' || next_input(&input[i + 1]) == '\0')
 			{
-				printf_fd(STDERR, " syntax error near unexpected token `<'\n");
+				printf_fd(STDERR,
+					"minishell: syntax error near unexpected token `<'\n");
 				shell->exit_status = 2;
 				return (ERROR);
 			}
@@ -109,7 +112,8 @@ int	check_input(char *input, t_sh *shell)
 			if (next_input(&input[i + 1]) == '|' || next_input(&input[i
 					+ 1]) == '<' || next_input(&input[i + 1]) == '\0')
 			{
-				printf_fd(STDERR, " syntax error near unexpected token `>'\n");
+				printf_fd(STDERR,
+					"minishell: syntax error near unexpected token `>'\n");
 				shell->exit_status = 2;
 				return (ERROR);
 			}
