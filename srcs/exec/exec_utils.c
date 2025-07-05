@@ -75,5 +75,7 @@ int	fork_single_binary(t_command *cmd, t_sh *shell)
 	}
 	waitpid(pid, &status, 0);
 	shell->exit_status = process_wait_status(status);
+	if (shell->exit_status == 131)
+			printf("Quit (core dumped)\n");
 	return (shell->exit_status);
 }
