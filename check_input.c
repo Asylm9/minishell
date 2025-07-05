@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:18:33 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/05 17:48:25 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/05 17:55:44 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ int	check_input(char *input, t_sh *shell)
 			shell->exit_status = 1;
 			return (ERROR);
 		}
+		if (input[i] != ' ')
+			delim[0] = input[i];
 		i++;
 	}
 	if (delim[0] == ':')
