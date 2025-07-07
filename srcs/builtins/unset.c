@@ -30,6 +30,11 @@ int	builtin_unset(char **args, t_env **envl)
 
 	if (!args[1])
 		return (SUCCESS);
+	if (args[1][0] == '-' && args[1][1])
+	{
+		printf_fd(STDERR,"minishell: unset: %s: invalid option\n", args[1]);
+		return (BUILTIN_ERR);
+	}
 	i = 1;
 	while (args[i])
 	{
