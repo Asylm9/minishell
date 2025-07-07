@@ -6,15 +6,13 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/07 21:04:44 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/07 22:26:29 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-//-lreadline
-//-lhistory
 # include "libft/libft.h"
 # include <errno.h>
 # include <fcntl.h>
@@ -36,13 +34,11 @@
 # define SUCCESS 0
 # define ERROR 1
 # define BUILTIN_ERR 2
-# define CMD_NOT_FOUND 127
-# define EXECVE_ERR 126 // commande trouvee mais pas executable
-
 # define STDERR 2
+# define CMD_NOT_FOUND 127
+# define EXECVE_ERR 126
 
-/* #ifndef PATH_MAX */
-# define PATH_MAX 4096 // most common value on Linux systems
+# define PATH_MAX 4096
 # define EMPTY ""
 
 typedef struct s_redirect		t_redirect;
@@ -99,7 +95,6 @@ typedef struct s_env
 {
 	char						*key;
 	char						*value;
-	int							index;
 	t_env						*next;
 	t_env						*prev;
 }								t_env;
@@ -108,7 +103,6 @@ typedef struct s_sh
 {
 	t_env						*envl;
 	bool						in_pipeline;
-	char						*current_dir;
 	int							saved_stdin;
 	int							saved_stdout;
 	int							exit_status;
