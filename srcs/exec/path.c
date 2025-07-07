@@ -74,11 +74,13 @@ int	execute_binary(t_command *cmd, t_sh *shell)
 	if (is_absolute_or_relative(cmd->cmd_name))
 	{
 		cmd_path = ft_strdup(cmd->cmd_name);
-		if (access(cmd_path, F_OK) < 0)
+		if (access(cmd_path, F_OK) < 0 || ft_strcmp("..", cmd_path) == 0)
 		{
 			if (access(cmd_path, X_OK) < 0)
+			{
 				printf_fd(STDERR, "minishell: %s: %s\n", cmd_path,
 					strerror(errno));
+			}
 			else
 				printf_fd(STDERR, "minishell: %s: command not found\n",
 					cmd->cmd_name);
@@ -102,6 +104,7 @@ int	execute_binary(t_command *cmd, t_sh *shell)
 	}
 	env = convert_envl_to_env(shell->envl);
 	execve(cmd_path, cmd->args, env);
+
 	if (check_file_type(cmd_path) == 1)
 		printf_fd(STDERR, "minishell: %s: Is a directory\n", cmd_path);
 	else
