@@ -4,6 +4,11 @@ void	print_env_list(t_env *envl)
 {
 	t_env	*current;
 
+	if (!envl)
+	{
+		printf("Environment list is NULL\n");
+		return ;
+	}
 	current = envl;
 	while (current)
 	{

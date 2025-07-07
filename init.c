@@ -1,44 +1,53 @@
 #include "minishell.h"
 
+void	fill_list(t_env **new_node, char *var)
+{
+	char	*equal_pos;
+	char	*value;
+	int		level;
+
+	equal_pos = ft_strchr(var, '=');
+	if (!equal_pos)
+		return ;
+	value = equal_pos + 1;
+	equal_pos[0] = '\0';
+	if (value && strcmp(var, "SHLVL") == 0)
+	{
+		level = atoi(value) + 1;
+		*new_node = create_node(ft_strdup(var), ft_itoa(level));
+	}
+	else if (value)
+		*new_node = create_node(ft_strdup(var), ft_strdup(value));
+	else
+		*new_node = create_node(ft_strdup(var), NULL);
+	equal_pos[0] = '=';
+	if (!*new_node)
+		return ;
+}
+
 t_env	*init_env_list(char **env)
 {
 	t_env	*new_node;
 	t_env	*head;
-	char	*equal_pos;
-	char	*value;
 	int		i;
-	int		level;
 
+	new_node = NULL;
 	if (!env)
 		return (NULL);
 	head = NULL;
 	i = 0;
 	while (env[i])
 	{
-		equal_pos = ft_strchr(env[i], '=');
-		if (!equal_pos)
-			return (NULL);
-		value = equal_pos + 1;
-		equal_pos[0] = '\0';
-		if (value && strcmp(env[i], "SHLVL") == 0)
-		{
-			level = atoi(value) + 1;
-			new_node = create_node(ft_strdup(env[i]), ft_itoa(level));
-		}
-		else if (value)
-			new_node = create_node(ft_strdup(env[i]), ft_strdup(value));
-		else
-			new_node = create_node(ft_strdup(env[i]), NULL);
+		fill_list(&new_node, env[i]);
 		if (!new_node)
 			return (NULL);
-		equal_pos[0] = '=';
 		head = add_back_node(new_node, head);
 		i++;
 	}
 	return (head);
 }
 
-static t_env	*init_minimal_list(t_sh *shell)
+static t_env	*init_minimal_list(void)
 {
 	t_env	*head;
 	t_env	*new_node1;
@@ -46,9 +55,6 @@ static t_env	*init_minimal_list(t_sh *shell)
 	char	buffer[PATH_MAX];
 
 	head = NULL;
-	shell->envl = malloc(sizeof(t_env *));
-	if (!shell->envl)
-		return (NULL);
 	if (!getcwd(buffer, sizeof(buffer)))
 	{
 		printf_fd(STDERR, "%s\n", strerror(errno));
@@ -68,7 +74,7 @@ static t_env	*init_minimal_list(t_sh *shell)
 int	init_shell(t_sh *shell, char **envp)
 {
 	if (!envp || !*envp)
-		shell->envl = init_minimal_list(shell);
+		shell->envl = init_minimal_list();
 	else
 		shell->envl = init_env_list(envp);
 	if (!shell->envl)
