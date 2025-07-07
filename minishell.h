@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/07 19:49:18 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/07 21:04:44 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,7 +204,7 @@ int								builtin_echo(char **args);
 
 int								builtin_cd(char **args, t_sh *shell);
 
-int								builtin_pwd(void);
+int								builtin_pwd(char **args);
 
 int								builtin_export(char **args, t_env **envl);
 t_env							**init_temp_array(t_env *envl, int count);

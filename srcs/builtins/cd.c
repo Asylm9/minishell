@@ -36,11 +36,21 @@ int	validate_path(char **args, char *new_path)
 			printf_fd(STDERR, "minishell: cd: OLDPWD not set\n");
 		return (ERROR);
 	}
-	if (access(new_path, F_OK | X_OK) < 0)
+	if (access(new_path, F_OK) < 0)
 	{
 		printf_fd(STDERR, "cd: %s: No such file or directory\n", new_path);
 		return (ERROR);
 	}
+	if (access(new_path, X_OK) < 0)
+	{
+		printf_fd(STDERR, "minishell: %s: Not a directory\n", args[1]);
+		return (ERROR);
+	}
+/* 	if (check_file_type(args[1]) != 1)
+	{
+		printf_fd(STDERR, "minishell: %s: Not a directory\n", args[1]);
+		return (ERROR);
+	} */
 	return (SUCCESS);
 }
 
