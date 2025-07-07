@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:18:33 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/07 18:04:38 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/07 20:25:31 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ int	check_input(char *input, t_sh *shell)
 	while (input[i])
 	{
 		if (ft_isalnum(input[i]) || input[i] == '$' || input[i] == '.'
-			|| input[i] == '-' || input[i] == '~' || input[i] == '/' || input[i] == '&')
+			|| input[i] == '-' || input[i] == '~' || input[i] == '/'
+			|| input[i] == '&' || input[i] == ':' || input[i] == '|')
 		{
 			valid = 1;
 			size++;
@@ -92,7 +93,7 @@ int	check_input(char *input, t_sh *shell)
 			shell->exit_status = 2;
 			return (ERROR);
 		}
-		if (input[i] == '|')
+		/* if (input[i] == '|')
 		{
 			if (next_input(&input[i + 1]) == '|' && input[i + 1] != ' ')
 			{
@@ -101,7 +102,8 @@ int	check_input(char *input, t_sh *shell)
 				shell->exit_status = 2;
 				return (ERROR);
 			}
-			else if (next_input(&input[i + 1]) == '\0' || (input[i + 1] == ' ' && next_input(&input[i + 1]) == '|'))
+			else if (next_input(&input[i + 1]) == '\0' || (input[i + 1] == ' '
+					&& next_input(&input[i + 1]) == '|'))
 			{
 				printf_fd(STDERR, " syntax error near unexpected token `|'\n");
 				shell->exit_status = 2;
@@ -111,7 +113,7 @@ int	check_input(char *input, t_sh *shell)
 		if (input[i] == '<')
 		{
 			if (next_input(&input[i + 1]) == '|' || next_input(&input[i
-					+ 1]) == '>' /* || next_input(&input[i + 1]) == '\0' */)
+					+ 1]) == '>')
 			{
 				printf_fd(STDERR,
 					"minishell: syntax error near unexpected token `<'\n");
@@ -120,7 +122,8 @@ int	check_input(char *input, t_sh *shell)
 			}
 			if (next_input(&input[i] + 1) == '\0')
 			{
-				printf_fd(STDERR, " syntax error near unexpected token `newline'\n");
+				printf_fd(STDERR,
+					" syntax error near unexpected token `newline'\n");
 				shell->exit_status = 2;
 				return (ERROR);
 			}
@@ -128,7 +131,7 @@ int	check_input(char *input, t_sh *shell)
 		if (input[i] == '>')
 		{
 			if (next_input(&input[i + 1]) == '|' || next_input(&input[i
-					+ 1]) == '<'/*  || next_input(&input[i + 1]) == '\0' */)
+					+ 1]) == '<')
 			{
 				printf_fd(STDERR,
 					"minishell: syntax error near unexpected token `>'\n");
@@ -137,11 +140,12 @@ int	check_input(char *input, t_sh *shell)
 			}
 			if (next_input(&input[i] + 1) == '\0')
 			{
-				printf_fd(STDERR, " syntax error near unexpected token `newline'\n");
+				printf_fd(STDERR,
+					" syntax error near unexpected token `newline'\n");
 				shell->exit_status = 2;
 				return (ERROR);
 			}
-		}
+		} */
 		if (input[i] == '!' && ft_strlen(input) == 1)
 		{
 			shell->exit_status = 1;
@@ -151,8 +155,11 @@ int	check_input(char *input, t_sh *shell)
 			delim[0] = input[i];
 		i++;
 	}
-	if (delim[0] == ':')
+	if (delim[0] == ':' && size == 1)
+	{
+		shell->exit_status = 0;
 		return (ERROR);
+	}
 	if (delim[0] == '.' && size == 1)
 	{
 		shell->exit_status = 2;

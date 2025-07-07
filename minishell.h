@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/05 20:34:36 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/07 19:49:18 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,8 +135,7 @@ int								check_input(char *input, t_sh *shell);
 int								create_token_list(t_token **tok_lst);
 int								create_token_node(t_token **tok_lst);
 int								skip_spaces(const char *input, int *start);
-int								find_end_of_token(const char *input, int *start,
-									int *end);
+int								find_end_of_token(const char *input, int *end);
 void							set_token_type(t_token *tok_lst,
 									const char *input, int *start, int *end);
 int								set_value(t_token *tok_lst, const char *input,

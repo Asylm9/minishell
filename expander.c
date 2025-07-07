@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/05 20:14:40 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/07 20:36:21 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -340,7 +340,7 @@ int	is_pipe_redir(char *str)
 	7 CMD,
 */
 
-int	check_validity(t_token *exp_lst)
+static int	check_validity(t_token *exp_lst, t_sh *shell)
 {
 	t_token_type	first;
 	t_token_type	second;
@@ -354,13 +354,16 @@ int	check_validity(t_token *exp_lst)
 		if (first == PIPE && (second >= 2 || (exp_lst->next
 					&& (exp_lst->next->type != 1 && exp_lst->next->type != 4))
 				|| !exp_lst->next))
+		{
+			shell->exit_status = 2;
 			return (ERROR);
-		else
-			return (SUCCESS);
-		if (second >= 3 && first != WORD)
+		}
+		// else
+		// 	return (SUCCESS);
+		if ((second >= 3 && first != WORD) || (first >= 3 && second >= 3))
 			return (ERROR);
-		if (first == 6 && (!exp_lst->next || exp_lst->next->type != WORD))
-			return (ERROR);
+		// if (first == 6 && (!exp_lst->next || exp_lst->next->type != WORD))
+		// 	return (ERROR);
 		exp_lst = exp_lst->next;
 	}
 	return (SUCCESS);
@@ -414,12 +417,13 @@ int	expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell)
 	if (tok_lst->type == PIPE)
 	{
 		shell->exit_status = 2;
-		printf_fd(STDERR, "minishell: syntax error near unexpected token `|'");
+		printf_fd(STDERR,
+			"minishell: syntax error near unexpected token `|'\n");
 		return (ERROR);
 	}
 	while (tok_lst)
 	{
-		if (check_validity(tok_lst) == SUCCESS)
+		if (check_validity(tok_lst, shell) == SUCCESS)
 		{
 			advance = 1;
 			exp_lst->expand = NO_EXPAND;

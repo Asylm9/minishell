@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:05:28 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/04 20:51:16 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/07 19:48:39 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,10 @@ int	skip_spaces(const char *input, int *pos)
 	return (SUCCESS);
 }
 
-int	find_end_of_token(const char *input, int *start, int *end)
+int	find_end_of_token(const char *input, int *end)
 {
 	char	quote;
 
-	(void)start;
 	while (input[(*end)] && input[(*end)] != ' ' && input[(*end)] != '|'
 		&& input[(*end)] != '<' && input[(*end)] != '>')
 	{
@@ -145,7 +144,7 @@ int	tokenize_input(t_token *tok_lst, const char *input)
 	{
 		skip_spaces(input, &start);
 		end = start;
-		if (find_end_of_token(input, &start, &end) == ERROR)
+		if (find_end_of_token(input, &end) == ERROR)
 			return (ERROR);
 		set_value(tok_lst, input, &start, &end);
 		set_token_type(tok_lst, input, &start, &end);
