@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/05 15:38:02 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/08 15:48:21 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,18 +139,14 @@ int	parse_ast(t_token *exp_lst, t_ast **ast, t_sh *shell)
 					(*ast)->right->type = CMD;
 				}
 			}
-			// else
-			// {
-			// 	exp_lst = exp_lst->next;
-			// 	printf("Error near exp_lst '|', missing next command.\n");
-			// 	// return (ERROR);
-			// }
 		}
 		if (exp_lst && exp_lst->type == WORD)
 		{
 			(*ast)->right = malloc(sizeof(t_ast));
 			(*ast)->right->cmd = create_node_cmd(&exp_lst);
 			(*ast)->right->type = CMD;
+			(*ast)->right->right = NULL;
+			(*ast)->right->left = NULL;
 		}
 	}
 	if (!(*ast)->left && !(*ast)->right && !(*ast)->cmd->cmd_name)

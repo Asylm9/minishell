@@ -40,7 +40,7 @@ void	free_envl(t_env **head)
 void	cleanup_shell(t_sh *shell)
 {
 	free_envl(&shell->envl);
-	free(shell);
+	// free(shell);
 }
 
 void	clean_exit(t_sh *shell)
