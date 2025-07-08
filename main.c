@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/08 16:40:07 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/08 17:15:33 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	main(int ac, char **av, char **envp)
 	if (init_shell(&shell, envp) != SUCCESS)
 	{
 		printf_fd(2, "Shell initialization failed\n");
-		return (cleanup_shell(&shell), ERROR);
+		return (free_envl(&shell.envl), ERROR);
 	}
 	set_main_signals();
 	while (1)

@@ -110,8 +110,6 @@ int	execute_binary(t_command *cmd, t_sh *shell)
 	else
 		printf_fd(STDERR, "minishell: %s: %s\n", cmd_path, strerror(errno));
 	free(cmd_path);
-	if (shell->in_pipeline)
-		cleanup_shell(shell);
 	free_array(env, -1);
 	return (EXECVE_ERR);
 }
