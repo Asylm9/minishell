@@ -35,7 +35,7 @@ int	builtin_exit(char **args, t_sh *shell)
 		{
 			printf_fd(STDERR,
 						"minishell: exit:\
-				%s: numeric argument required\n ",
+				%s: numeric argument required\n",
 						args[1]);
 			code = BUILTIN_ERR;
 		}
@@ -48,7 +48,7 @@ int	builtin_exit(char **args, t_sh *shell)
 			code = ft_atoi(args[1]);
 	}
 	// cleanup_shell(shell);
-	rl_clear_history();
+	// rl_clear_history();
 	exit(code);
 	return (SUCCESS);
 }

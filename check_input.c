@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:18:33 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/07 20:40:39 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/08 14:05:35 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,24 +41,16 @@ int	check_input(char *input, t_sh *shell)
 {
 	int		i;
 	int		size;
-	bool	valid;
 	char	quote;
 	char	delim[2];
 
 	i = 0;
 	size = 0;
-	valid = 0;
 	if (is_empty(input) == SUCCESS || ft_strlen(input) == 0)
 		return (ERROR);
 	while (input[i])
 	{
-		if (ft_isalnum(input[i]) || input[i] == '$' || input[i] == '.'
-			|| input[i] == '-' || input[i] == '~' || input[i] == '/'
-			|| input[i] == '&' || input[i] == ':' || input[i] == '|')
-		{
-			valid = 1;
-			size++;
-		}
+		size++;
 		if (input[i] == '\'' || input[i] == '"')
 		{
 			quote = input[i];
@@ -67,7 +59,6 @@ int	check_input(char *input, t_sh *shell)
 			{
 				if (ft_isalnum(input[i]) || input[i] == '$')
 				{
-					valid = 1;
 					size++;
 				}
 				i++;
@@ -93,59 +84,6 @@ int	check_input(char *input, t_sh *shell)
 			shell->exit_status = 2;
 			return (ERROR);
 		}
-		/* if (input[i] == '|')
-		{
-			if (next_input(&input[i + 1]) == '|' && input[i + 1] != ' ')
-			{
-				printf_fd(STDERR,
-					"minishell: syntax error near unexpected token `||'\n");
-				shell->exit_status = 2;
-				return (ERROR);
-			}
-			else if (next_input(&input[i + 1]) == '\0' || (input[i + 1] == ' '
-					&& next_input(&input[i + 1]) == '|'))
-			{
-				printf_fd(STDERR, " syntax error near unexpected token `|'\n");
-				shell->exit_status = 2;
-				return (ERROR);
-			}
-		}
-		if (input[i] == '<')
-		{
-			if (next_input(&input[i + 1]) == '|' || next_input(&input[i
-					+ 1]) == '>')
-			{
-				printf_fd(STDERR,
-					"minishell: syntax error near unexpected token `<'\n");
-				shell->exit_status = 2;
-				return (ERROR);
-			}
-			if (next_input(&input[i] + 1) == '\0')
-			{
-				printf_fd(STDERR,
-					" syntax error near unexpected token `newline'\n");
-				shell->exit_status = 2;
-				return (ERROR);
-			}
-		}
-		if (input[i] == '>')
-		{
-			if (next_input(&input[i + 1]) == '|' || next_input(&input[i
-					+ 1]) == '<')
-			{
-				printf_fd(STDERR,
-					"minishell: syntax error near unexpected token `>'\n");
-				shell->exit_status = 2;
-				return (ERROR);
-			}
-			if (next_input(&input[i] + 1) == '\0')
-			{
-				printf_fd(STDERR,
-					" syntax error near unexpected token `newline'\n");
-				shell->exit_status = 2;
-				return (ERROR);
-			}
-		} */
 		if (input[i] == '!' && ft_strlen(input) == 1)
 		{
 			shell->exit_status = 1;
@@ -167,16 +105,5 @@ int	check_input(char *input, t_sh *shell)
 		printf_fd(STDERR, ".: usage: . filename [arguments]\n");
 		return (ERROR);
 	}
-	// if (!ft_isalnum(delim[0]) && valid == 1 && size <= 2)
-	// {
-	// 	printf_fd(STDERR, " syntax error near unexpected token `newline'\n");
-	// 	return (ERROR);
-	// }
-	if (valid == 1)
-		return (SUCCESS);
-	else
-	{
-		shell->exit_status = 2;
-		return (ERROR);
-	}
+	return (SUCCESS);
 }
