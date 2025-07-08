@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/08 16:01:21 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:40:07 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ int	main(int ac, char **av, char **envp)
 	t_ast	*ast;
 	t_sh	shell;
 
-	// t_token	*tok_lst;
-	// t_token	*exp_lst;
 	ast = NULL;
 	shell.tok_lst = NULL;
 	shell.exp_lst = NULL;
@@ -111,17 +109,15 @@ int	main(int ac, char **av, char **envp)
 						if (parse_ast(shell.exp_lst, &ast, &shell) == SUCCESS)
 							execute_ast(ast, &shell);
 						free_ast(ast);
-						// free_tok_lst(&tok_lst);
-						// free_tok_lst(&exp_lst);
+						// free_tok_lst(&shell.tok_lst);
+						// free_tok_lst(&shell.exp_lst);
 						ast = NULL;
 						shell.tok_lst = NULL;
 						shell.exp_lst = NULL;
 					}
 				}
 				else
-				{
 					free_tok_lst(&shell.tok_lst);
-				}
 			}
 		}
 		else

@@ -40,6 +40,8 @@ void	free_envl(t_env **head)
 void	cleanup_shell(t_sh *shell)
 {
 	free_envl(&shell->envl);
+	free_tok_lst(&shell->tok_lst);
+	free_tok_lst(&shell->exp_lst);
 	// free(shell);
 }
 

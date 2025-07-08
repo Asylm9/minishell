@@ -34,16 +34,16 @@ pid_t	process_right_child(t_ast *ast, t_sh *shell, int *pfd)
 	return (pid_right);
 }
 
-int	handle_builtin(t_command *cmd, t_sh *shell)
+int	handle_builtin(t_ast *ast, t_sh *shell)
 {
 	int	ret;
 
-	if (cmd->redirections && !shell->in_pipeline)
+	if (ast->cmd->redirections && !shell->in_pipeline)
 		save_or_restore_fds(shell, 's');
-	if (apply_redirections(cmd) == ERROR)
+	if (apply_redirections(ast->cmd) == ERROR)
 		exit(1);
-	ret = execute_builtin(cmd, shell);
-	if (cmd->redirections && !shell->in_pipeline)
+	ret = execute_builtin(ast, shell);
+	if (ast->cmd->redirections && !shell->in_pipeline)
 		save_or_restore_fds(shell, 'r');
 	if (shell->in_pipeline)
 		exit(ret);
@@ -76,8 +76,8 @@ int	fork_single_binary(t_command *cmd, t_sh *shell)
 	waitpid(pid, &status, 0);
 	shell->exit_status = process_wait_status(status);
 	if (shell->exit_status == 130)
-			printf("\n");
+		printf("\n");
 	if (shell->exit_status == 131)
-			printf("Quit (core dumped)\n");
+		printf("Quit (core dumped)\n");
 	return (shell->exit_status);
 }

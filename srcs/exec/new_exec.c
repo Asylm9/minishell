@@ -19,21 +19,21 @@ int	execute_pipeline(t_ast *ast, t_sh *shell)
 	return (shell->exit_status);
 }
 
-int	execute_command(t_command *cmd, t_sh *shell)
+int	execute_command(t_ast *ast, t_sh *shell)
 {
-	if (!cmd)
+	if (!ast->cmd)
 	{
 		if (shell->in_pipeline)
 			exit(0);
 		return (0);
 	}
 	signal(SIGINT, SIG_IGN);
-	if (is_builtin(cmd->cmd_name))
-		return (handle_builtin(cmd, shell));
+	if (is_builtin(ast->cmd->cmd_name))
+		return (handle_builtin(ast, shell));
 	if (shell->in_pipeline)
-		handle_binary_pipeline(cmd, shell);
+		handle_binary_pipeline(ast->cmd, shell);
 	else
-		return (fork_single_binary(cmd, shell));
+		return (fork_single_binary(ast->cmd, shell));
 	signal(SIGINT, handle_sigint);
 	return (0);
 }
@@ -43,7 +43,7 @@ int	execute_ast(t_ast *ast, t_sh *shell)
 	if (!ast)
 		return (0);
 	if (ast->type == CMD)
-		return (execute_command(ast->cmd, shell));
+		return (execute_command(ast, shell));
 	else if (ast->type == PIPE)
 		return (execute_pipeline(ast, shell));
 	return (0);

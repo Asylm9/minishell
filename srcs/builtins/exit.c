@@ -20,35 +20,36 @@ static bool	is_numeric(char *arg)
 	return (true);
 }
 
-int	builtin_exit(char **args, t_sh *shell)
+int	builtin_exit(t_ast *ast, t_sh *shell)
 {
 	int	code;
 
 	printf_fd(1, "exit\n");
-	if (!args)
+	if (!ast->cmd->args)
 		code = shell->exit_status;
-	else if (!args[1])
+	else if (!ast->cmd->args[1])
 		code = shell->exit_status;
 	else
 	{
-		if (!is_numeric(args[1]))
+		if (!is_numeric(ast->cmd->args[1]))
 		{
 			printf_fd(STDERR,
 						"minishell: exit:\
 				%s: numeric argument required\n",
-						args[1]);
+						ast->cmd->args[1]);
 			code = BUILTIN_ERR;
 		}
-		else if (args[2])
+		else if (ast->cmd->args[2])
 		{
 			printf_fd(STDERR, "minishell: exit: too many arguments\n");
 			return (ERROR);
 		}
 		else
-			code = ft_atoi(args[1]);
+			code = ft_atoi(ast->cmd->args[1]);
 	}
 	cleanup_shell(shell);
 	rl_clear_history();
+	free_ast(ast);
 	exit(code);
 	return (SUCCESS);
 }

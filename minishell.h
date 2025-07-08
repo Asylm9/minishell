@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/08 15:57:34 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:38:17 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ int								handle_heredoc(char *delimiter, t_sh *shell);
 
 /* Execution */
 int								execute_ast(t_ast *ast, t_sh *shell);
-int								execute_command(t_command *cmd, t_sh *shell);
+int								execute_command(t_ast *ast, t_sh *shell);
 int								execute_pipeline(t_ast *ast, t_sh *shell);
 int								process_wait_status(int status);
 int								execute_binary(t_command *cmd, t_sh *shell);
@@ -173,7 +173,7 @@ pid_t							process_left_child(t_ast *ast, t_sh *shell,
 									int *pfd);
 pid_t							process_right_child(t_ast *ast, t_sh *shell,
 									int *pfd);
-int								handle_builtin(t_command *cmd, t_sh *shell);
+int								handle_builtin(t_ast *ast, t_sh *shell);
 void							handle_binary_pipeline(t_command *cmd,
 									t_sh *shell);
 int								fork_single_binary(t_command *cmd, t_sh *shell);
@@ -193,7 +193,7 @@ int								apply_redirections(t_command *cmd);
 /* Builtin commands */
 int								args_count(char **args);
 bool							is_builtin(char *cmd_name);
-int								execute_builtin(t_command *cmd, t_sh *shell);
+int								execute_builtin(t_ast *ast, t_sh *shell);
 
 /* Builtin implementations */
 int								builtin_echo(char **args);
@@ -211,7 +211,7 @@ int								builtin_unset(char **args, t_env **envl);
 
 int								builtin_env(t_sh *shell);
 
-int								builtin_exit(char **args, t_sh *shell);
+int								builtin_exit(t_ast *ast, t_sh *shell);
 
 /* Env utils */
 char							**convert_envl_to_env(t_env *envl);
