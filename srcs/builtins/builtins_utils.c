@@ -34,7 +34,7 @@ int	execute_builtin(t_command *cmd, t_sh *shell)
 	else if (ft_strcmp(cmd->cmd_name, "cd") == 0)
 		shell->exit_status = builtin_cd(cmd->args, shell);
 	else if (ft_strcmp(cmd->cmd_name, "pwd") == 0)
-		shell->exit_status = builtin_pwd();
+		shell->exit_status = builtin_pwd(cmd->args);
 	else if (ft_strcmp(cmd->cmd_name, "export") == 0)
 		shell->exit_status = builtin_export(cmd->args, &shell->envl);
 	else if (ft_strcmp(cmd->cmd_name, "unset") == 0)

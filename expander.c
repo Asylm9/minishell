@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/07 20:46:08 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/08 13:43:33 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -361,8 +361,18 @@ static int	check_validity(t_token *exp_lst, t_sh *shell)
 		}
 		// else
 		// 	return (SUCCESS);
-		if ((second >= 3 && first != WORD) || (first >= 3 && second >= 3))
+		if (first >= 3 && !exp_lst->next)
+		{
+			printf_fd(STDERR,
+				" syntax error near unexpected token `newline'\n");
+			shell->exit_status = 2;
 			return (ERROR);
+		}
+		if ((second >= 3 && first != WORD) || (first >= 3 && second >= 3))
+		{
+			shell->exit_status = 2;
+			return (ERROR);
+		}
 		// if (first == 6 && (!exp_lst->next || exp_lst->next->type != WORD))
 		// 	return (ERROR);
 		exp_lst = exp_lst->next;
