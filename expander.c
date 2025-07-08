@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/08 13:59:25 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/08 14:44:44 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -340,6 +340,19 @@ int	is_pipe_redir(char *str)
 	7 CMD,
 */
 
+char	*token(t_token_type token)
+{
+	if (token == 3)
+		return ("<");
+	if (token == 4)
+		return (">");
+	if (token == 5)
+		return (">>");
+	if (token == 6)
+		return ("<<");
+	return ("newline");
+}
+
 static int	check_validity(t_token *exp_lst, t_sh *shell)
 {
 	t_token_type	first;
@@ -359,11 +372,10 @@ static int	check_validity(t_token *exp_lst, t_sh *shell)
 			shell->exit_status = 2;
 			return (ERROR);
 		}
-		// else
-		// 	return (SUCCESS);
 		if ((second >= 3 && first != WORD) || (first >= 3 && second >= 3))
 		{
-			printf_fd(STDERR, " syntax error near unexpected token `<'\n");
+			printf_fd(STDERR, " syntax error near unexpected token `%s'\n",
+				token(first));
 			shell->exit_status = 2;
 			return (ERROR);
 		}
@@ -374,8 +386,6 @@ static int	check_validity(t_token *exp_lst, t_sh *shell)
 			shell->exit_status = 2;
 			return (ERROR);
 		}
-		// if (first == 6 && (!exp_lst->next || exp_lst->next->type != WORD))
-		// 	return (ERROR);
 		exp_lst = exp_lst->next;
 	}
 	return (SUCCESS);

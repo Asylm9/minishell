@@ -48,7 +48,7 @@ int	builtin_exit(char **args, t_sh *shell)
 			code = ft_atoi(args[1]);
 	}
 	// cleanup_shell(shell);
-	// rl_clear_history();
+	rl_clear_history();
 	exit(code);
 	return (SUCCESS);
 }
