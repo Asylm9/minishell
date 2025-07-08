@@ -37,16 +37,17 @@ void	free_envl(t_env **head)
 	*head = NULL;
 }
 
-void	cleanup_shell(t_sh *shell)
+void	cleanup_shell(t_sh *shell, t_ast *ast)
 {
 	free_envl(&shell->envl);
 	free_tok_lst(&shell->tok_lst);
 	free_tok_lst(&shell->exp_lst);
-	// free(shell);
+	free_ast(ast);
+	rl_clear_history();
 }
 
-void	clean_exit(t_sh *shell)
+void	clean_exit(t_sh *shell, t_ast *ast)
 {
-	cleanup_shell(shell);
+	cleanup_shell(shell, ast);
 	exit(shell->exit_status);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/08 16:38:17 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:50:22 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,7 +247,9 @@ void							free_cmd(t_command *cmd);
 void							free_ast(t_ast *ast);
 void							free_array(char **array, int i);
 void							free_envl(t_env **head);
-void							cleanup_shell(t_sh *shell);
+void							cleanup_shell(t_sh *shell, t_ast *ast);
+void							clean_exit(t_sh *shell, t_ast *ast);
+
 
 /* Testing */
 void							print_env_array(char **env);
