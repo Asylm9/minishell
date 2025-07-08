@@ -31,9 +31,9 @@ int	execute_command(t_ast *ast, t_sh *shell)
 	if (is_builtin(ast->cmd->cmd_name))
 		return (handle_builtin(ast, shell));
 	if (shell->in_pipeline)
-		handle_binary_pipeline(ast->cmd, shell);
+		handle_binary_pipeline(ast, shell);
 	else
-		return (fork_single_binary(ast->cmd, shell));
+		return (fork_single_binary(ast, shell));
 	signal(SIGINT, handle_sigint);
 	return (0);
 }

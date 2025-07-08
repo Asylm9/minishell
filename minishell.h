@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/08 16:50:22 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/08 17:29:59 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,7 @@ int								execute_ast(t_ast *ast, t_sh *shell);
 int								execute_command(t_ast *ast, t_sh *shell);
 int								execute_pipeline(t_ast *ast, t_sh *shell);
 int								process_wait_status(int status);
-int								execute_binary(t_command *cmd, t_sh *shell);
+int								execute_binary(t_ast *ast, t_sh *shell);
 
 /* Exec utils */
 pid_t							process_left_child(t_ast *ast, t_sh *shell,
@@ -174,9 +174,9 @@ pid_t							process_left_child(t_ast *ast, t_sh *shell,
 pid_t							process_right_child(t_ast *ast, t_sh *shell,
 									int *pfd);
 int								handle_builtin(t_ast *ast, t_sh *shell);
-void							handle_binary_pipeline(t_command *cmd,
+void							handle_binary_pipeline(t_ast *ast,
 									t_sh *shell);
-int								fork_single_binary(t_command *cmd, t_sh *shell);
+int								fork_single_binary(t_ast *ast, t_sh *shell);
 
 /* Path and environment handling */
 char							*get_env_var(char *name, char **env);

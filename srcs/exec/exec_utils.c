@@ -50,15 +50,15 @@ int	handle_builtin(t_ast *ast, t_sh *shell)
 	return (ret);
 }
 
-void	handle_binary_pipeline(t_command *cmd, t_sh *shell)
+void	handle_binary_pipeline(t_ast *ast, t_sh *shell)
 {
-	if (apply_redirections(cmd) == ERROR)
+	if (apply_redirections(ast->cmd) == ERROR)
 		exit(1);
-	shell->exit_status = execute_binary(cmd, shell);
+	shell->exit_status = execute_binary(ast, shell);
 	exit(shell->exit_status);
 }
 
-int	fork_single_binary(t_command *cmd, t_sh *shell)
+int	fork_single_binary(t_ast *ast, t_sh *shell)
 {
 	pid_t	pid;
 	int		status;
@@ -69,9 +69,9 @@ int	fork_single_binary(t_command *cmd, t_sh *shell)
 	else if (pid == 0)
 	{
 		set_subprocess_signals();
-		if (apply_redirections(cmd) == ERROR)
+		if (apply_redirections(ast->cmd) == ERROR)
 			exit(1);
-		exit(execute_binary(cmd, shell));
+		exit(execute_binary(ast, shell));
 	}
 	waitpid(pid, &status, 0);
 	shell->exit_status = process_wait_status(status);
