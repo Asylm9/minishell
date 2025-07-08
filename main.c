@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/05 20:35:38 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/08 13:42:52 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	main(int ac, char **av, char **envp)
 	if (init_shell(&shell, envp) != SUCCESS)
 	{
 		printf_fd(2, "Shell initialization failed\n");
-		return(cleanup_shell(&shell), ERROR);
+		return (cleanup_shell(&shell), ERROR);
 	}
 	set_main_signals();
 	while (1)
@@ -96,8 +96,10 @@ int	main(int ac, char **av, char **envp)
 					if (!ast)
 					{
 						perror("malloc");
-						free(tok_lst);
+						free_tok_lst(&tok_lst);
+						free_tok_lst(&expanded);
 						tok_lst = NULL;
+						expanded = NULL;
 					}
 					else
 					{
@@ -107,8 +109,8 @@ int	main(int ac, char **av, char **envp)
 						if (parse_ast(expanded, &ast, &shell) == SUCCESS)
 							execute_ast(ast, &shell);
 						free_ast(ast);
-						// free_tok_lst(tok_lst);
-						// free_tok_lst(expanded);
+						free_tok_lst(&tok_lst);
+						free_tok_lst(&expanded);
 						ast = NULL;
 						tok_lst = NULL;
 						expanded = NULL;

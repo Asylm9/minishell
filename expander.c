@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/07 20:36:21 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/07 20:46:08 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -355,6 +355,7 @@ static int	check_validity(t_token *exp_lst, t_sh *shell)
 					&& (exp_lst->next->type != 1 && exp_lst->next->type != 4))
 				|| !exp_lst->next))
 		{
+			printf_fd(STDERR, " syntax error near unexpected token `|'\n");
 			shell->exit_status = 2;
 			return (ERROR);
 		}
