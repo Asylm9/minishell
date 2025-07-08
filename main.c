@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/08 14:41:45 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/08 16:01:21 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ void	print_token(t_token *tok_lst)
 int	main(int ac, char **av, char **envp)
 {
 	char	*input;
-	t_token	*tok_lst;
-	t_token	*expanded;
 	t_ast	*ast;
 	t_sh	shell;
 
+	// t_token	*tok_lst;
+	// t_token	*exp_lst;
 	ast = NULL;
-	tok_lst = NULL;
-	expanded = NULL;
+	shell.tok_lst = NULL;
+	shell.exp_lst = NULL;
 	if (ac > 1)
 	{
 		fprintf(stderr, "Usage: %s\n", av[0]);
@@ -73,52 +73,54 @@ int	main(int ac, char **av, char **envp)
 		}
 		if (check_input(input, &shell) == SUCCESS)
 		{
-			if (create_token_node(&tok_lst) == ERROR)
+			if (create_token_node(&shell.tok_lst) == ERROR)
 				free(input);
-			else if (tokenize_input(tok_lst, input) == ERROR
-				|| (tok_lst->value == NULL && tok_lst->next == NULL))
+			else if (tokenize_input(shell.tok_lst, input) == ERROR
+				|| (&shell.tok_lst->value == NULL
+					&& &shell.tok_lst->next == NULL))
 			{
-				if (tok_lst)
-					free_tok_lst(&tok_lst);
+				if (&shell.tok_lst)
+					free_tok_lst(&shell.tok_lst);
 				free(input);
 			}
 			else
 			{
 				free(input);
-				if (create_token_node(&expanded) == ERROR)
+				if (create_token_node(&shell.exp_lst) == ERROR)
 				{
-					free_tok_lst(&tok_lst);
-					tok_lst = NULL;
+					free_tok_lst(&shell.tok_lst);
+					shell.tok_lst = NULL;
 				}
-				else if (expand_list(tok_lst, expanded, &shell) == SUCCESS)
+				else if (expand_list(shell.tok_lst, shell.exp_lst,
+						&shell) == SUCCESS)
 				{
 					ast = malloc(sizeof(t_ast));
 					if (!ast)
 					{
 						perror("malloc");
-						free_tok_lst(&tok_lst);
-						free_tok_lst(&expanded);
-						tok_lst = NULL;
-						expanded = NULL;
+						free_tok_lst(&shell.tok_lst);
+						free_tok_lst(&shell.exp_lst);
+						shell.tok_lst = NULL;
+						shell.exp_lst = NULL;
 					}
 					else
 					{
 						ast->cmd = malloc(sizeof(t_command));
 						ast->left = NULL;
 						ast->right = NULL;
-						if (parse_ast(expanded, &ast, &shell) == SUCCESS)
+						if (parse_ast(shell.exp_lst, &ast, &shell) == SUCCESS)
 							execute_ast(ast, &shell);
 						free_ast(ast);
 						// free_tok_lst(&tok_lst);
-						// free_tok_lst(&expanded);
+						// free_tok_lst(&exp_lst);
 						ast = NULL;
-						tok_lst = NULL;
-						expanded = NULL;
+						shell.tok_lst = NULL;
+						shell.exp_lst = NULL;
 					}
 				}
 				else
 				{
-					free_tok_lst(&tok_lst);
+					free_tok_lst(&shell.tok_lst);
 				}
 			}
 		}

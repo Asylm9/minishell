@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/07 22:26:29 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/08 15:57:34 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,8 @@ typedef struct s_sh
 	int							saved_stdin;
 	int							saved_stdout;
 	int							exit_status;
+	t_token						*tok_lst;
+	t_token						*exp_lst;
 }								t_sh;
 
 typedef struct s_ast
