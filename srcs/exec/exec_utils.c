@@ -53,7 +53,10 @@ int	handle_builtin(t_ast *ast, t_sh *shell)
 void	handle_binary_pipeline(t_ast *ast, t_sh *shell)
 {
 	if (apply_redirections(ast->cmd) == ERROR)
+	{
+		cleanup_shell(shell, ast);
 		exit(1);
+	}
 	shell->exit_status = execute_binary(ast, shell);
 	exit(shell->exit_status);
 }
@@ -70,7 +73,10 @@ int	fork_single_binary(t_ast *ast, t_sh *shell)
 	{
 		set_subprocess_signals();
 		if (apply_redirections(ast->cmd) == ERROR)
+		{
+			cleanup_shell(shell, ast);
 			exit(1);
+		}
 		exit(execute_binary(ast, shell));
 	}
 	waitpid(pid, &status, 0);
