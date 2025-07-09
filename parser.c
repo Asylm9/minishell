@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/08 15:48:21 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/09 17:14:13 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static t_redirect	*add_redirection(t_redirect *redir, t_token *exp_lst)
 	if (!new_redir)
 		return (NULL);
 	new_redir->type = exp_lst->type;
-	new_redir->target = exp_lst->next->value;
+	new_redir->target = ft_strdup(exp_lst->next->value);
 	new_redir->fd = exp_lst->hd_fd;
 	new_redir->next = NULL;
 	if (!redir)

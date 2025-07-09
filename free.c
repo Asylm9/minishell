@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 20:42:02 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/09 16:38:19 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/09 17:08:02 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@ void	free_tok_lst(t_token **list)
 	while (*list)
 	{
 		temp = (*list)->next;
-		if ((*list)->value)
+		if ((*list)->value != NULL)
 			free((*list)->value);
+		(*list)->value = NULL;
 		free(*list);
 		*list = temp;
 	}
@@ -37,12 +38,12 @@ void	free_redir(t_redirect *redirection)
 	{
 		while (redirection)
 		{
-			current = redirection;
-			redirection = redirection->next;
-			if (current->target)
-				free(current->target);
-			free(current);
-			current = NULL;
+			current = redirection->next;
+			// redirection = redirection->next;
+			if (redirection->target)
+				free(redirection->target);
+			free(redirection);
+			redirection = current;
 		}
 	}
 }
