@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/08 18:30:42 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/09 16:39:27 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,10 @@ int	main(int ac, char **av, char **envp)
 			if (create_token_node(&shell.tok_lst) == ERROR)
 				free(input);
 			else if (tokenize_input(shell.tok_lst, input) == ERROR
-				|| (&shell.tok_lst->value == NULL
-					&& &shell.tok_lst->next == NULL))
+				|| (shell.tok_lst->value == NULL
+					&& shell.tok_lst->next == NULL))
 			{
-				if (&shell.tok_lst)
+				if (shell.tok_lst)
 					free_tok_lst(&shell.tok_lst);
 				free(input);
 			}
@@ -103,14 +103,14 @@ int	main(int ac, char **av, char **envp)
 					}
 					else
 					{
-						ast->cmd = malloc(sizeof(t_command));
+						ast->cmd = NULL;
 						ast->left = NULL;
 						ast->right = NULL;
 						if (parse_ast(shell.exp_lst, &ast, &shell) == SUCCESS)
 							execute_ast(ast, &shell);
 						free_ast(ast);
-						// free_tok_lst(&shell.tok_lst);
-						// free_tok_lst(&shell.exp_lst);
+						free_tok_lst(&shell.tok_lst);
+						free_tok_lst(&shell.exp_lst);
 						ast = NULL;
 						shell.tok_lst = NULL;
 						shell.exp_lst = NULL;
