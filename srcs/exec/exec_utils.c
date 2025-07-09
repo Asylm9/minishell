@@ -12,7 +12,12 @@ pid_t	process_left_child(t_ast *ast, t_sh *shell, int *pfd, t_ast *root)
 		close(pfd[0]);
 		dup2(pfd[1], STDOUT_FILENO);
 		close(pfd[1]);
-		exit(execute_ast(ast->left, shell, root));
+		if (ast->left->type == PIPE)
+			execute_pipeline(ast->left, shell, root);
+		else
+			exit(execute_ast(ast->left, shell, root));
+		cleanup_shell(shell, root);
+		exit(0);
 	}
 	return (pid_left);
 }
@@ -29,7 +34,12 @@ pid_t	process_right_child(t_ast *ast, t_sh *shell, int *pfd, t_ast *root)
 		close(pfd[1]);
 		dup2(pfd[0], STDIN_FILENO);
 		close(pfd[0]);
-		exit(execute_ast(ast->right, shell, root));
+		if (ast->right->type == PIPE)
+			execute_pipeline(ast->right, shell, root);
+		else
+			exit(execute_ast(ast->right, shell, root));
+		cleanup_shell(shell, root);
+		exit(0);
 	}
 	return (pid_right);
 }
