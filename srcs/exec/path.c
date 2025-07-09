@@ -63,7 +63,7 @@ int	check_file_type(char *path)
 	return (0);
 }
 
-int	execute_binary(t_ast *ast, t_sh *shell)
+int	execute_binary(t_ast *ast, t_sh *shell, t_ast *root)
 {
 	char	**paths;
 	char	*cmd_path;
@@ -99,7 +99,7 @@ int	execute_binary(t_ast *ast, t_sh *shell)
 		{
 			printf_fd(STDERR, "minishell: %s: command not found\n",
 			ast->cmd->cmd_name);
-			return (cleanup_shell(shell, ast), CMD_NOT_FOUND);
+			return (cleanup_shell(shell, root), CMD_NOT_FOUND);
 		}
 	}
 	env = convert_envl_to_env(shell->envl);
@@ -111,5 +111,5 @@ int	execute_binary(t_ast *ast, t_sh *shell)
 		printf_fd(STDERR, "minishell: %s: %s\n", cmd_path, strerror(errno));
 	free(cmd_path);
 	free_array(env, -1);
-	return (cleanup_shell(shell, ast), EXECVE_ERR);
+	return (cleanup_shell(shell, root), EXECVE_ERR);
 }

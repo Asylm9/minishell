@@ -1,6 +1,6 @@
 #include "../../minishell.h"
 
-int	execute_pipeline(t_ast *ast, t_sh *shell)
+int	execute_pipeline(t_ast *ast, t_sh *shell, t_ast *root)
 {
 	int		pfd[2];
 	pid_t	pid_left;
@@ -9,8 +9,8 @@ int	execute_pipeline(t_ast *ast, t_sh *shell)
 
 	if (pipe(pfd) < 0)
 		return (ERROR);
-	pid_left = process_left_child(ast, shell, pfd);
-	pid_right = process_right_child(ast, shell, pfd);
+	pid_left = process_left_child(ast, shell, pfd, root);
+	pid_right = process_right_child(ast, shell, pfd, root);
 	close(pfd[0]);
 	close(pfd[1]);
 	waitpid(pid_left, NULL, 0);
@@ -19,7 +19,7 @@ int	execute_pipeline(t_ast *ast, t_sh *shell)
 	return (shell->exit_status);
 }
 
-int	execute_command(t_ast *ast, t_sh *shell)
+int	execute_command(t_ast *ast, t_sh *shell, t_ast *root)
 {
 	if (!ast->cmd)
 	{
@@ -29,22 +29,22 @@ int	execute_command(t_ast *ast, t_sh *shell)
 	}
 	signal(SIGINT, SIG_IGN);
 	if (is_builtin(ast->cmd->cmd_name))
-		return (handle_builtin(ast, shell));
+		return (handle_builtin(ast, shell, root));
 	if (shell->in_pipeline)
-		handle_binary_pipeline(ast, shell);
+		handle_binary_pipeline(ast, shell, root);
 	else
-		return (fork_single_binary(ast, shell));
+		return (fork_single_binary(ast, shell, root));
 	signal(SIGINT, handle_sigint);
 	return (0);
 }
 
-int	execute_ast(t_ast *ast, t_sh *shell)
+int	execute_ast(t_ast *ast, t_sh *shell, t_ast *root)
 {
 	if (!ast)
 		return (0);
 	if (ast->type == CMD)
-		return (execute_command(ast, shell));
+		return (execute_command(ast, shell, root));
 	else if (ast->type == PIPE)
-		return (execute_pipeline(ast, shell));
+		return (execute_pipeline(ast, shell, root));
 	return (0);
 }

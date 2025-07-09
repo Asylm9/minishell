@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/08 17:29:59 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/09 20:11:24 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,21 +162,21 @@ void							print_ast(t_ast *ast);
 int								handle_heredoc(char *delimiter, t_sh *shell);
 
 /* Execution */
-int								execute_ast(t_ast *ast, t_sh *shell);
-int								execute_command(t_ast *ast, t_sh *shell);
-int								execute_pipeline(t_ast *ast, t_sh *shell);
+int								execute_ast(t_ast *ast, t_sh *shell, t_ast *root);
+int								execute_command(t_ast *ast, t_sh *shell, t_ast *root);
+int								execute_pipeline(t_ast *ast, t_sh *shell, t_ast *root);
 int								process_wait_status(int status);
-int								execute_binary(t_ast *ast, t_sh *shell);
+int								execute_binary(t_ast *ast, t_sh *shell, t_ast *root);
 
 /* Exec utils */
 pid_t							process_left_child(t_ast *ast, t_sh *shell,
-									int *pfd);
+									int *pfd, t_ast *root);
 pid_t							process_right_child(t_ast *ast, t_sh *shell,
-									int *pfd);
-int								handle_builtin(t_ast *ast, t_sh *shell);
+									int *pfd, t_ast *root);
+int								handle_builtin(t_ast *ast, t_sh *shell, t_ast *root);
 void							handle_binary_pipeline(t_ast *ast,
-									t_sh *shell);
-int								fork_single_binary(t_ast *ast, t_sh *shell);
+									t_sh *shell, t_ast *root);
+int								fork_single_binary(t_ast *ast, t_sh *shell, t_ast *root);
 
 /* Path and environment handling */
 char							*get_env_var(char *name, char **env);
