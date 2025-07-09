@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/09 17:16:04 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/09 17:58:27 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	main(int ac, char **av, char **envp)
 			add_history(input);
 		if (!input)
 		{
-			free_ast(ast);
+			cleanup_shell(&shell, ast);
 			printf("exit\n");
 			exit(SUCCESS);
 		}

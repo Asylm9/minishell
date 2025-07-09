@@ -28,3 +28,5 @@ Redirections:
 - refactoriser apply_redirections()
 - proteger dup2 -> +- gere a la sortie de apply_redirections()
 - proteger close ???
+
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=readline.supp -s ./minishell 
