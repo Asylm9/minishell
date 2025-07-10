@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 20:42:02 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/09 17:08:02 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/10 17:08:10 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,11 @@ void	free_cmd(t_command *cmd)
 			free(cmd->args);
 		}
 		if (cmd->redirections)
+		{
+			if (cmd->redirections->fd != -1)
+				close(cmd->redirections->fd);
 			free_redir(cmd->redirections);
+		}
 		free(cmd);
 		cmd = NULL;
 	}

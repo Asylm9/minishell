@@ -90,6 +90,7 @@ static int	read_heredoc_content(char *delimiter, t_sh *shell, char **buffer)
 				%d delimited by end-of-file (wanted `%s')\n",
 						count,
 						delimiter);
+			// ioctl(STDIN_FILENO, TIOCSTI, "\n");
 			break ;
 		}
 		line = process_heredoc_line(input, delimiter, shell);
@@ -136,15 +137,16 @@ int	handle_heredoc(char *delimiter, t_sh *shell)
 				free(buffer);
 				buffer = temp;
 			}
+			printf("buf: %s\n", buffer);
 			write(pfd[1], buffer, ft_strlen(buffer));
 			free(buffer);
 		}
 		close(pfd[0]);
 		close(pfd[1]);
-		//cleanup_shell(shell, NULL);
-		free_envl(&shell->envl);
+		cleanup_shell(shell, NULL);
+/* 		free_envl(&shell->envl);
 		free_tok_lst(&shell->tok_lst);
-		free_tok_lst(&shell->exp_lst);
+		free_tok_lst(&shell->exp_lst) */;
 		exit(0);
 	}
 	else
@@ -155,6 +157,9 @@ int	handle_heredoc(char *delimiter, t_sh *shell)
 	}
 	shell->exit_status = process_wait_status(status);
 	if (shell->exit_status == 130)
+	{
+		close(pfd[0]);
 		return (shell->exit_status);
+	}
 	return (pfd[0]);
 }
