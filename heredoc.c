@@ -125,6 +125,7 @@ int	handle_heredoc(char *delimiter, t_sh *shell)
 		{
 			close(pfd[0]);
 			close(pfd[1]);
+			cleanup_shell(shell, NULL);
 			exit(130);
 		}
 		if (buffer)
@@ -140,6 +141,10 @@ int	handle_heredoc(char *delimiter, t_sh *shell)
 		}
 		close(pfd[0]);
 		close(pfd[1]);
+		//cleanup_shell(shell, NULL);
+		free_envl(&shell->envl);
+		free_tok_lst(&shell->tok_lst);
+		free_tok_lst(&shell->exp_lst);
 		exit(0);
 	}
 	else
