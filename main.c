@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/10 15:54:25 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/10 16:11:45 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,10 @@ int	main(int ac, char **av, char **envp)
 					}
 				}
 				else
+				{
 					free_tok_lst(&shell.tok_lst);
+					free_tok_lst(&shell.exp_lst);
+				}
 			}
 		}
 		else
