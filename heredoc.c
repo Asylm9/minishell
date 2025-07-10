@@ -141,6 +141,7 @@ int	handle_heredoc(char *delimiter, t_sh *shell)
 			write(pfd[1], buffer, ft_strlen(buffer));
 			free(buffer);
 		}
+		close_all_fds(3);
 		close(pfd[0]);
 		close(pfd[1]);
 		cleanup_shell(shell, NULL);

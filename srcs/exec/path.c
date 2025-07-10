@@ -104,6 +104,7 @@ int	execute_binary(t_ast *ast, t_sh *shell, t_ast *root)
 	}
 	env = convert_envl_to_env(shell->envl);
 	//system("ls -la /proc/self/fd/ >&2");
+	close(shell->exp_lst->hd_fd);
 	set_subprocess_signals();
 	execve(cmd_path, ast->cmd->args, env);
 
