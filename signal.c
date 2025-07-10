@@ -22,6 +22,12 @@ void	handle_sigint(int sig)
 	reset_readline();
 }
 
+void	handle_sigint_exec(int sig)
+{
+	(void)sig;
+	write(1, "\n", 1);
+}
+
 int	set_main_signals(void)
 {
 	signal(SIGINT, handle_sigint);

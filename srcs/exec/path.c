@@ -103,6 +103,7 @@ int	execute_binary(t_ast *ast, t_sh *shell, t_ast *root)
 		}
 	}
 	env = convert_envl_to_env(shell->envl);
+	set_subprocess_signals();
 	execve(cmd_path, ast->cmd->args, env);
 
 	if (check_file_type(cmd_path) == 1)

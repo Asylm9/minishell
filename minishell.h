@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/09 20:11:24 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/10 15:38:51 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,6 +260,7 @@ int								init_shell(t_sh *shell, char **envp);
 
 void							handle_here_sig(int sig);
 void							handle_sigint(int sig);
+void							handle_sigint_exec(int sig);
 int								set_main_signals(void);
 int								set_subprocess_signals(void);
 

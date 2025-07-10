@@ -7,7 +7,6 @@ pid_t	process_left_child(t_ast *ast, t_sh *shell, int *pfd, t_ast *root)
 	pid_left = fork();
 	if (pid_left == 0)
 	{
-		set_subprocess_signals();
 		shell->in_pipeline = true;
 		close(pfd[0]);
 		dup2(pfd[1], STDOUT_FILENO);
@@ -29,7 +28,6 @@ pid_t	process_right_child(t_ast *ast, t_sh *shell, int *pfd, t_ast *root)
 	pid_right = fork();
 	if (pid_right == 0)
 	{
-		set_subprocess_signals();
 		shell->in_pipeline = true;
 		close(pfd[1]);
 		dup2(pfd[0], STDIN_FILENO);
@@ -84,7 +82,6 @@ int	fork_single_binary(t_ast *ast, t_sh *shell, t_ast *root)
 		return (ERROR);
 	else if (pid == 0)
 	{
-		set_subprocess_signals();
 		if (apply_redirections(ast->cmd) == ERROR)
 		{
 			cleanup_shell(shell, ast);

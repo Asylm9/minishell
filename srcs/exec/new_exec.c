@@ -50,24 +50,25 @@ int	execute_command(t_ast *ast, t_sh *shell, t_ast *root)
 			exit(0);
 		return (0);
 	}
-	signal(SIGINT, SIG_IGN);
 	if (is_builtin(ast->cmd->cmd_name))
 		return (handle_builtin(ast, shell, root));
 	if (shell->in_pipeline)
 		handle_binary_pipeline(ast, shell, root);
 	else
 		return (fork_single_binary(ast, shell, root));
-	signal(SIGINT, handle_sigint);
 	return (0);
 }
 
 int	execute_ast(t_ast *ast, t_sh *shell, t_ast *root)
 {
+	signal(SIGINT, handle_sigint_exec);
+
 	if (!ast)
 		return (0);
 	if (ast->type == CMD)
 		return (execute_command(ast, shell, root));
 	else if (ast->type == PIPE)
 		return (execute_pipeline(ast, shell, root));
+	signal(SIGINT, handle_sigint);
 	return (0);
 }
