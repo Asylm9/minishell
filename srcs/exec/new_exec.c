@@ -62,7 +62,6 @@ int	execute_command(t_ast *ast, t_sh *shell, t_ast *root)
 int	execute_ast(t_ast *ast, t_sh *shell, t_ast *root)
 {
 	signal(SIGINT, handle_sigint_exec);
-
 	if (!ast)
 		return (0);
 	if (ast->type == CMD)
