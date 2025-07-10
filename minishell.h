@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/10 15:38:51 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/10 19:35:36 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,6 +249,7 @@ void							free_array(char **array, int i);
 void							free_envl(t_env **head);
 void							cleanup_shell(t_sh *shell, t_ast *ast);
 void							clean_exit(t_sh *shell, t_ast *ast);
+void 							close_all_fds(int fd);
 
 
 /* Testing */

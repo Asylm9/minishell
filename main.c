@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/10 17:08:47 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/10 19:49:58 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ int	main(int ac, char **av, char **envp)
 						if (parse_ast(shell.exp_lst, &ast, &shell) == SUCCESS)
 							execute_ast(ast, &shell, ast);
 						signal(SIGINT, handle_sigint);
+						close(shell.exp_lst->hd_fd);
 						free_ast(ast);
 						free_tok_lst(&shell.tok_lst);
 						free_tok_lst(&shell.exp_lst);

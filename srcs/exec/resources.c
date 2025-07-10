@@ -51,3 +51,9 @@ void	clean_exit(t_sh *shell, t_ast *ast)
 	cleanup_shell(shell, ast);
 	exit(shell->exit_status);
 }
+
+void close_all_fds(int fd)
+{
+	while (fd < 256)
+		close(fd++);
+}

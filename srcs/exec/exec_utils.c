@@ -68,6 +68,7 @@ void	handle_binary_pipeline(t_ast *ast, t_sh *shell, t_ast *root)
 		cleanup_shell(shell, ast);
 		exit(1);
 	}
+	close_all_fds(3);
 	shell->exit_status = execute_binary(ast, shell, root);
 	exit(shell->exit_status);
 }
