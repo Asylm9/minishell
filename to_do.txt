@@ -29,4 +29,7 @@ Redirections:
 - proteger dup2 -> +- gere a la sortie de apply_redirections()
 - proteger close ???
 
-valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --suppressions=readline.supp -s ./minishell 
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes --suppressions=readline.supp -s ./minishell 
+cat | cat
+echo $$$$
+shlvl pas negatif
