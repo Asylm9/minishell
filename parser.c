@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/09 17:14:13 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/11 16:27:11 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,12 @@ static int	count_args(t_token *exp_lst)
 	i = 0;
 	while (exp_lst && exp_lst->type != PIPE)
 	{
-		if (exp_lst->type == WORD)
+		if (exp_lst->type >= 3)
+			exp_lst = exp_lst->next->next;
+		if (exp_lst && exp_lst->type == WORD)
 			i++;
-		exp_lst = exp_lst->next;
+		if (exp_lst)
+			exp_lst = exp_lst->next;
 	}
 	return (i);
 }
