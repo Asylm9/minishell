@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/11 03:41:30 by matthieu         ###   ########.fr       */
+/*   Updated: 2025/07/11 15:13:00 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,7 +308,8 @@ char	*trim_quotes(char *input)
 		}
 		else
 			result = tmp; // first chunk, no join needed
-		end++;
+		if (input[end] != '\0')
+			end++;
 		start = end;
 	}
 	free(input);
@@ -448,6 +449,7 @@ int	expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell)
 			advance = 1;
 			exp_lst->expand = NO_EXPAND;
 			if (tok_lst->type == REDIR_HEREDOC)
+			{
 				if (tok_lst->next->value)
 				{
 					exp_lst->hd_fd = handle_heredoc(tok_lst->next->value,
@@ -455,6 +457,7 @@ int	expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell)
 					if (exp_lst->hd_fd == 130)
 						return (ERROR);
 				}
+			}
 			if (tok_lst->expand == NO_EXPAND)
 			{
 				if (!is_pipe_redir(tok_lst->value))
