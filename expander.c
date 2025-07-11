@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/08 14:44:44 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/11 03:41:30 by matthieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ int	expand_xcode(char **result, t_sh *shell)
 		return (1);
 	return (0);
 }
+
+// struct expand_tools
 
 char	*expand_token(char *input, t_sh *shell)
 {
@@ -306,8 +308,6 @@ char	*trim_quotes(char *input)
 		}
 		else
 			result = tmp; // first chunk, no join needed
-		if (input[end] == '\0')
-			break ;
 		end++;
 		start = end;
 	}
@@ -399,8 +399,6 @@ size_t	count_nb_words(char const *s, char c)
 
 	i = 0;
 	count = 0;
-	if (!s)
-		return (0);
 	while (s[i])
 	{
 		while (s[i] == c)
