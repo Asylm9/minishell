@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/12 19:22:58 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/12 21:22:38 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@
 typedef struct s_redirect		t_redirect;
 typedef struct s_command		t_command;
 typedef struct s_sh				t_sh;
-typedef struct s_token			t_token;
+typedef struct s_token			t_lst;
 typedef struct s_env			t_env;
 typedef struct s_ast			t_ast;
 
@@ -72,8 +72,18 @@ typedef struct s_token
 	int							hd_fd;
 	t_expand					expand;
 	t_token_type				type;
-	t_token						*next;
-}								t_token;
+	t_lst						*next;
+}								t_lst;
+
+typedef struct s_exp
+{
+	char						*result;
+	char						*buffer;
+	char						*tmp;
+	int							end;
+	int							start;
+	char						quote;
+}								t_exp;
 
 typedef struct s_redirect
 {
@@ -106,8 +116,8 @@ typedef struct s_sh
 	int							saved_stdin;
 	int							saved_stdout;
 	int							exit_status;
-	t_token						*tok_lst;
-	t_token						*exp_lst;
+	t_lst						*tok_lst;
+	t_lst						*exp_lst;
 }								t_sh;
 
 typedef struct s_ast
@@ -122,21 +132,21 @@ extern volatile sig_atomic_t	g_sig;
 
 /**************************		Parsing		*****************************/
 
-void							print_token(t_token *tok_lst);
+void							print_token(t_lst *tok_lst);
 
 /* Tokenizer */
 int								is_empty(char *input);
 
 int								check_input(char *input, t_sh *shell);
-int								create_token_list(t_token **tok_lst);
-int								create_token_node(t_token **tok_lst);
+int								create_token_list(t_lst **tok_lst);
+int								create_token_node(t_lst **tok_lst);
 int								skip_spaces(const char *input, int *start);
 int								find_end_of_token(const char *input, int *end);
-void							set_token_type(t_token *tok_lst,
+void							set_token_type(t_lst *tok_lst,
 									const char *input, int *start, int *end);
-int								set_value(t_token *tok_lst, const char *input,
+int								set_value(t_lst *tok_lst, const char *input,
 									int *start, int *end);
-int								tokenize_input(t_token *tok_lst,
+int								tokenize_input(t_lst *tok_lst,
 									const char *input);
 int								is_env_var(char *str);
 
@@ -147,13 +157,13 @@ int								expand_var(char *input, char **result,
 char							*expand_token(char *input, t_sh *shell);
 char							*trim_quotes(char *input);
 int								is_pipe_redir(char *str);
-int								expand_list(t_token *tok_lst, t_token *exp_lst,
+int								expand_list(t_lst *tok_lst, t_lst *exp_lst,
 									t_sh *shell);
 
 /* Parser */
 int								create_node_pipe(t_ast **ast);
-t_command						*create_node_cmd(t_token **exp_lst);
-int								parse_ast(t_token *exp_lst, t_ast **ast,
+t_command						*create_node_cmd(t_lst **exp_lst);
+int								parse_ast(t_lst *exp_lst, t_ast **ast,
 									t_sh *shell);
 void							print_ast(t_ast *ast);
 
@@ -162,21 +172,27 @@ void							print_ast(t_ast *ast);
 int								handle_heredoc(char *delimiter, t_sh *shell);
 
 /* Execution */
-int								execute_ast(t_ast *ast, t_sh *shell, t_ast *root);
-int								execute_command(t_ast *ast, t_sh *shell, t_ast *root);
-int								execute_pipeline(t_ast *ast, t_sh *shell, t_ast *root);
+int								execute_ast(t_ast *ast, t_sh *shell,
+									t_ast *root);
+int								execute_command(t_ast *ast, t_sh *shell,
+									t_ast *root);
+int								execute_pipeline(t_ast *ast, t_sh *shell,
+									t_ast *root);
 int								process_wait_status(int status);
-int								execute_binary(t_ast *ast, t_sh *shell, t_ast *root);
+int								execute_binary(t_ast *ast, t_sh *shell,
+									t_ast *root);
 
 /* Exec utils */
 pid_t							process_left_child(t_ast *ast, t_sh *shell,
 									int *pfd, t_ast *root);
 pid_t							process_right_child(t_ast *ast, t_sh *shell,
 									int *pfd, t_ast *root);
-int								handle_builtin(t_ast *ast, t_sh *shell, t_ast *root);
-void							handle_binary_pipeline(t_ast *ast,
-									t_sh *shell, t_ast *root);
-int								fork_single_binary(t_ast *ast, t_sh *shell, t_ast *root);
+int								handle_builtin(t_ast *ast, t_sh *shell,
+									t_ast *root);
+void							handle_binary_pipeline(t_ast *ast, t_sh *shell,
+									t_ast *root);
+int								fork_single_binary(t_ast *ast, t_sh *shell,
+									t_ast *root);
 
 /* Path and environment handling */
 char							*get_env_var(char *name, char **env);
@@ -215,7 +231,6 @@ int								builtin_exit(t_ast *ast, t_sh *shell);
 
 bool							is_numeric(char *arg);
 
-
 /* Env utils */
 char							**convert_envl_to_env(t_env *envl);
 t_env							*init_env_list(char **env);
@@ -244,7 +259,7 @@ t_env							*add_back_node(t_env *new_node, t_env *head);
 /* Resources */
 // void						free_pipes(int **pipes, int i);
 /* Free */
-void							free_tok_lst(t_token **list);
+void							free_tok_lst(t_lst **list);
 void							free_redir(t_redirect *redirection);
 void							free_cmd(t_command *cmd);
 void							free_ast(t_ast *ast);
@@ -252,8 +267,7 @@ void							free_array(char **array, int i);
 void							free_envl(t_env **head);
 void							cleanup_shell(t_sh *shell, t_ast *ast);
 void							clean_exit(t_sh *shell, t_ast *ast);
-void 							close_all_fds(int fd);
-
+void							close_all_fds(int fd);
 
 /* Testing */
 void							print_env_array(char **env);

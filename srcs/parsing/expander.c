@@ -6,11 +6,11 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/11 15:13:00 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/12 21:26:03 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../minishell.h"
 
 int	is_env_var(char *str)
 {
@@ -55,214 +55,221 @@ int	expand_xcode(char **result, t_sh *shell)
 	return (0);
 }
 
-// struct expand_tools
+void	init_exp(t_exp *exp)
+{
+	exp->result = ft_calloc(1, 1);
+	exp->buffer = NULL;
+	exp->tmp = NULL;
+	exp->end = 0;
+	exp->start = 0;
+	exp->quote = ' ';
+}
 
 char	*expand_token(char *input, t_sh *shell)
 {
-	char	*result;
-	char	*buffer;
-	char	*tmp;
-	int		pos;
-	int		start;
+	t_exp	exp;
 
-	result = ft_calloc(1, 1);
-	buffer = NULL;
-	tmp = NULL;
-	pos = 0;
-	start = 0;
-	while (input[pos] != '\0')
+	init_exp(&exp);
+	while (input[exp.end] != '\0')
 	{
-		if (input[pos] == '\'')
+		if (input[exp.end] == '\'')
 		{
-			pos++;
-			while (input[pos] && input[pos] != '\'')
-				pos++;
-			pos++;
+			exp.end++;
+			while (input[exp.end] && input[exp.end] != '\'')
+				exp.end++;
+			exp.end++;
 		}
-		if (input[pos] == '"')
+		if (input[exp.end] == '"')
 		{
-			pos++;
-			while (input[pos] && input[pos] != '"')
+			exp.end++;
+			while (input[exp.end] && input[exp.end] != '"')
 			{
-				if (input[pos] == '$')
+				if (input[exp.end] == '$')
 				{
-					if (input[pos + 1] && (ft_isalnum(input[pos + 1])
-							|| input[pos + 1] == '_' || input[pos + 1] == '?'))
+					if (input[exp.end + 1] && (ft_isalnum(input[exp.end + 1])
+							|| input[exp.end + 1] == '_' || input[exp.end
+							+ 1] == '?'))
 					{
-						buffer = ft_substr(input, start, pos - start);
-						tmp = ft_fstrjoin(&result, &buffer, 0);
-						if (result)
+						exp.buffer = ft_substr(input, exp.start, exp.end
+								- exp.start);
+						exp.tmp = ft_fstrjoin(&exp.result, &exp.buffer, 0);
+						if (exp.result)
 						{
-							free(result);
-							result = NULL;
+							free(exp.result);
+							exp.result = NULL;
 						}
-						if (buffer)
+						if (exp.buffer)
 						{
-							free(buffer);
-							buffer = NULL;
+							free(exp.buffer);
+							exp.buffer = NULL;
 						}
-						if (input[pos + 1] == '?')
+						if (input[exp.end + 1] == '?')
 						{
-							if (expand_xcode(&buffer, shell))
-								result = tmp;
-							if (buffer)
+							if (expand_xcode(&exp.buffer, shell))
+								exp.result = exp.tmp;
+							if (exp.buffer)
 							{
-								result = ft_fstrjoin(&tmp, &buffer, 3);
-								tmp = NULL;
+								exp.result = ft_fstrjoin(&exp.tmp, &exp.buffer,
+										3);
+								exp.tmp = NULL;
 							}
 						}
-						else if (expand_var(input + pos, &buffer, shell->envl))
-							result = tmp;
+						else if (expand_var(input + exp.end, &exp.buffer,
+								shell->envl))
+							exp.result = exp.tmp;
 						else
 						{
-							if (buffer)
+							if (exp.buffer)
 							{
-								result = ft_fstrjoin(&tmp, &buffer, 1);
-								tmp = NULL;
+								exp.result = ft_fstrjoin(&exp.tmp, &exp.buffer,
+										1);
+								exp.tmp = NULL;
 							}
 							else
 							{
-								if (result)
-									free(result);
-								result = tmp;
+								if (exp.result)
+									free(exp.result);
+								exp.result = exp.tmp;
 							}
 						}
-						pos++;
-						if (input[pos] >= '0' && input[pos] <= '9')
-							pos++;
+						exp.end++;
+						if (input[exp.end] >= '0' && input[exp.end] <= '9')
+							exp.end++;
 						else
-							while ((ft_isalnum(input[pos]) || input[pos] == '_'
-									|| input[pos] == '?') && input[pos])
+							while ((ft_isalnum(input[exp.end])
+									|| input[exp.end] == '_'
+									|| input[exp.end] == '?') && input[exp.end])
 							{
-								pos++;
-								if (input[pos - 1] == '?')
+								exp.end++;
+								if (input[exp.end - 1] == '?')
 									break ;
 							}
-						start = pos;
+						exp.start = exp.end;
 					}
-					else if (input[pos + 1] && input[pos + 1] != ':'
-						&& input[pos + 1] != '=' && input[pos + 1] != '"'
-						&& input[pos + 1] != ' ')
+					else if (input[exp.end + 1] && input[exp.end + 1] != ':'
+						&& input[exp.end + 1] != '=' && input[exp.end
+						+ 1] != '"' && input[exp.end + 1] != ' ')
 					{
-						pos++;
-						buffer = ft_strdup("");
-						tmp = ft_fstrjoin(&result, &buffer, 0);
+						exp.end++;
+						exp.buffer = ft_strdup("");
+						exp.tmp = ft_fstrjoin(&exp.result, &exp.buffer, 0);
 					}
 					else
 					{
-						pos++;
-						buffer = ft_substr(input, start, pos - start);
-						tmp = ft_fstrjoin(&result, &buffer, 0);
-						if (result)
+						exp.end++;
+						exp.buffer = ft_substr(input, exp.start, exp.end
+								- exp.start);
+						exp.tmp = ft_fstrjoin(&exp.result, &exp.buffer, 0);
+						if (exp.result)
 						{
-							free(result);
-							result = NULL;
+							free(exp.result);
+							exp.result = NULL;
 						}
-						if (buffer)
+						if (exp.buffer)
 						{
-							free(buffer);
-							buffer = NULL;
+							free(exp.buffer);
+							exp.buffer = NULL;
 						}
 					}
-					start = pos;
+					exp.start = exp.end;
 				}
 				else
-					pos++;
+					exp.end++;
 			}
-			pos++;
+			exp.end++;
 		}
-		else if (input[pos] == '$')
+		else if (input[exp.end] == '$')
 		{
-			if (input[pos + 1] && (ft_isalnum(input[pos + 1]) || input[pos
-					+ 1] == '_' || input[pos + 1] == '?'))
+			if (input[exp.end + 1] && (ft_isalnum(input[exp.end + 1])
+					|| input[exp.end + 1] == '_' || input[exp.end + 1] == '?'))
 			{
-				buffer = ft_substr(input, start, pos - start);
-				tmp = ft_fstrjoin(&result, &buffer, 0);
-				if (result)
+				exp.buffer = ft_substr(input, exp.start, exp.end - exp.start);
+				exp.tmp = ft_fstrjoin(&exp.result, &exp.buffer, 0);
+				if (exp.result)
 				{
-					free(result);
-					result = NULL;
+					free(exp.result);
+					exp.result = NULL;
 				}
-				if (buffer)
+				if (exp.buffer)
 				{
-					free(buffer);
-					buffer = NULL;
+					free(exp.buffer);
+					exp.buffer = NULL;
 				}
-				if (input[pos + 1] == '?')
+				if (input[exp.end + 1] == '?')
 				{
-					if (expand_xcode(&buffer, shell))
-						result = tmp;
-					if (buffer)
+					if (expand_xcode(&exp.buffer, shell))
+						exp.result = exp.tmp;
+					if (exp.buffer)
 					{
-						result = ft_fstrjoin(&tmp, &buffer, 3);
-						tmp = result;
+						exp.result = ft_fstrjoin(&exp.tmp, &exp.buffer, 3);
+						exp.tmp = exp.result;
 					}
 				}
-				else if (expand_var(input + pos, &buffer, shell->envl))
-					result = tmp;
+				else if (expand_var(input + exp.end, &exp.buffer, shell->envl))
+					exp.result = exp.tmp;
 				else
 				{
-					if (buffer)
+					if (exp.buffer)
 					{
-						result = ft_fstrjoin(&tmp, &buffer, 1);
-						tmp = NULL;
+						exp.result = ft_fstrjoin(&exp.tmp, &exp.buffer, 1);
+						exp.tmp = NULL;
 					}
 					else
 					{
-						if (result)
-							free(result);
-						result = tmp;
+						if (exp.result)
+							free(exp.result);
+						exp.result = exp.tmp;
 					}
 				}
-				pos++;
-				if (input[pos] >= '0' && input[pos] <= '9')
-					pos++;
+				exp.end++;
+				if (input[exp.end] >= '0' && input[exp.end] <= '9')
+					exp.end++;
 				else
-					while ((ft_isalnum(input[pos]) || input[pos] == '_'
-							|| input[pos] == '?') && input[pos])
+					while ((ft_isalnum(input[exp.end]) || input[exp.end] == '_'
+							|| input[exp.end] == '?') && input[exp.end])
 					{
-						pos++;
-						if (input[pos - 1] == '?')
+						exp.end++;
+						if (input[exp.end - 1] == '?')
 							break ;
 					}
-				start = pos;
+				exp.start = exp.end;
 			}
-			else if (input[pos + 1] && input[pos + 1] != ':' && input[pos
-				+ 1] != '=' && input[pos + 1] != ' ')
+			else if (input[exp.end + 1] && input[exp.end + 1] != ':'
+				&& input[exp.end + 1] != '=' && input[exp.end + 1] != ' ')
 			{
-				pos++;
-				buffer = ft_strdup("");
-				tmp = ft_fstrjoin(&result, &buffer, 0);
+				exp.end++;
+				exp.buffer = ft_strdup("");
+				exp.tmp = ft_fstrjoin(&exp.result, &exp.buffer, 0);
 			}
 			else
 			{
-				pos++;
-				result = tmp;
-				buffer = ft_substr(input, start, pos - start);
-				tmp = ft_fstrjoin(&result, &buffer, 0);
-				if (result)
+				exp.end++;
+				exp.result = exp.tmp;
+				exp.buffer = ft_substr(input, exp.start, exp.end - exp.start);
+				exp.tmp = ft_fstrjoin(&exp.result, &exp.buffer, 0);
+				if (exp.result)
 				{
-					free(result);
-					result = NULL;
+					free(exp.result);
+					exp.result = NULL;
 				}
-				if (buffer)
+				if (exp.buffer)
 				{
-					free(buffer);
-					buffer = NULL;
+					free(exp.buffer);
+					exp.buffer = NULL;
 				}
 			}
-			start = pos;
+			exp.start = exp.end;
 		}
 		else
-			pos++;
+			exp.end++;
 	}
-	buffer = ft_substr(input, start, pos - start);
-	if (tmp)
-		result = tmp;
-	tmp = ft_fstrjoin(&result, &buffer, 0);
-	free(result);
-	free(buffer);
-	return (tmp);
+	exp.buffer = ft_substr(input, exp.start, exp.end - exp.start);
+	if (exp.tmp)
+		exp.result = exp.tmp;
+	exp.tmp = ft_fstrjoin(&exp.result, &exp.buffer, 0);
+	free(exp.result);
+	free(exp.buffer);
+	return (exp.tmp);
 }
 
 void	match_quotes(char *input, int *end, char *quote)
@@ -283,37 +290,27 @@ void	match_quotes(char *input, int *end, char *quote)
 
 char	*trim_quotes(char *input)
 {
-	char	*result;
-	char	*tmp;
-	char	*buffer;
-	int		start;
-	int		end;
-	char	quote;
+	t_exp	exp;
 
-	start = 0;
-	end = 0;
-	result = NULL;
-	tmp = NULL;
-	buffer = NULL;
-	quote = ' ';
-	while (input[end] && input[end] != '\0')
+	init_exp(&exp);
+	while (input[exp.end] && input[exp.end] != '\0')
 	{
-		match_quotes(input, &end, &quote);
-		tmp = ft_substr(input, start, end - start);
-		if (result)
+		match_quotes(input, &exp.end, &exp.quote);
+		exp.tmp = ft_substr(input, exp.start, exp.end - exp.start);
+		if (exp.result)
 		{
-			buffer = ft_strdup(result);
-			free(result);
-			result = ft_fstrjoin(&buffer, &tmp, 3);
+			exp.buffer = ft_strdup(exp.result);
+			free(exp.result);
+			exp.result = ft_fstrjoin(&exp.buffer, &exp.tmp, 3);
 		}
 		else
-			result = tmp; // first chunk, no join needed
-		if (input[end] != '\0')
-			end++;
-		start = end;
+			exp.result = exp.tmp; // first chunk, no join needed
+		if (input[exp.end] != '\0')
+			exp.end++;
+		exp.start = exp.end;
 	}
 	free(input);
-	return (result);
+	return (exp.result);
 }
 
 int	is_pipe_redir(char *str)
@@ -354,7 +351,7 @@ char	*token(t_token_type token)
 	return ("newline");
 }
 
-static int	check_validity(t_token *exp_lst, t_sh *shell)
+static int	check_validity(t_lst *exp_lst, t_sh *shell)
 {
 	t_token_type	first;
 	t_token_type	second;
@@ -421,14 +418,14 @@ size_t	count_nb_words(char const *s, char c)
 	return (count);
 }
 
-int	expand_list(t_token *tok_lst, t_token *exp_lst, t_sh *shell)
+int	expand_list(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
 {
 	int		advance;
 	int		count;
 	int		i;
 	char	*input;
 	char	**splitted;
-	t_token	*new_line;
+	t_lst	*new_line;
 
 	count = 0;
 	i = 0;

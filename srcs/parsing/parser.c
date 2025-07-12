@@ -6,11 +6,11 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/11 16:27:11 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/12 21:26:14 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../minishell.h"
 
 int	create_node_pipe(t_ast **ast)
 {
@@ -27,7 +27,7 @@ int	create_node_pipe(t_ast **ast)
 	return (SUCCESS);
 }
 
-static t_redirect	*add_redirection(t_redirect *redir, t_token *exp_lst)
+static t_redirect	*add_redirection(t_redirect *redir, t_lst *exp_lst)
 {
 	t_redirect	*new_redir;
 	t_redirect	*tmp;
@@ -48,7 +48,7 @@ static t_redirect	*add_redirection(t_redirect *redir, t_token *exp_lst)
 	return (redir);
 }
 
-static int	count_args(t_token *exp_lst)
+static int	count_args(t_lst *exp_lst)
 {
 	int	i;
 
@@ -65,11 +65,11 @@ static int	count_args(t_token *exp_lst)
 	return (i);
 }
 
-static char	**fill_args(t_token **exp_lst, int argc, char **cmd_name)
+static char	**fill_args(t_lst **exp_lst, int argc, char **cmd_name)
 {
 	char	**args;
 	int		i;
-	t_token	*tmp;
+	t_lst	*tmp;
 
 	args = malloc(sizeof(char *) * (argc + 1));
 	i = 0;
@@ -90,9 +90,9 @@ static char	**fill_args(t_token **exp_lst, int argc, char **cmd_name)
 	return (args);
 }
 
-t_command	*create_node_cmd(t_token **exp_lst)
+t_command	*create_node_cmd(t_lst **exp_lst)
 {
-	t_token		*tmp;
+	t_lst		*tmp;
 	t_command	*cmd;
 
 	tmp = *exp_lst;
@@ -116,7 +116,7 @@ t_command	*create_node_cmd(t_token **exp_lst)
 	return (cmd);
 }
 
-int	parse_ast(t_token *exp_lst, t_ast **ast, t_sh *shell)
+int	parse_ast(t_lst *exp_lst, t_ast **ast, t_sh *shell)
 {
 	(void)shell;
 	if (exp_lst->type == PIPE)

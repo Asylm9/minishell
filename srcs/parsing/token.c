@@ -6,63 +6,11 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:05:28 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/07 19:48:39 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/12 21:26:17 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-int	create_token_list(t_token **tok_lst)
-{
-	(*tok_lst) = malloc(sizeof(t_token));
-	if (!(*tok_lst))
-	{
-		perror("Token list malloc failed.\n");
-		return (ERROR);
-	}
-	(*tok_lst)->value = NULL;
-	(*tok_lst)->expand = NO_EXPAND;
-	(*tok_lst)->type = WORD;
-	(*tok_lst)->next = NULL;
-	return (SUCCESS);
-}
-
-int	create_token_node(t_token **tok_lst)
-{
-	t_token	*new_token;
-	t_token	*temp;
-
-	temp = *tok_lst;
-	new_token = malloc(sizeof(t_token));
-	if (!new_token)
-	{
-		perror("Token list malloc failed.\n");
-		return (ERROR);
-	}
-	new_token->value = NULL;
-	new_token->expand = NO_EXPAND;
-	new_token->type = WORD;
-	new_token->next = NULL;
-	new_token->hd_fd = -1;
-	if (*tok_lst == NULL)
-		*tok_lst = new_token;
-	else
-	{
-		while (temp->next)
-			temp = temp->next;
-		temp->next = new_token;
-	}
-	return (SUCCESS);
-}
-
-int	skip_spaces(const char *input, int *pos)
-{
-	while (input[*pos] && input[*pos] == ' ')
-		(*pos)++;
-	if (input[*pos] == '\0')
-		return (ERROR);
-	return (SUCCESS);
-}
+#include "../../minishell.h"
 
 int	find_end_of_token(const char *input, int *end)
 {
@@ -89,8 +37,7 @@ int	find_end_of_token(const char *input, int *end)
 	return (SUCCESS);
 }
 
-void	set_token_type(t_token *tok_lst, const char *input, int *start,
-		int *end)
+void	set_token_type(t_lst *tok_lst, const char *input, int *start, int *end)
 {
 	if (input[(*start)] == '|')
 	{
@@ -102,26 +49,22 @@ void	set_token_type(t_token *tok_lst, const char *input, int *start,
 		tok_lst->type = REDIR_IN;
 		(*end)++;
 		if (input[(*end)] == '<')
-		{
 			tok_lst->type = REDIR_HEREDOC;
-			(*end)++;
-		}
 	}
 	else if (input[(*start)] == '>')
 	{
 		tok_lst->type = REDIR_OUT;
 		(*end)++;
 		if (input[(*end)] == '>')
-		{
 			tok_lst->type = REDIR_APPEND;
-			(*end)++;
-		}
 	}
 	else if (!(input[(*end)] == '\'' || !is_env_var(tok_lst->value)))
 		tok_lst->expand = EXPAND;
+	if (tok_lst->type == 5 || tok_lst->type == 6)
+		(*end)++;
 }
 
-int	set_value(t_token *tok_lst, const char *input, int *start, int *end)
+int	set_value(t_lst *tok_lst, const char *input, int *start, int *end)
 {
 	tok_lst->value = ft_substr(input, (*start), (*end) - (*start));
 	if (!tok_lst->value)
@@ -132,22 +75,30 @@ int	set_value(t_token *tok_lst, const char *input, int *start, int *end)
 	return (SUCCESS);
 }
 
-int	tokenize_input(t_token *tok_lst, const char *input)
+int	process_token(t_lst *tok_lst, const char *input, int *start, int *end)
+{
+	if (skip_spaces(input, start) == ERROR)
+		return (ERROR);
+	*end = *start;
+	if (find_end_of_token(input, end) == ERROR)
+		return (ERROR);
+	if (set_value(tok_lst, input, start, end) == ERROR)
+		return (ERROR);
+	set_token_type(tok_lst, input, start, end);
+	return (SUCCESS);
+}
+
+int	tokenize_input(t_lst *tok_lst, const char *input)
 {
 	int	start;
 	int	end;
 	int	i;
 
-	i = 0;
 	start = 0;
 	while (input[start])
 	{
-		skip_spaces(input, &start);
-		end = start;
-		if (find_end_of_token(input, &end) == ERROR)
+		if (process_token(tok_lst, input, &start, &end) == ERROR)
 			return (ERROR);
-		set_value(tok_lst, input, &start, &end);
-		set_token_type(tok_lst, input, &start, &end);
 		i = end;
 		while (input[i] && input[i] == ' ')
 			i++;

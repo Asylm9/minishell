@@ -13,10 +13,11 @@ OBJ_DIR = objs
 SRCS =  $(SRCDIR)/main.c \
         $(SRCDIR)/init.c \
         $(SRCDIR)/signal.c \
-        $(SRCDIR)/check_input.c \
-        $(SRCDIR)/token.c \
-        $(SRCDIR)/expander.c \
-        $(SRCDIR)/parser.c \
+        $(SRCDIR)/srcs/parsing/check_input.c \
+        $(SRCDIR)/srcs/parsing/list_utils.c \
+        $(SRCDIR)/srcs/parsing/token.c \
+        $(SRCDIR)/srcs/parsing/expander.c \
+        $(SRCDIR)/srcs/parsing/parser.c \
         $(SRCDIR)/free.c \
         $(SRCDIR)/heredoc.c \
         $(SRCDIR)/srcs/exec/env_utils.c \
