@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../minishell.h"
 
 static bool	has_quotes(char *delimiter)
 {

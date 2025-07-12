@@ -6,11 +6,11 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/12 21:22:38 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/12 21:30:49 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 volatile sig_atomic_t	g_sig = 0;
 

@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:18:33 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/12 21:25:35 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/12 21:56:11 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,14 @@ int	is_empty(char *input)
 
 	i = 0;
 	if (input)
+	{
 		while (input[i])
 		{
 			if (input[i] != ' ')
 				return (ERROR);
 			i++;
 		}
+	}
 	return (SUCCESS);
 }
 
@@ -41,69 +43,27 @@ int	check_input(char *input, t_sh *shell)
 {
 	int		i;
 	int		size;
-	char	quote;
 	char	delim[2];
 
-	i = 0;
+	i = -1;
 	size = 0;
 	if (is_empty(input) == SUCCESS || ft_strlen(input) == 0)
 		return (ERROR);
-	while (input[i])
+	while (input[++i])
 	{
 		size++;
 		if (input[i] == '\'' || input[i] == '"')
-		{
-			quote = input[i];
-			i++;
-			while (input[i] && input[i] != quote)
-			{
-				if (ft_isalnum(input[i]) || input[i] == '$')
-				{
-					size++;
-				}
-				i++;
-			}
-			if (input[i] == '\0')
-			{
-				printf_fd(STDERR,
-					"minishell: unexpected EOF while looking for matching `%c'\n",
-					quote);
-				shell->exit_status = 2;
+			if (check_quotes(input, &i, &size, shell) == ERROR)
 				return (ERROR);
-			}
-		}
 		if (input[i] == '&')
-		{
-			if (next_input(&input[i + 1]) == '&')
-			{
-				printf_fd(STDERR, " syntax error near unexpected token `&&'\n");
-				shell->exit_status = 2;
+			if (check_ampersand(input, i, shell) == ERROR)
 				return (ERROR);
-			}
-			printf_fd(STDERR, " invalid caracter : '&'\n");
-			shell->exit_status = 2;
-			return (ERROR);
-		}
 		if (input[i] == '!' && ft_strlen(input) == 1)
-		{
-			shell->exit_status = 1;
-			return (ERROR);
-		}
+			return (shell->exit_status = 1, ERROR);
 		if (input[i] != ' ')
 			delim[0] = input[i];
-		i++;
 	}
-	if (delim[0] == ':' && size == 1)
-	{
-		shell->exit_status = 0;
+	if (check_special_delim(delim[0], size, shell) == ERROR)
 		return (ERROR);
-	}
-	if (delim[0] == '.' && size == 1)
-	{
-		shell->exit_status = 2;
-		printf_fd(STDERR, "minishell: filename argument required\n");
-		printf_fd(STDERR, ".: usage: . filename [arguments]\n");
-		return (ERROR);
-	}
 	return (SUCCESS);
 }

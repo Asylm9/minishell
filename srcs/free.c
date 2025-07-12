@@ -6,11 +6,11 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 20:42:02 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/12 21:22:38 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/12 21:30:40 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 void	free_tok_lst(t_lst **list)
 {

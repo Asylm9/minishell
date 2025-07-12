@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/12 21:22:38 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/12 21:57:42 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,13 @@ void							print_token(t_lst *tok_lst);
 
 /* Tokenizer */
 int								is_empty(char *input);
+char							next_input(char *input);
+int								check_quotes(const char *input, int *i,
+									int *size, t_sh *shell);
+int								check_ampersand(const char *input, int i,
+									t_sh *shell);
+int								check_special_delim(char delim, int size,
+									t_sh *shell);
 
 int								check_input(char *input, t_sh *shell);
 int								create_token_list(t_lst **tok_lst);

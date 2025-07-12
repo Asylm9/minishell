@@ -10,16 +10,17 @@ SRCDIR = .
 OBJ_DIR = objs
 
 # Fichiers sources avec chemins complets
-SRCS =  $(SRCDIR)/main.c \
-        $(SRCDIR)/init.c \
-        $(SRCDIR)/signal.c \
+SRCS =  $(SRCDIR)/srcs/main.c \
+        $(SRCDIR)/srcs/init.c \
+        $(SRCDIR)/srcs/signal.c \
         $(SRCDIR)/srcs/parsing/check_input.c \
+        $(SRCDIR)/srcs/parsing/input_errors.c \
         $(SRCDIR)/srcs/parsing/list_utils.c \
         $(SRCDIR)/srcs/parsing/token.c \
         $(SRCDIR)/srcs/parsing/expander.c \
         $(SRCDIR)/srcs/parsing/parser.c \
-        $(SRCDIR)/free.c \
-        $(SRCDIR)/heredoc.c \
+        $(SRCDIR)/srcs/free.c \
+        $(SRCDIR)/srcs/heredoc.c \
         $(SRCDIR)/srcs/exec/env_utils.c \
         $(SRCDIR)/srcs/exec/path.c \
         $(SRCDIR)/srcs/exec/exec_utils.c \
