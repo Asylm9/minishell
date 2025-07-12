@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/12 21:57:42 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/12 22:32:03 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,8 +145,7 @@ int								check_special_delim(char delim, int size,
 									t_sh *shell);
 
 int								check_input(char *input, t_sh *shell);
-int								create_token_list(t_lst **tok_lst);
-int								create_token_node(t_lst **tok_lst);
+int								create_list_node(t_lst **tok_lst);
 int								skip_spaces(const char *input, int *start);
 int								find_end_of_token(const char *input, int *end);
 void							set_token_type(t_lst *tok_lst,
@@ -169,6 +168,11 @@ int								expand_list(t_lst *tok_lst, t_lst *exp_lst,
 
 /* Parser */
 int								create_node_pipe(t_ast **ast);
+int								count_args(t_lst *exp_lst);
+char							**fill_args(t_lst **exp_lst, int argc,
+									char **cmd_name);
+t_redirect						*add_redirection(t_redirect *redir,
+									t_lst *exp_lst);
 t_command						*create_node_cmd(t_lst **exp_lst);
 int								parse_ast(t_lst *exp_lst, t_ast **ast,
 									t_sh *shell);

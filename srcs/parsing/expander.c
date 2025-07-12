@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/12 21:26:03 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/12 22:22:09 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -480,7 +480,7 @@ int	expand_list(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
 					{
 						exp_lst->value = splitted[i];
 						exp_lst->type = WORD;
-						create_token_node(&exp_lst);
+						create_list_node(&exp_lst);
 						exp_lst = exp_lst->next;
 						i++;
 						count--;
@@ -498,7 +498,7 @@ int	expand_list(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
 			tok_lst = tok_lst->next;
 			if (tok_lst != NULL && advance)
 			{
-				create_token_node(&exp_lst);
+				create_list_node(&exp_lst);
 				exp_lst = exp_lst->next;
 			}
 			else if (advance)
@@ -512,10 +512,10 @@ int	expand_list(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
 			if (!tok_lst->next)
 			{
 				exp_lst->type = PIPE;
-				create_token_node(&exp_lst);
+				create_list_node(&exp_lst);
 				exp_lst = exp_lst->next;
 				input = readline(">");
-				create_token_node(&new_line);
+				create_list_node(&new_line);
 				tokenize_input(new_line, input);
 				expand_list(new_line, exp_lst, shell);
 				tok_lst = tok_lst->next;

@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/12 21:30:49 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/12 22:22:09 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	main(int ac, char **av, char **envp)
 		}
 		if (check_input(input, &shell) == SUCCESS)
 		{
-			if (create_token_node(&shell.tok_lst) == ERROR)
+			if (create_list_node(&shell.tok_lst) == ERROR)
 				free(input);
 			else if (tokenize_input(shell.tok_lst, input) == ERROR
 				|| (shell.tok_lst->value == NULL
@@ -84,7 +84,7 @@ int	main(int ac, char **av, char **envp)
 			else
 			{
 				free(input);
-				if (create_token_node(&shell.exp_lst) == ERROR)
+				if (create_list_node(&shell.exp_lst) == ERROR)
 				{
 					free_tok_lst(&shell.tok_lst);
 					shell.tok_lst = NULL;

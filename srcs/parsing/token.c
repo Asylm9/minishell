@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:05:28 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/12 21:32:51 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/12 22:22:09 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	tokenize_input(t_lst *tok_lst, const char *input)
 			i++;
 		if (input[i] == '\0')
 			break ;
-		create_token_node(&tok_lst);
+		create_list_node(&tok_lst);
 		if (!tok_lst->next)
 			return (ERROR);
 		if (input[end] == ' ')

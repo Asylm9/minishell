@@ -6,28 +6,13 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 21:11:07 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/12 21:26:19 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/12 22:29:57 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	create_token_list(t_lst **tok_lst)
-{
-	(*tok_lst) = malloc(sizeof(t_lst));
-	if (!(*tok_lst))
-	{
-		perror("Token list malloc failed.\n");
-		return (ERROR);
-	}
-	(*tok_lst)->value = NULL;
-	(*tok_lst)->expand = NO_EXPAND;
-	(*tok_lst)->type = WORD;
-	(*tok_lst)->next = NULL;
-	return (SUCCESS);
-}
-
-int	create_token_node(t_lst **tok_lst)
+int	create_list_node(t_lst **tok_lst)
 {
 	t_lst	*new_token;
 	t_lst	*temp;
@@ -53,6 +38,47 @@ int	create_token_node(t_lst **tok_lst)
 		temp->next = new_token;
 	}
 	return (SUCCESS);
+}
+
+int	create_node_pipe(t_ast **ast)
+{
+	t_ast	*new_ast;
+
+	new_ast = malloc(sizeof(t_ast));
+	if (!new_ast)
+		return (ERROR);
+	new_ast->type = PIPE;
+	new_ast->cmd = NULL;
+	new_ast->left = *ast;
+	new_ast->right = NULL;
+	*ast = new_ast;
+	return (SUCCESS);
+}
+
+t_command	*create_node_cmd(t_lst **exp_lst)
+{
+	t_lst		*tmp;
+	t_command	*cmd;
+
+	tmp = *exp_lst;
+	cmd = malloc(sizeof(t_command));
+	if (!cmd)
+		return (NULL);
+	cmd->cmd_name = NULL;
+	cmd->args = NULL;
+	cmd->redirections = NULL;
+	while (*exp_lst && (*exp_lst)->type != PIPE)
+	{
+		if ((*exp_lst)->type >= 3 && (*exp_lst)->next
+			&& (*exp_lst)->next->value)
+		{
+			cmd->redirections = add_redirection(cmd->redirections, *exp_lst);
+			*exp_lst = (*exp_lst)->next;
+		}
+		*exp_lst = (*exp_lst)->next;
+	}
+	cmd->args = fill_args(&tmp, count_args(tmp), &cmd->cmd_name);
+	return (cmd);
 }
 
 int	skip_spaces(const char *input, int *pos)
