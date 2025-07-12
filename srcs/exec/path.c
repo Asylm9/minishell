@@ -29,7 +29,8 @@ char	**get_paths(t_command *cmd, t_env *envl)
 
 static bool	is_absolute_or_relative(char *cmd)
 {
-	return (ft_strchr(cmd, '/') || cmd[0] == '.');
+	return (ft_strchr(cmd, '/') || (cmd[0] == '.' && ft_strchr(cmd, '/'))
+		|| (cmd[0] == '.' && cmd[1] == '.'));
 }
 
 char	*find_cmd_path(char **paths, char *cmd_name)
