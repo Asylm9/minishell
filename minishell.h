@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/12 18:26:30 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/12 19:22:58 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,6 +212,9 @@ int								builtin_unset(char **args, t_env **envl);
 int								builtin_env(t_sh *shell);
 
 int								builtin_exit(t_ast *ast, t_sh *shell);
+
+bool							is_numeric(char *arg);
+
 
 /* Env utils */
 char							**convert_envl_to_env(t_env *envl);

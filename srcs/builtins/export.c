@@ -57,6 +57,7 @@ static int	process_export_arg(char **args, int i, t_env **envl)
 	char	*equal_pos;
 	char	*plus_pos;
 	char	*value;
+	char	*shlvl_value;
 	int		ret;
 
 	ret = SUCCESS;
@@ -80,7 +81,12 @@ static int	process_export_arg(char **args, int i, t_env **envl)
 		{
 			*equal_pos = '\0';
 			value = equal_pos + 1;
-			if (ft_strlen(value) == 0)
+			if ((ft_strcmp(args[i], "SHLVL") == 0 && (*value == '-' || is_numeric(value) == false)))
+			{
+				shlvl_value = "0";
+				ret = set_envl_var(args[i], envl, shlvl_value);
+			}
+			else if (ft_strlen(value) == 0)
 				ret = set_envl_var(args[i], envl, EMPTY);
 			else
 				ret = set_envl_var(args[i], envl, value);

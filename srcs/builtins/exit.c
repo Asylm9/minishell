@@ -1,6 +1,6 @@
 #include "../../minishell.h"
 
-static bool	is_numeric(char *arg)
+bool	is_numeric(char *arg)
 {
 	int	i;
 
