@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/12 22:34:17 by magoosse          #+#    #+#             */
+/*   Updated: 2025/07/12 22:44:22 by magoosse         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../minishell.h"
 
 static bool	has_quotes(char *delimiter)
@@ -86,7 +98,8 @@ static int	read_heredoc_content(char *delimiter, t_sh *shell, char **buffer)
 		if (!input)
 		{
 			printf_fd(STDIN_FILENO,
-						"bash: warning: here-document at line %d delimited by end-of-file (wanted `%s')\n",
+						"bash: warning: here-document at line\
+				%d delimited by end-of-file (wanted `%s')\n",
 						count,
 						delimiter);
 			break ;

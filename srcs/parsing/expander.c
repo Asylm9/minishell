@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/12 22:22:09 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/12 22:54:21 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,14 @@ void	init_exp(t_exp *exp)
 	exp->quote = ' ';
 }
 
+static void	handle_single_quote(t_exp *exp, char *input)
+{
+	exp->end++;
+	while (input[exp->end] && input[exp->end] != '\'')
+		exp->end++;
+	exp->end++;
+}
+
 char	*expand_token(char *input, t_sh *shell)
 {
 	t_exp	exp;
@@ -73,12 +81,7 @@ char	*expand_token(char *input, t_sh *shell)
 	while (input[exp.end] != '\0')
 	{
 		if (input[exp.end] == '\'')
-		{
-			exp.end++;
-			while (input[exp.end] && input[exp.end] != '\'')
-				exp.end++;
-			exp.end++;
-		}
+			handle_single_quote(&exp, input);
 		if (input[exp.end] == '"')
 		{
 			exp.end++;
