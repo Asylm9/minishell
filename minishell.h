@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/10 19:35:36 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/12 18:26:30 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,7 @@ bool							is_builtin(char *cmd_name);
 int								execute_builtin(t_ast *ast, t_sh *shell);
 
 /* Builtin implementations */
-int								builtin_echo(char **args);
+int								builtin_echo(t_ast *ast, t_sh *shell);
 
 int								builtin_cd(char **args, t_sh *shell);
 

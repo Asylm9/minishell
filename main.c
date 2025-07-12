@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/11 17:02:26 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/12 18:58:07 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,6 @@ int	main(int ac, char **av, char **envp)
 						if (parse_ast(shell.exp_lst, &ast, &shell) == SUCCESS)
 							execute_ast(ast, &shell, ast);
 						signal(SIGINT, handle_sigint);
-						close(shell.exp_lst->hd_fd);
 						free_ast(ast);
 						free_tok_lst(&shell.tok_lst);
 						free_tok_lst(&shell.exp_lst);

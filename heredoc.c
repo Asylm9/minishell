@@ -135,7 +135,6 @@ int	handle_heredoc(char *delimiter, t_sh *shell)
 				free(buffer);
 				buffer = temp;
 			}
-			printf("buf: %s\n", buffer);
 			write(pfd[1], buffer, ft_strlen(buffer));
 			free(buffer);
 		}

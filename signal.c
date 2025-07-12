@@ -28,11 +28,16 @@ void	handle_sigint_exec(int sig)
 	write(1, "\n", 1);
 }
 
+void	handle_sigpipe(int sig)
+{
+	g_sig = sig;
+}
+
 int	set_main_signals(void)
 {
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
-	signal(SIGPIPE, SIG_IGN);
+	signal(SIGPIPE, handle_sigpipe);
 	return (0);
 }
 

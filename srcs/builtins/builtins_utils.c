@@ -27,7 +27,7 @@ int	execute_builtin(t_ast *ast, t_sh *shell)
 	if (!ast->cmd || !shell)
 		return (ERROR);
 	if (ft_strcmp(ast->cmd->cmd_name, "echo") == 0)
-		shell->exit_status = builtin_echo(ast->cmd->args);
+		shell->exit_status = builtin_echo(ast, shell);
 	else if (ft_strcmp(ast->cmd->cmd_name, "cd") == 0)
 		shell->exit_status = builtin_cd(ast->cmd->args, shell);
 	else if (ft_strcmp(ast->cmd->cmd_name, "pwd") == 0)
