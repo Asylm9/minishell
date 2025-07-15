@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/12 22:54:21 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/15 15:44:09 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,73 @@ void	init_exp(t_exp *exp)
 	exp->quote = ' ';
 }
 
+static void	go_to_end(char *input, t_exp *exp)
+{
+	if (input[exp->end] >= '0' && input[exp->end] <= '9')
+		exp->end++;
+	else
+	{
+		while ((ft_isalnum(input[exp->end]) || input[exp->end] == '_'
+				|| input[exp->end] == '?') && input[exp->end])
+		{
+			if (input[exp->end] == '?')
+			{
+				exp->end++;
+				break ;
+			}
+			exp->end++;
+		}
+	}
+	exp->start = exp->end;
+}
+
+static void	handle_dollar(t_exp *exp, char *input, t_sh *shell)
+{
+	if (input[exp->end + 1] && (ft_isalnum(input[exp->end + 1])
+			|| input[exp->end + 1] == '_' || input[exp->end + 1] == '?'))
+	{
+		exp->buffer = ft_substr(input, exp->start, exp->end - exp->start);
+		exp->tmp = ft_fstrjoin(&exp->result, &exp->buffer, 3);
+		exp->result = exp->tmp;
+		if (input[exp->end + 1] == '?')
+			expand_xcode(&exp->buffer, shell);
+		else
+			expand_var(input + exp->end, &exp->buffer, shell->envl);
+		if (exp->buffer)
+		{
+			exp->tmp = ft_fstrjoin(&exp->result, &exp->buffer, 3);
+			exp->result = exp->tmp;
+		}
+		exp->end++;
+		go_to_end(input, exp);
+	}
+	else if (input[exp->end + 1] == '\'' || input[exp->end + 1] == '"')
+	{
+		exp->end++;
+		exp->start = exp->end;
+	}
+	else
+		exp->end++;
+}
+
 static void	handle_single_quote(t_exp *exp, char *input)
 {
 	exp->end++;
 	while (input[exp->end] && input[exp->end] != '\'')
 		exp->end++;
+	exp->end++;
+}
+
+static void	handle_double_quote(t_exp *exp, char *input, t_sh *shell)
+{
+	exp->end++;
+	while (input[exp->end] && input[exp->end] != '"')
+	{
+		if (input[exp->end] == '$' && input[exp->end + 1] != '"')
+			handle_dollar(exp, input, shell);
+		else
+			exp->end++;
+	}
 	exp->end++;
 }
 
@@ -82,187 +144,10 @@ char	*expand_token(char *input, t_sh *shell)
 	{
 		if (input[exp.end] == '\'')
 			handle_single_quote(&exp, input);
-		if (input[exp.end] == '"')
-		{
-			exp.end++;
-			while (input[exp.end] && input[exp.end] != '"')
-			{
-				if (input[exp.end] == '$')
-				{
-					if (input[exp.end + 1] && (ft_isalnum(input[exp.end + 1])
-							|| input[exp.end + 1] == '_' || input[exp.end
-							+ 1] == '?'))
-					{
-						exp.buffer = ft_substr(input, exp.start, exp.end
-								- exp.start);
-						exp.tmp = ft_fstrjoin(&exp.result, &exp.buffer, 0);
-						if (exp.result)
-						{
-							free(exp.result);
-							exp.result = NULL;
-						}
-						if (exp.buffer)
-						{
-							free(exp.buffer);
-							exp.buffer = NULL;
-						}
-						if (input[exp.end + 1] == '?')
-						{
-							if (expand_xcode(&exp.buffer, shell))
-								exp.result = exp.tmp;
-							if (exp.buffer)
-							{
-								exp.result = ft_fstrjoin(&exp.tmp, &exp.buffer,
-										3);
-								exp.tmp = NULL;
-							}
-						}
-						else if (expand_var(input + exp.end, &exp.buffer,
-								shell->envl))
-							exp.result = exp.tmp;
-						else
-						{
-							if (exp.buffer)
-							{
-								exp.result = ft_fstrjoin(&exp.tmp, &exp.buffer,
-										1);
-								exp.tmp = NULL;
-							}
-							else
-							{
-								if (exp.result)
-									free(exp.result);
-								exp.result = exp.tmp;
-							}
-						}
-						exp.end++;
-						if (input[exp.end] >= '0' && input[exp.end] <= '9')
-							exp.end++;
-						else
-							while ((ft_isalnum(input[exp.end])
-									|| input[exp.end] == '_'
-									|| input[exp.end] == '?') && input[exp.end])
-							{
-								exp.end++;
-								if (input[exp.end - 1] == '?')
-									break ;
-							}
-						exp.start = exp.end;
-					}
-					else if (input[exp.end + 1] && input[exp.end + 1] != ':'
-						&& input[exp.end + 1] != '=' && input[exp.end
-						+ 1] != '"' && input[exp.end + 1] != ' ')
-					{
-						exp.end++;
-						exp.buffer = ft_strdup("");
-						exp.tmp = ft_fstrjoin(&exp.result, &exp.buffer, 0);
-					}
-					else
-					{
-						exp.end++;
-						exp.buffer = ft_substr(input, exp.start, exp.end
-								- exp.start);
-						exp.tmp = ft_fstrjoin(&exp.result, &exp.buffer, 0);
-						if (exp.result)
-						{
-							free(exp.result);
-							exp.result = NULL;
-						}
-						if (exp.buffer)
-						{
-							free(exp.buffer);
-							exp.buffer = NULL;
-						}
-					}
-					exp.start = exp.end;
-				}
-				else
-					exp.end++;
-			}
-			exp.end++;
-		}
+		else if (input[exp.end] == '"')
+			handle_double_quote(&exp, input, shell);
 		else if (input[exp.end] == '$')
-		{
-			if (input[exp.end + 1] && (ft_isalnum(input[exp.end + 1])
-					|| input[exp.end + 1] == '_' || input[exp.end + 1] == '?'))
-			{
-				exp.buffer = ft_substr(input, exp.start, exp.end - exp.start);
-				exp.tmp = ft_fstrjoin(&exp.result, &exp.buffer, 0);
-				if (exp.result)
-				{
-					free(exp.result);
-					exp.result = NULL;
-				}
-				if (exp.buffer)
-				{
-					free(exp.buffer);
-					exp.buffer = NULL;
-				}
-				if (input[exp.end + 1] == '?')
-				{
-					if (expand_xcode(&exp.buffer, shell))
-						exp.result = exp.tmp;
-					if (exp.buffer)
-					{
-						exp.result = ft_fstrjoin(&exp.tmp, &exp.buffer, 3);
-						exp.tmp = exp.result;
-					}
-				}
-				else if (expand_var(input + exp.end, &exp.buffer, shell->envl))
-					exp.result = exp.tmp;
-				else
-				{
-					if (exp.buffer)
-					{
-						exp.result = ft_fstrjoin(&exp.tmp, &exp.buffer, 1);
-						exp.tmp = NULL;
-					}
-					else
-					{
-						if (exp.result)
-							free(exp.result);
-						exp.result = exp.tmp;
-					}
-				}
-				exp.end++;
-				if (input[exp.end] >= '0' && input[exp.end] <= '9')
-					exp.end++;
-				else
-					while ((ft_isalnum(input[exp.end]) || input[exp.end] == '_'
-							|| input[exp.end] == '?') && input[exp.end])
-					{
-						exp.end++;
-						if (input[exp.end - 1] == '?')
-							break ;
-					}
-				exp.start = exp.end;
-			}
-			else if (input[exp.end + 1] && input[exp.end + 1] != ':'
-				&& input[exp.end + 1] != '=' && input[exp.end + 1] != ' ')
-			{
-				exp.end++;
-				exp.buffer = ft_strdup("");
-				exp.tmp = ft_fstrjoin(&exp.result, &exp.buffer, 0);
-			}
-			else
-			{
-				exp.end++;
-				exp.result = exp.tmp;
-				exp.buffer = ft_substr(input, exp.start, exp.end - exp.start);
-				exp.tmp = ft_fstrjoin(&exp.result, &exp.buffer, 0);
-				if (exp.result)
-				{
-					free(exp.result);
-					exp.result = NULL;
-				}
-				if (exp.buffer)
-				{
-					free(exp.buffer);
-					exp.buffer = NULL;
-				}
-			}
-			exp.start = exp.end;
-		}
+			handle_dollar(&exp, input, shell);
 		else
 			exp.end++;
 	}
@@ -360,7 +245,6 @@ static int	check_validity(t_lst *exp_lst, t_sh *shell)
 	t_token_type	second;
 
 	first = NOT_SET;
-	second = NOT_SET;
 	while (exp_lst)
 	{
 		second = first;
