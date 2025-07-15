@@ -9,6 +9,26 @@ int	process_wait_status(int status)
 	return (ERROR);
 }
 
+bool	is_numeric(char *arg)
+{
+	int	i;
+
+	i = 0;
+	while (ft_isspace(arg[i]))
+		i++;
+	if (arg[i] == '-' || arg[i] == '+')
+		i++;
+	if (!arg[i])
+		return (false);
+	while (arg[i])
+	{
+		if (!ft_isdigit((arg[i])))
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
 char	*ft_charjoin(char const *s1, char const *s2, char c)
 {
 	size_t	len1;
