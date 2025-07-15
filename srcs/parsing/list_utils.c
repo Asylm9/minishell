@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 21:11:07 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/15 17:28:18 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/15 18:13:17 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int	create_list_node(t_lst **tok_lst)
 		while (temp->next)
 			temp = temp->next;
 		temp->next = new_token;
-		// *tok_lst = new_token;
 	}
 	return (SUCCESS);
 }
