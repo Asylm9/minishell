@@ -93,7 +93,7 @@ int	execute_binary(t_ast *ast, t_sh *shell, t_ast *root)
 	{
 		paths = get_paths(ast->cmd, shell->envl);
 		if (!paths)
-			return (1);
+			return (cleanup_shell(shell, ast), CMD_NOT_FOUND);
 		cmd_path = find_cmd_path(paths, ast->cmd->cmd_name);
 		free_array(paths, -1);
 		if (!cmd_path)
@@ -104,7 +104,6 @@ int	execute_binary(t_ast *ast, t_sh *shell, t_ast *root)
 		}
 	}
 	env = convert_envl_to_env(shell->envl);
-	//system("ls -la /proc/self/fd/ >&2");
 	close(shell->exp_lst->hd_fd);
 	set_subprocess_signals();
 	execve(cmd_path, ast->cmd->args, env);
