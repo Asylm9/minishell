@@ -46,21 +46,14 @@ int	validate_path(char **args, char *new_path)
 		printf_fd(STDERR, "minishell: %s: Not a directory\n", args[1]);
 		return (ERROR);
 	}
-/* 	if (check_file_type(args[1]) != 1)
-	{
-		printf_fd(STDERR, "minishell: %s: Not a directory\n", args[1]);
-		return (ERROR);
-	} */
 	return (SUCCESS);
 }
 
 int	update_pwds(t_sh *shell, char *curr_dir)
 {
-	// actualiser OLDPWD avec current
 	set_envl_var("OLDPWD", &shell->envl, curr_dir);
 	if (!getcwd(curr_dir, PATH_MAX))
 		return (perror("getcwd"), ERROR);
-	// actualiser PWD avec current
 	set_envl_var("PWD", &shell->envl, curr_dir);
 	return (SUCCESS);
 }
@@ -72,17 +65,14 @@ int	builtin_cd(char **args, t_sh *shell)
 
 	if (!args)
 		return (ERROR);
-	// recuperer current_path
 	if (!getcwd(curr_dir, PATH_MAX))
 		return (perror("getcwd"), BUILTIN_ERR);
-	// rechercher le new_path
 	new_path = set_new_path(args, shell);
 	if (validate_path(args, new_path) != SUCCESS)
 		return (ERROR);
-	// changer current directory
 	if (chdir(new_path) < 0)
 		return (BUILTIN_ERR);
-	free(new_path); //car ajout de dupe dan get_envl_var)
+	free(new_path);
 	if (update_pwds(shell, curr_dir) != 0)
 		return (BUILTIN_ERR);
 	return (SUCCESS);

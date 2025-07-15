@@ -9,9 +9,7 @@ static void	delete_env_var(t_env *current, t_env **head)
 			current->next->prev = NULL;
 	}
 	else if (current->next == NULL)
-	{
 		current->prev->next = NULL;
-	}
 	else
 	{
 		current->next->prev = current->prev;
@@ -32,11 +30,11 @@ int	builtin_unset(char **args, t_env **envl)
 		return (SUCCESS);
 	if (args[1][0] == '-' && args[1][1])
 	{
-		printf_fd(STDERR,"minishell: unset: %s: invalid option\n", args[1]);
+		printf_fd(STDERR, "minishell: unset: %s: invalid option\n", args[1]);
 		return (BUILTIN_ERR);
 	}
-	i = 1;
-	while (args[i])
+	i = 0;
+	while (args[++i])
 	{
 		current = *envl;
 		while (current)
@@ -48,7 +46,6 @@ int	builtin_unset(char **args, t_env **envl)
 			}
 			current = current->next;
 		}
-		i++;
 	}
 	return (SUCCESS);
 }

@@ -33,7 +33,7 @@ SRCS =  $(SRCDIR)/srcs/main.c \
         $(SRCDIR)/srcs/exec/redirections.c \
         $(SRCDIR)/srcs/exec/resources.c \
         $(SRCDIR)/srcs/exec/utils.c \
-        $(SRCDIR)/srcs/builtins/builtins_utils.c \
+        $(SRCDIR)/srcs/exec/exec_builtins.c \
         $(SRCDIR)/srcs/builtins/cd.c \
         $(SRCDIR)/srcs/builtins/echo.c \
         $(SRCDIR)/srcs/builtins/env.c \

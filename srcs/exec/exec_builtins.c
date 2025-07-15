@@ -42,23 +42,3 @@ int	execute_builtin(t_ast *ast, t_sh *shell)
 		shell->exit_status = builtin_exit(ast, shell);
 	return (shell->exit_status);
 }
-
-/* int	main(int ac, char **av, char **envp)
-{
-	t_sh		shell;
-	t_command	cmd;
-
-	if (ac < 2)
-		return (0);
-	init_shell_struct(&shell, envp);
-	init_cmd_struct(&cmd, &av[1], NULL);
-
-	//builtin_env(&shell);
-	printf("\n-------------EXP-----------------\n");
-	execute_builtin(&cmd, &shell);
-	//printf("\n-------------ENV-----------------\n");
-	//builtin_env(&shell);
-
-	cleanup_shell(&shell);
-	return (shell.exit_status);
-} */
