@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/12 22:22:09 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/16 00:05:29 by matthieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,24 @@
 
 volatile sig_atomic_t	g_sig = 0;
 
-void	print_token(t_lst *tok_lst)
-{
-	int	i;
+// void	print_token(t_lst *tok_lst)
+// {
+// 	int	i;
 
-	i = 1;
-	while (tok_lst)
-	{
-		if (tok_lst->value != NULL)
-			printf("Token %d type : %d value : |%s|\n", i, tok_lst->type,
-				tok_lst->value);
-		if (tok_lst->expand == EXPAND && tok_lst->value != NULL)
-			printf("Token %d expand : EXPAND\n", i);
-		else if (tok_lst->value != NULL)
-			printf("Token %d expand : NO_EXPAND\n", i);
-		tok_lst = tok_lst->next;
-		i++;
-	}
-}
+// 	i = 1;
+// 	while (tok_lst)
+// 	{
+// 		if (tok_lst->value != NULL)
+// 			printf_fd(STDOUT_FILENO, "Token %d type : %d value : |%s|\n", i, tok_lst->type,
+// 				tok_lst->value);
+// 		if (tok_lst->expand == EXPAND && tok_lst->value != NULL)
+// 			printf_fd(STDOUT_FILENO, "Token %d expand : EXPAND\n", i);
+// 		else if (tok_lst->value != NULL)
+// 			printf_fd(STDOUT_FILENO, "Token %d expand : NO_EXPAND\n", i);
+// 		tok_lst = tok_lst->next;
+// 		i++;
+// 	}
+// }
 
 int	main(int ac, char **av, char **envp)
 {
@@ -61,7 +61,7 @@ int	main(int ac, char **av, char **envp)
 		if (!input)
 		{
 			cleanup_shell(&shell, ast);
-			printf("exit\n");
+			printf_fd(STDOUT_FILENO, "exit\n");
 			exit(SUCCESS);
 		}
 		if (g_sig == SIGINT)

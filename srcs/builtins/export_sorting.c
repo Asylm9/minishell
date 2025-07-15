@@ -30,9 +30,9 @@ void	print_exp_list(t_env *envl)
 	while (i < count)
 	{
 		if (!ptr_array[i]->value)
-			printf("export %s\n", ptr_array[i]->key);
+			printf_fd(STDOUT_FILENO, "export %s\n", ptr_array[i]->key);
 		else
-			printf("export %s=\"%s\"\n", ptr_array[i]->key,
+			printf_fd(STDOUT_FILENO, "export %s=\"%s\"\n", ptr_array[i]->key,
 				ptr_array[i]->value);
 		i++;
 	}

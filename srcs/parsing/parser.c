@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/12 22:31:55 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/16 00:02:54 by matthieu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,111 +123,111 @@ int	parse_ast(t_lst *exp_lst, t_ast **ast, t_sh *shell)
 
 // void	print_ast(t_ast *ast)
 // {
-// 	printf("Type:\n");
+// 	printf_fd(STDOUT_FILENO, "Type:\n");
 // 	if (!ast)
 // 		return ;
 // 	if (ast && ast->type == CMD && ast->cmd)
 // 	{
 // 		if (ast->cmd->cmd_name == NULL)
-// 			printf("	Command:\n		Name: NULL\n");
+// 			printf_fd(STDOUT_FILENO, "	Command:\n		Name: NULL\n");
 // 		else
-// 			printf("	Command:\n		Name: %s\n", ast->cmd->cmd_name);
+// 			printf_fd(STDOUT_FILENO, "	Command:\n		Name: %s\n", ast->cmd->cmd_name);
 // 		if (ast->cmd->args)
 // 		{
-// 			printf("		Arguments:\n");
+// 			printf_fd(STDOUT_FILENO, "		Arguments:\n");
 // 			for (int i = 0; ast->cmd->args[i]; i++)
 // 			{
-// 				printf("			%s\n", ast->cmd->args[i]);
+// 				printf_fd(STDOUT_FILENO, "			%s\n", ast->cmd->args[i]);
 // 			}
 // 			if (ast->cmd->redirections)
-// 				printf("Redirection : %s\n", ast->cmd->redirections->target);
+// 				printf_fd(STDOUT_FILENO, "Redirection : %s\n", ast->cmd->redirections->target);
 // 		}
 // 		else
-// 			printf("No arguments\n");
+// 			printf_fd(STDOUT_FILENO, "No arguments\n");
 // 	}
 // 	else if (ast->type == PIPE)
-// 		printf("	Pipe\n");
+// 		printf_fd(STDOUT_FILENO, "	Pipe\n");
 // 	else if (ast->type == REDIR_IN)
 // 	{
-// 		printf("	Redirect In\n");
+// 		printf_fd(STDOUT_FILENO, "	Redirect In\n");
 // 		if (ast->cmd && ast->cmd->redirections)
 // 		{
-// 			printf("        Command:\n");
+// 			printf_fd(STDOUT_FILENO, "        Command:\n");
 // 			if (ast->cmd->cmd_name == NULL)
-// 				printf("		Name: NULL\n");
+// 				printf_fd(STDOUT_FILENO, "		Name: NULL\n");
 // 			else
-// 				printf("		Name: %s\n", ast->cmd->cmd_name);
+// 				printf_fd(STDOUT_FILENO, "		Name: %s\n", ast->cmd->cmd_name);
 // 			if (ast->cmd->args)
 // 			{
-// 				printf("		Arguments:\n");
+// 				printf_fd(STDOUT_FILENO, "		Arguments:\n");
 // 				for (int i = 0; ast->cmd->args[i]; i++)
 // 				{
-// 					printf("			%s\n", ast->cmd->args[i]);
+// 					printf_fd(STDOUT_FILENO, "			%s\n", ast->cmd->args[i]);
 // 				}
 // 			}
 // 			else
-// 				printf("No arguments\n");
-// 			printf("		Redirection Target: %s\n",
+// 				printf_fd(STDOUT_FILENO, "No arguments\n");
+// 			printf_fd(STDOUT_FILENO, "		Redirection Target: %s\n",
 // 						ast->cmd->redirections->target);
-// 			printf("		File Descriptor: %d\n", ast->cmd->redirections->fd);
+// 			printf_fd(STDOUT_FILENO, "		File Descriptor: %d\n", ast->cmd->redirections->fd);
 // 		}
 // 		else
-// 			printf("No redirection target or file descriptor\n");
+// 			printf_fd(STDOUT_FILENO, "No redirection target or file descriptor\n");
 // 	}
 // 	else if (ast->type == REDIR_OUT)
 // 	{
-// 		printf("	Redirect Out\n");
+// 		printf_fd(STDOUT_FILENO, "	Redirect Out\n");
 // 		if (ast->cmd && ast->cmd->redirections)
 // 		{
-// 			printf("		Redirection Target: %s\n",
+// 			printf_fd(STDOUT_FILENO, "		Redirection Target: %s\n",
 // 						ast->cmd->redirections->target);
-// 			printf("		File Descriptor: %d\n", ast->cmd->redirections->fd);
+// 			printf_fd(STDOUT_FILENO, "		File Descriptor: %d\n", ast->cmd->redirections->fd);
 // 		}
 // 		else
-// 			printf("No redirection target or file descriptor\n");
+// 			printf_fd(STDOUT_FILENO, "No redirection target or file descriptor\n");
 // 	}
 // 	else if (ast->type == REDIR_APPEND)
 // 	{
-// 		printf("	Redirect Append\n");
+// 		printf_fd(STDOUT_FILENO, "	Redirect Append\n");
 // 		if (ast->cmd && ast->cmd->redirections)
 // 		{
-// 			printf("		Redirection Target: %s\n",
+// 			printf_fd(STDOUT_FILENO, "		Redirection Target: %s\n",
 // 						ast->cmd->redirections->target);
-// 			printf("		File Descriptor: %d\n", ast->cmd->redirections->fd);
+// 			printf_fd(STDOUT_FILENO, "		File Descriptor: %d\n", ast->cmd->redirections->fd);
 // 		}
 // 		else
-// 			printf("No redirection target or file descriptor\n");
+// 			printf_fd(STDOUT_FILENO, "No redirection target or file descriptor\n");
 // 	}
 // 	else if (ast->type == REDIR_HEREDOC)
 // 	{
-// 		printf("	Redirect Heredoc\n");
+// 		printf_fd(STDOUT_FILENO, "	Redirect Heredoc\n");
 // 		if (ast->cmd && ast->cmd->redirections)
 // 		{
-// 			printf("		Redirection Target: %s\n",
+// 			printf_fd(STDOUT_FILENO, "		Redirection Target: %s\n",
 // 						ast->cmd->redirections->target);
-// 			printf("		File Descriptor: %d\n", ast->cmd->redirections->fd);
+// 			printf_fd(STDOUT_FILENO, "		File Descriptor: %d\n", ast->cmd->redirections->fd);
 // 		}
 // 		else
-// 			printf("No redirection target or file descriptor\n");
+// 			printf_fd(STDOUT_FILENO, "No redirection target or file descriptor\n");
 // 	}
 // 	else
-// 		printf("Unknown type\n");
+// 		printf_fd(STDOUT_FILENO, "Unknown type\n");
 // 	if (ast->left)
 // 	{
-// 		printf("Left child:\n");
-// 		printf("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL\n");
+// 		printf_fd(STDOUT_FILENO, "Left child:\n");
+// 		printf_fd(STDOUT_FILENO, "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL\n");
 // 		print_ast(ast->left);
-// 		printf("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL\n");
+// 		printf_fd(STDOUT_FILENO, "LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL\n");
 // 	}
 // 	else
-// 		printf("No left child\n");
+// 		printf_fd(STDOUT_FILENO, "No left child\n");
 // 	if (ast->right)
 // 	{
-// 		printf("Right child:\n");
-// 		printf("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR\n");
+// 		printf_fd(STDOUT_FILENO, "Right child:\n");
+// 		printf_fd(STDOUT_FILENO, "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR\n");
 // 		print_ast(ast->right);
-// 		printf("RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR\n");
+// 		printf_fd(STDOUT_FILENO, "RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR\n");
 // 	}
 // 	else
-// 		printf("No right child\n");
+// 		printf_fd(STDOUT_FILENO, "No right child\n");
 // }

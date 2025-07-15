@@ -6,14 +6,14 @@ void	print_env_list(t_env *envl)
 
 	if (!envl)
 	{
-		printf("Environment list is NULL\n");
+		printf_fd(STDERR_FILENO, "Environment list is NULL\n");
 		return ;
 	}
 	current = envl;
 	while (current)
 	{
 		if (current->value != NULL)
-			printf("%s=%s\n", current->key, current->value);
+			printf_fd(STDOUT_FILENO, "%s=%s\n", current->key, current->value);
 		current = current->next;
 	}
 }

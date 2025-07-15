@@ -39,13 +39,13 @@ int	builtin_echo(t_ast *ast, t_sh *shell)
 	i = skip_n_flags(ast->cmd->args, &newline);
 	while (ast->cmd->args[i])
 	{
-		printf("%s", ast->cmd->args[i]);
+		printf_fd(STDOUT_FILENO, "%s", ast->cmd->args[i]);
 		sigpipe_intercepted(shell, ast);
 		if (ast->cmd->args[i + 1])
-			printf(" ");
+			printf_fd(STDOUT_FILENO, " ");
 		i++;
 	}
 	if (newline)
-		printf("\n");
+		printf_fd(STDOUT_FILENO, "\n");
 	return (SUCCESS);
 }
