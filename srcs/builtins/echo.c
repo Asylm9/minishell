@@ -1,6 +1,6 @@
 #include "../../minishell.h"
 
-void	sigpipe_intercepted(t_sh *shell, t_ast *ast)
+static void	sigpipe_intercepted(t_sh *shell, t_ast *ast)
 {
 	if (g_sig == SIGPIPE)
 	{
@@ -9,31 +9,38 @@ void	sigpipe_intercepted(t_sh *shell, t_ast *ast)
 	}
 }
 
-int	builtin_echo(t_ast *ast, t_sh *shell)
+static int	skip_n_flags(char **args, bool *newline)
 {
 	int		i;
 	int		j;
+
+	i = 1;
+	while (args[i] && (ft_strncmp(args[i], "-n", 2)) == 0)
+	{
+		j = 2;
+		while (args[i][j] == 'n')
+			j++;
+		if (args[i][j] != '\0')
+			break ;
+		*newline = false;
+		i++;
+	}
+	return (i);
+}
+
+int	builtin_echo(t_ast *ast, t_sh *shell)
+{
+	int		i;
 	bool	newline;
-	(void)shell;
 
 	if (!ast->cmd->args || !ast->cmd->args[0])
 		return (BUILTIN_ERR);
 	newline = true;
-	i = 1;
-	while (ast->cmd->args[i] && (ft_strncmp(ast->cmd->args[i], "-n", 2)) == 0)
-	{
-		j = 2;
-		while (ast->cmd->args[i][j] == 'n')
-			j++;
-		if (ast->cmd->args[i][j] != '\0')
-			break ;
-		newline = false;
-		i++;
-	}
+	i = skip_n_flags(ast->cmd->args, &newline);
 	while (ast->cmd->args[i])
 	{
 		printf("%s", ast->cmd->args[i]);
-		sigpipe_intercepted(shell, ast); //verifier utilite
+		sigpipe_intercepted(shell, ast);
 		if (ast->cmd->args[i + 1])
 			printf(" ");
 		i++;
