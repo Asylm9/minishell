@@ -17,7 +17,10 @@ SRCS =  $(SRCDIR)/srcs/main.c \
         $(SRCDIR)/srcs/parsing/input_errors.c \
         $(SRCDIR)/srcs/parsing/list_utils.c \
         $(SRCDIR)/srcs/parsing/token.c \
+        $(SRCDIR)/srcs/parsing/exp_token.c \
+        $(SRCDIR)/srcs/parsing/exp_utils.c \
         $(SRCDIR)/srcs/parsing/expander.c \
+        $(SRCDIR)/srcs/parsing/errors.c \
         $(SRCDIR)/srcs/parsing/parser.c \
         $(SRCDIR)/srcs/free.c \
         $(SRCDIR)/srcs/heredoc.c \

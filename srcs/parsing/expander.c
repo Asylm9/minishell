@@ -6,175 +6,11 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/15 15:44:09 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/15 16:56:07 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-int	is_env_var(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '$')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-int	expand_var(char *input, char **result, t_env *envl)
-{
-	int		i;
-	char	*var;
-
-	i = 1;
-	if (input[i] >= '0' && input[i] <= '9')
-		var = ft_substr(input, 1, 1);
-	else
-	{
-		while (ft_isalnum(input[i]) || input[i] == '_')
-			i++;
-		var = ft_substr(input, 1, i - 1);
-	}
-	(*result) = get_envl_var(var, envl);
-	free(var);
-	if ((*result) == NULL)
-		return (1);
-	return (0);
-}
-
-int	expand_xcode(char **result, t_sh *shell)
-{
-	*result = ft_itoa(shell->exit_status);
-	if (!(*result))
-		return (1);
-	return (0);
-}
-
-void	init_exp(t_exp *exp)
-{
-	exp->result = ft_calloc(1, 1);
-	exp->buffer = NULL;
-	exp->tmp = NULL;
-	exp->end = 0;
-	exp->start = 0;
-	exp->quote = ' ';
-}
-
-static void	go_to_end(char *input, t_exp *exp)
-{
-	if (input[exp->end] >= '0' && input[exp->end] <= '9')
-		exp->end++;
-	else
-	{
-		while ((ft_isalnum(input[exp->end]) || input[exp->end] == '_'
-				|| input[exp->end] == '?') && input[exp->end])
-		{
-			if (input[exp->end] == '?')
-			{
-				exp->end++;
-				break ;
-			}
-			exp->end++;
-		}
-	}
-	exp->start = exp->end;
-}
-
-static void	handle_dollar(t_exp *exp, char *input, t_sh *shell)
-{
-	if (input[exp->end + 1] && (ft_isalnum(input[exp->end + 1])
-			|| input[exp->end + 1] == '_' || input[exp->end + 1] == '?'))
-	{
-		exp->buffer = ft_substr(input, exp->start, exp->end - exp->start);
-		exp->tmp = ft_fstrjoin(&exp->result, &exp->buffer, 3);
-		exp->result = exp->tmp;
-		if (input[exp->end + 1] == '?')
-			expand_xcode(&exp->buffer, shell);
-		else
-			expand_var(input + exp->end, &exp->buffer, shell->envl);
-		if (exp->buffer)
-		{
-			exp->tmp = ft_fstrjoin(&exp->result, &exp->buffer, 3);
-			exp->result = exp->tmp;
-		}
-		exp->end++;
-		go_to_end(input, exp);
-	}
-	else if (input[exp->end + 1] == '\'' || input[exp->end + 1] == '"')
-	{
-		exp->end++;
-		exp->start = exp->end;
-	}
-	else
-		exp->end++;
-}
-
-static void	handle_single_quote(t_exp *exp, char *input)
-{
-	exp->end++;
-	while (input[exp->end] && input[exp->end] != '\'')
-		exp->end++;
-	exp->end++;
-}
-
-static void	handle_double_quote(t_exp *exp, char *input, t_sh *shell)
-{
-	exp->end++;
-	while (input[exp->end] && input[exp->end] != '"')
-	{
-		if (input[exp->end] == '$' && input[exp->end + 1] != '"')
-			handle_dollar(exp, input, shell);
-		else
-			exp->end++;
-	}
-	exp->end++;
-}
-
-char	*expand_token(char *input, t_sh *shell)
-{
-	t_exp	exp;
-
-	init_exp(&exp);
-	while (input[exp.end] != '\0')
-	{
-		if (input[exp.end] == '\'')
-			handle_single_quote(&exp, input);
-		else if (input[exp.end] == '"')
-			handle_double_quote(&exp, input, shell);
-		else if (input[exp.end] == '$')
-			handle_dollar(&exp, input, shell);
-		else
-			exp.end++;
-	}
-	exp.buffer = ft_substr(input, exp.start, exp.end - exp.start);
-	if (exp.tmp)
-		exp.result = exp.tmp;
-	exp.tmp = ft_fstrjoin(&exp.result, &exp.buffer, 0);
-	free(exp.result);
-	free(exp.buffer);
-	return (exp.tmp);
-}
-
-void	match_quotes(char *input, int *end, char *quote)
-{
-	if (*quote == '\'' || *quote == '"')
-	{
-		while (input[(*end)] && input[(*end)] != *quote)
-			(*end)++;
-		*quote = ' ';
-	}
-	else
-	{
-		while (input[(*end)] != '\'' && input[(*end)] != '"' && input[(*end)])
-			(*end)++;
-		*quote = input[(*end)];
-	}
-}
 
 char	*trim_quotes(char *input)
 {
@@ -192,88 +28,12 @@ char	*trim_quotes(char *input)
 			exp.result = ft_fstrjoin(&exp.buffer, &exp.tmp, 3);
 		}
 		else
-			exp.result = exp.tmp; // first chunk, no join needed
+			exp.result = exp.tmp;
 		if (input[exp.end] != '\0')
 			exp.end++;
 		exp.start = exp.end;
 	}
-	free(input);
 	return (exp.result);
-}
-
-int	is_pipe_redir(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str && str[i])
-	{
-		if ((str[i] != '|' && str[i] != '>' && str[i] != '<') || i > 1)
-			return (SUCCESS);
-		i++;
-	}
-	return (ERROR);
-}
-
-/*
-	0 NOT_SET
-	1 WORD,
-	2 PIPE,
-	3 REDIR_IN,
-	4 REDIR_OUT,
-	5 REDIR_APPEND,
-	6 REDIR_HEREDOC,
-	7 CMD,
-*/
-
-char	*token(t_token_type token)
-{
-	if (token == 3)
-		return ("<");
-	if (token == 4)
-		return (">");
-	if (token == 5)
-		return (">>");
-	if (token == 6)
-		return ("<<");
-	return ("newline");
-}
-
-static int	check_validity(t_lst *exp_lst, t_sh *shell)
-{
-	t_token_type	first;
-	t_token_type	second;
-
-	first = NOT_SET;
-	while (exp_lst)
-	{
-		second = first;
-		first = exp_lst->type;
-		if (first == PIPE && (second >= 2 || (exp_lst->next
-					&& (exp_lst->next->type != 1 && exp_lst->next->type != 4))
-				|| !exp_lst->next))
-		{
-			printf_fd(STDERR, " syntax error near unexpected token `|'\n");
-			shell->exit_status = 2;
-			return (ERROR);
-		}
-		if ((second >= 3 && first != WORD) || (first >= 3 && second >= 3))
-		{
-			printf_fd(STDERR, " syntax error near unexpected token `%s'\n",
-				token(first));
-			shell->exit_status = 2;
-			return (ERROR);
-		}
-		if (first >= 3 && !exp_lst->next)
-		{
-			printf_fd(STDERR,
-				" syntax error near unexpected token `newline'\n");
-			shell->exit_status = 2;
-			return (ERROR);
-		}
-		exp_lst = exp_lst->next;
-	}
-	return (SUCCESS);
 }
 
 size_t	count_nb_words(char const *s, char c)
@@ -311,6 +71,7 @@ int	expand_list(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
 	int		count;
 	int		i;
 	char	*input;
+	char	*expanded;
 	char	**splitted;
 	t_lst	*new_line;
 
@@ -342,11 +103,12 @@ int	expand_list(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
 						return (ERROR);
 				}
 			}
+			expanded = expand_token(tok_lst->value, shell);
 			if (tok_lst->expand == NO_EXPAND)
 			{
 				if (!is_pipe_redir(tok_lst->value))
 				{
-					exp_lst->value = trim_quotes(ft_strdup(tok_lst->value));
+					exp_lst->value = trim_quotes(expanded);
 					if (!exp_lst->value)
 					{
 						free(exp_lst);
@@ -355,14 +117,12 @@ int	expand_list(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
 				}
 				exp_lst->type = tok_lst->type;
 			}
-			else if ((ft_strlen(expand_token(tok_lst->value, shell))) != 0)
+			else if ((ft_strlen(expanded)) != 0)
 			{
-				count = count_nb_words(expand_token(tok_lst->value, shell),
-						' ');
+				count = count_nb_words(expanded, ' ');
 				if (count > 1)
 				{
-					splitted = ft_split(trim_quotes(expand_token(tok_lst->value,
-									shell)), ' ');
+					splitted = ft_split(trim_quotes(expanded), ' ');
 					while (count != 0)
 					{
 						exp_lst->value = splitted[i];
@@ -375,13 +135,13 @@ int	expand_list(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
 				}
 				else
 				{
-					exp_lst->value = trim_quotes(expand_token(tok_lst->value,
-								shell));
+					exp_lst->value = trim_quotes(expanded);
 					exp_lst->type = tok_lst->type;
 				}
 			}
 			else
 				advance = 0;
+			free(expanded);
 			tok_lst = tok_lst->next;
 			if (tok_lst != NULL && advance)
 			{

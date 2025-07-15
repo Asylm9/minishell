@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/12 22:32:03 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/15 16:54:11 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ typedef struct s_exp
 	char						*result;
 	char						*buffer;
 	char						*tmp;
+	char						*expanded;
 	int							end;
 	int							start;
 	char						quote;
@@ -157,10 +158,15 @@ int								tokenize_input(t_lst *tok_lst,
 int								is_env_var(char *str);
 
 /* Expander */
+void							init_exp(t_exp *exp);
+int								is_pipe_redir(char *str);
+int								check_validity(t_lst *exp_lst, t_sh *shell);
 int								expand_xcode(char **result, t_sh *shell);
 int								expand_var(char *input, char **result,
 									t_env *envl);
 char							*expand_token(char *input, t_sh *shell);
+void							match_quotes(char *input, int *end,
+									char *quote);
 char							*trim_quotes(char *input);
 int								is_pipe_redir(char *str);
 int								expand_list(t_lst *tok_lst, t_lst *exp_lst,
