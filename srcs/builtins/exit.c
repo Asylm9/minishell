@@ -79,6 +79,7 @@ int	builtin_exit(t_ast *ast, t_sh *shell)
 			shell->exit_status = 2;
 		}
 	}
-	clean_exit(shell, ast);
+	cleanup_shell(shell, ast);
+	exit(shell->exit_status);
 	return (SUCCESS);
 }
