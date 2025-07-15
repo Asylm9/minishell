@@ -93,15 +93,3 @@ int	set_envl_var(char *name, t_env **envl, char *value)
 	}
 	return (add_new_entry(name, value, envl));
 }
-
-/* void	print_env_array(char **env)
-{
-	int	i;
-
-	i = 0;
-	while (env[i])
-	{
-		printf("%s\n", env[i]);
-		i++;
-	}
-} */

@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/15 21:58:17 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/15 23:52:26 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,10 @@ extern volatile sig_atomic_t	g_sig;
 
 void							print_token(t_lst *tok_lst);
 
+
+/* Initialization */
+int								init_shell(t_sh *shell, char **envp);
+
 /* Tokenizer */
 int								is_empty(char *input);
 char							next_input(char *input);
@@ -197,12 +201,12 @@ int								parse_ast(t_lst *exp_lst, t_ast **ast,
 									t_sh *shell);
 void							print_ast(t_ast *ast);
 
-/**************************		Execution	*****************************/
-
+/* Heredoc */
 int								handle_heredoc(char *delimiter, t_sh *shell);
 int								read_heredoc_content(char *del, t_sh *shell, char **buffer);
 char							*process_heredoc_line(char *input, char *del, t_sh *shell);
 
+/**************************		Execution	*****************************/
 
 /* Execution */
 int								execute_ast(t_ast *ast, t_sh *shell,
@@ -239,29 +243,22 @@ int								redirect_in(t_redirect *redir);
 int								redirect_out(t_redirect *redir);
 int								apply_redirections(t_command *cmd);
 
-/* Builtin commands */
+/* Exec builtins */
 int								args_count(char **args);
 bool							is_builtin(char *cmd_name);
 int								execute_builtin(t_ast *ast, t_sh *shell);
 
 /* Builtin implementations */
 int								builtin_echo(t_ast *ast, t_sh *shell);
-
 int								builtin_cd(char **args, t_sh *shell);
-
 int								builtin_pwd(char **args);
-
 int								builtin_export(char **args, t_env **envl);
 t_env							**init_temp_array(t_env *envl, int count);
 void							sort_env_list(t_env **array, int count);
 int								count_elements(t_env *envl);
-
 int								builtin_unset(char **args, t_env **envl);
-
 int								builtin_env(t_sh *shell);
-
 int								builtin_exit(t_ast *ast, t_sh *shell);
-
 bool							is_numeric(char *arg);
 
 /* Env utils */
@@ -272,14 +269,11 @@ int								add_new_entry(char *key, char *value,
 char							*get_envl_var(char *name, t_env *envl);
 int								set_envl_var(char *name, t_env **envl,
 									char *value);
-/* char	*get_env_var(char *name, char **env);
-int	set_env_var(char *name, char **env, char *value); */
 
 /* Utils */
 int								ft_strcmp(const char *s1, const char *s2);
 char							*ft_charjoin(char const *s1, char const *s2,
 									char c);
-// void	error_message(const char *msg);
 
 /* List utils */
 int								list_size(t_env *envl);
@@ -289,9 +283,7 @@ t_env							*create_node(char *key, char *value);
 t_env							*find_last_node(t_env *head);
 t_env							*add_back_node(t_env *new_node, t_env *head);
 
-/* Resources */
-// void						free_pipes(int **pipes, int i);
-/* Free */
+/* Resources *//* Free */
 void							free_tok_lst(t_lst **list);
 void							free_redir(t_redirect *redirection);
 void							free_cmd(t_command *cmd);
@@ -302,13 +294,7 @@ void							cleanup_shell(t_sh *shell, t_ast *ast);
 void							fd_clean_exit(t_sh *shell, int *pfd, int exit_code);
 void							close_all_fds(int fd);
 
-/* Testing */
-void							print_env_array(char **env);
-void							init_redir(t_redirect *redir);
-void							init_cmd_struct(t_command *cmd, char **av,
-									t_redirect *redir);
-int								init_shell(t_sh *shell, char **envp);
-
+/* Signals */
 void							handle_here_sig(int sig);
 void							handle_sigint(int sig);
 void							handle_sigint_exec(int sig);

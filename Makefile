@@ -13,6 +13,7 @@ OBJ_DIR = objs
 SRCS =  $(SRCDIR)/srcs/main.c \
         $(SRCDIR)/srcs/init.c \
         $(SRCDIR)/srcs/signal.c \
+        $(SRCDIR)/srcs/signal2.c \
         $(SRCDIR)/srcs/parsing/check_input.c \
         $(SRCDIR)/srcs/parsing/input_errors.c \
         $(SRCDIR)/srcs/parsing/list_utils.c \
