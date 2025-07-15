@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/15 16:54:11 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/15 18:12:21 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,17 +160,30 @@ int								is_env_var(char *str);
 /* Expander */
 void							init_exp(t_exp *exp);
 int								is_pipe_redir(char *str);
+size_t							count_nb_words(char const *s, char c);
 int								check_validity(t_lst *exp_lst, t_sh *shell);
+void							input_error(int error, t_sh *shell,
+									t_token_type tok);
 int								expand_xcode(char **result, t_sh *shell);
 int								expand_var(char *input, char **result,
 									t_env *envl);
 char							*expand_token(char *input, t_sh *shell);
+void							handle_unclosed_pipes(t_lst *tok_lst,
+									t_lst *exp_lst, t_sh *shell);
 void							match_quotes(char *input, int *end,
 									char *quote);
 char							*trim_quotes(char *input);
 int								is_pipe_redir(char *str);
 int								expand_list(t_lst *tok_lst, t_lst *exp_lst,
 									t_sh *shell);
+int								process_heredoc(t_lst *tok_lst, t_lst *exp_lst,
+									t_sh *shell);
+void							process_expand(t_lst *tok_lst, t_lst *exp_lst,
+									char *expanded);
+int								process_lst_node(t_lst *tok_lst, t_lst *exp_lst,
+									t_sh *shell, int *advance);
+int								process_lst(t_lst *tok_lst, t_lst *exp_lst,
+									t_sh *shell, int advance);
 
 /* Parser */
 int								create_node_pipe(t_ast **ast);
