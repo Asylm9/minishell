@@ -46,10 +46,12 @@ void	cleanup_shell(t_sh *shell, t_ast *ast)
 	rl_clear_history();
 }
 
-void	clean_exit(t_sh *shell, t_ast *ast)
+void	fd_clean_exit(t_sh *shell, int *pfd, int exit_code)
 {
-	cleanup_shell(shell, ast);
-	exit(shell->exit_status);
+	close(pfd[0]);
+	close(pfd[1]);
+	cleanup_shell(shell, NULL);
+	exit(exit_code);
 }
 
 void close_all_fds(int fd)

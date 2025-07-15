@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/15 18:12:21 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/15 21:58:17 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,6 +200,9 @@ void							print_ast(t_ast *ast);
 /**************************		Execution	*****************************/
 
 int								handle_heredoc(char *delimiter, t_sh *shell);
+int								read_heredoc_content(char *del, t_sh *shell, char **buffer);
+char							*process_heredoc_line(char *input, char *del, t_sh *shell);
+
 
 /* Execution */
 int								execute_ast(t_ast *ast, t_sh *shell,
@@ -296,7 +299,7 @@ void							free_ast(t_ast *ast);
 void							free_array(char **array, int i);
 void							free_envl(t_env **head);
 void							cleanup_shell(t_sh *shell, t_ast *ast);
-void							clean_exit(t_sh *shell, t_ast *ast);
+void							fd_clean_exit(t_sh *shell, int *pfd, int exit_code);
 void							close_all_fds(int fd);
 
 /* Testing */
