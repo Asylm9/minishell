@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/15 23:52:26 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/16 01:30:37 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,6 +264,7 @@ bool							is_numeric(char *arg);
 /* Env utils */
 char							**convert_envl_to_env(t_env *envl);
 t_env							*init_env_list(char **env);
+bool							key_exists(char *key, t_env *envl);
 int								add_new_entry(char *key, char *value,
 									t_env **envl);
 char							*get_envl_var(char *name, t_env *envl);

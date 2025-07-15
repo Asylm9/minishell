@@ -28,6 +28,20 @@ char	**convert_envl_to_env(t_env *envl)
 	return (env);
 }
 
+bool	key_exists(char *key, t_env *envl)
+{
+	t_env	*current;
+
+	current = envl;
+	while (current)
+	{
+		if (ft_strcmp(current->key, key) == 0)
+			return (true);
+		current =  current->next;
+	}
+	return (false);
+}
+
 int	add_new_entry(char *key, char *value, t_env **envl)
 {
 	t_env	*new_node;
