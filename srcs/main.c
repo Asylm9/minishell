@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: matthieu <matthieu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/16 00:05:29 by matthieu         ###   ########.fr       */
+/*   Updated: 2025/07/16 01:37:39 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,36 @@
 
 volatile sig_atomic_t	g_sig = 0;
 
-// void	print_token(t_lst *tok_lst)
-// {
-// 	int	i;
+int	init_minishell(t_sh *shell, char **envp)
+{
+	shell->tok_lst = NULL;
+	shell->exp_lst = NULL;
+	if (init_shell(shell, envp) != SUCCESS)
+	{
+		printf_fd(2, "Shell initialization failed\n");
+		free_envl(&shell->envl);
+		return (ERROR);
+	}
+	return (SUCCESS);
+}
 
-// 	i = 1;
-// 	while (tok_lst)
-// 	{
-// 		if (tok_lst->value != NULL)
-// 			printf_fd(STDOUT_FILENO, "Token %d type : %d value : |%s|\n", i, tok_lst->type,
-// 				tok_lst->value);
-// 		if (tok_lst->expand == EXPAND && tok_lst->value != NULL)
-// 			printf_fd(STDOUT_FILENO, "Token %d expand : EXPAND\n", i);
-// 		else if (tok_lst->value != NULL)
-// 			printf_fd(STDOUT_FILENO, "Token %d expand : NO_EXPAND\n", i);
-// 		tok_lst = tok_lst->next;
-// 		i++;
-// 	}
-// }
+void	get_input(char *input, t_sh *shell, t_ast *ast)
+{
+	input = readline("\033[0;34m\033[1mMinishell> \033[0m");
+	if (is_empty(input))
+		add_history(input);
+	if (!input)
+	{
+		cleanup_shell(shell, ast);
+		printf_fd(STDOUT_FILENO, "exit\n");
+		exit(SUCCESS);
+	}
+	if (g_sig == SIGINT)
+	{
+		shell->exit_status = 128 + g_sig;
+		g_sig = 0;
+	}
+}
 
 int	main(int ac, char **av, char **envp)
 {
@@ -39,22 +51,18 @@ int	main(int ac, char **av, char **envp)
 	t_ast	*ast;
 	t_sh	shell;
 
-	ast = NULL;
-	shell.tok_lst = NULL;
-	shell.exp_lst = NULL;
+	input = NULL;
 	if (ac > 1)
 	{
 		fprintf(stderr, "Usage: %s\n", av[0]);
 		return (1);
 	}
-	if (init_shell(&shell, envp) != SUCCESS)
-	{
-		printf_fd(2, "Shell initialization failed\n");
-		return (free_envl(&shell.envl), ERROR);
-	}
+	if (init_minishell(&shell, envp) == 1)
+		return (ERROR);
 	set_main_signals();
 	while (1)
 	{
+		// get_input(input, &shell, ast);
 		input = readline("\033[0;34m\033[1mMinishell> \033[0m");
 		if (is_empty(input))
 			add_history(input);
@@ -98,6 +106,7 @@ int	main(int ac, char **av, char **envp)
 						perror("malloc");
 						free_tok_lst(&shell.tok_lst);
 						free_tok_lst(&shell.exp_lst);
+
 						shell.tok_lst = NULL;
 						shell.exp_lst = NULL;
 					}
@@ -128,6 +137,25 @@ int	main(int ac, char **av, char **envp)
 			free(input);
 	}
 }
+
+// void	print_token(t_lst *tok_lst)
+// {
+// 	int	i;
+
+// 	i = 1;
+// 	while (tok_lst)
+// 	{
+// 		if (tok_lst->value != NULL)
+// 			printf_fd(STDOUT_FILENO, "Token %d type : %d value : |%s|\n", i, tok_lst->type,
+// 				tok_lst->value);
+// 		if (tok_lst->expand == EXPAND && tok_lst->value != NULL)
+// 			printf_fd(STDOUT_FILENO, "Token %d expand : EXPAND\n", i);
+// 		else if (tok_lst->value != NULL)
+// 			printf_fd(STDOUT_FILENO, "Token %d expand : NO_EXPAND\n", i);
+// 		tok_lst = tok_lst->next;
+// 		i++;
+// 	}
+// }
 
 // CHECK SET TOKEN VALUE FOR QUOTES BUGGED
 
