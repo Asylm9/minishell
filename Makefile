@@ -25,6 +25,7 @@ SRCS =  $(SRCDIR)/srcs/main.c \
         $(SRCDIR)/srcs/parsing/parser.c \
         $(SRCDIR)/srcs/free.c \
         $(SRCDIR)/srcs/heredoc.c \
+        $(SRCDIR)/srcs/heredoc2.c \
         $(SRCDIR)/srcs/exec/env_utils.c \
         $(SRCDIR)/srcs/exec/path.c \
         $(SRCDIR)/srcs/exec/exec_utils.c \
