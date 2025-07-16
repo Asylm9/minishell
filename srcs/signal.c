@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:12:30 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/16 13:12:31 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/16 15:11:20 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,3 @@ int	set_main_signals(void)
 	signal(SIGPIPE, handle_sigpipe);
 	return (0);
 }
-

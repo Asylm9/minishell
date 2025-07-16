@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 20:42:02 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/12 21:30:40 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/16 15:11:33 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	free_redir(t_redirect *redirection)
 		while (redirection)
 		{
 			current = redirection->next;
-			// redirection = redirection->next;
 			if (redirection->target)
 				free(redirection->target);
 			free(redirection);
