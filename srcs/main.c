@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/16 02:42:28 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/16 10:53:53 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,23 +44,25 @@ void	get_input(char **input, t_sh *shell, t_ast *ast)
 		g_sig = 0;
 	}
 }
-// int	init_ast(t_ast *ast, t_sh )
-// {
-// 	ast = malloc(sizeof(t_ast));
-// 	if (!ast)
-// 	{
-// 		free_tok_lst(&shell.tok_lst);
-// 		free_tok_lst(&shell.exp_lst);
-// 		shell.tok_lst = NULL;
-// 		shell.exp_lst = NULL;
-// 	}
-// 	else
-// 	{
-// 		ast->cmd = NULL;
-// 		ast->left = NULL;
-// 		ast->right = NULL;
-// 	}
-// }
+int	init_ast(t_ast **ast, t_sh *shell)
+{
+	*ast = malloc(sizeof(t_ast));
+	if (!ast)
+	{
+		free_tok_lst(&shell->tok_lst);
+		free_tok_lst(&shell->exp_lst);
+		shell->tok_lst = NULL;
+		shell->exp_lst = NULL;
+		return (ERROR);
+	}
+	else
+	{
+		(*ast)->cmd = NULL;
+		(*ast)->left = NULL;
+		(*ast)->right = NULL;
+		return (SUCCESS);
+	}
+}
 
 int	tokenize(char *input, t_sh *shell)
 {
@@ -84,10 +86,11 @@ int	main(int ac, char **av, char **envp)
 	t_sh	shell;
 
 	input = NULL;
+	ast = NULL;
 	if (ac > 1)
 	{
 		fprintf(stderr, "Usage: %s\n", av[0]);
-		return (1);
+		return (ERROR);
 	}
 	if (init_minishell(&shell, envp) == ERROR)
 		return (ERROR);
@@ -107,42 +110,23 @@ int	main(int ac, char **av, char **envp)
 			if (expand_list(shell.tok_lst, shell.exp_lst,
 					&shell) == SUCCESS)
 			{
-				ast = malloc(sizeof(t_ast));
-				if (!ast)
+				if (init_ast(&ast, &shell) == SUCCESS)
 				{
-					free_tok_lst(&shell.tok_lst);
-					free_tok_lst(&shell.exp_lst);
-					shell.tok_lst = NULL;
-					shell.exp_lst = NULL;
-				}
-				else
-				{
-					ast->cmd = NULL;
-					ast->left = NULL;
-					ast->right = NULL;
 					if (parse_ast(shell.exp_lst, &ast, &shell) == SUCCESS)
 						execute_ast(ast, &shell, ast);
-					signal(SIGINT, handle_sigint);
-					free_ast(ast);
-					free_tok_lst(&shell.tok_lst);
-					free_tok_lst(&shell.exp_lst);
-					ast = NULL;
-					shell.tok_lst = NULL;
-					shell.exp_lst = NULL;
 				}
 			}
-			else
-			{
-				free_tok_lst(&shell.tok_lst);
-				free_tok_lst(&shell.exp_lst);
-			}
 		}
+		signal(SIGINT, handle_sigint);
+		free_ast(ast);
+		free_tok_lst(&shell.tok_lst);
+		free_tok_lst(&shell.exp_lst);
+		ast = NULL;
+		shell.tok_lst = NULL;
+		shell.exp_lst = NULL;
 		free(input);
 	}
-	
 }
-
-
 // void	print_token(t_lst *tok_lst)
 // {
 // 	int	i;
