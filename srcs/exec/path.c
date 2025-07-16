@@ -64,50 +64,42 @@ int	check_file_type(char *path)
 	return (0);
 }
 
-int	execute_binary(t_ast *ast, t_sh *shell, t_ast *root)
+char	*resolve_direct_path(t_ast *ast)
+{
+	char	*cmd_path;
+
+	cmd_path = ft_strdup(ast->cmd->cmd_name);
+	if (access(cmd_path, F_OK) < 0 || ft_strcmp("..", cmd_path) == 0)
+	{
+		if (access(cmd_path, X_OK) < 0)
+		{
+			printf_fd(STDERR, "minishell: %s: %s\n", cmd_path,
+				strerror(errno));
+		}
+		else
+			printf_fd(STDERR, "minishell: %s: command not found\n",
+				ast->cmd->cmd_name);
+		free(cmd_path);
+		return (NULL);
+	}
+	return (cmd_path);
+}
+
+char	*resolve_path(t_ast *ast, t_sh *shell)
 {
 	char	**paths;
 	char	*cmd_path;
-	char	**env;
 
-	if (!ast->cmd || !shell->envl)
-		return (1);
-	if (is_absolute_or_relative(ast->cmd->cmd_name))
-	{
-		cmd_path = ft_strdup(ast->cmd->cmd_name);
-		if (access(cmd_path, F_OK) < 0 || ft_strcmp("..", cmd_path) == 0)
-		{
-			if (access(cmd_path, X_OK) < 0)
-			{
-				printf_fd(STDERR, "minishell: %s: %s\n", cmd_path,
-					strerror(errno));
-			}
-			else
-				printf_fd(STDERR, "minishell: %s: command not found\n",
-					ast->cmd->cmd_name);
-			free(cmd_path);
-			return (CMD_NOT_FOUND);
-		}
-	}
-	else
-	{
-		paths = get_paths(ast->cmd, shell->envl);
-		if (!paths)
-			return (cleanup_shell(shell, ast), CMD_NOT_FOUND);
-		cmd_path = find_cmd_path(paths, ast->cmd->cmd_name);
-		free_array(paths, -1);
-		if (!cmd_path)
-		{
-			printf_fd(STDERR, "minishell: %s: command not found\n",
-			ast->cmd->cmd_name);
-			return (cleanup_shell(shell, root), CMD_NOT_FOUND);
-		}
-	}
-	env = convert_envl_to_env(shell->envl);
-	close(shell->exp_lst->hd_fd);
-	set_subprocess_signals();
-	execve(cmd_path, ast->cmd->args, env);
+	paths = get_paths(ast->cmd, shell->envl);
+	if (!paths)
+		return (NULL);
+	cmd_path = find_cmd_path(paths, ast->cmd->cmd_name);
+	free_array(paths, -1);
+	return (cmd_path);
+}
 
+int	execve_error(char *cmd_path, char **env, t_sh *shell, t_ast *root)
+{
 	if (check_file_type(cmd_path) == 1)
 		printf_fd(STDERR, "minishell: %s: Is a directory\n", cmd_path);
 	else
@@ -115,4 +107,32 @@ int	execute_binary(t_ast *ast, t_sh *shell, t_ast *root)
 	free(cmd_path);
 	free_array(env, -1);
 	return (cleanup_shell(shell, root), EXECVE_ERR);
+}
+
+int	execute_binary(t_ast *ast, t_sh *shell, t_ast *root)
+{
+	char	*cmd_path;
+	char	**env;
+
+	if (!ast->cmd || !shell->envl)
+		return (1);
+	if (is_absolute_or_relative(ast->cmd->cmd_name))
+	{
+		cmd_path = resolve_direct_path(ast);
+		if (!cmd_path)
+			return (cleanup_shell(shell, root), CMD_NOT_FOUND);
+	}
+	else
+		cmd_path = resolve_path(ast, shell);
+	if (!cmd_path)
+	{
+		printf_fd(STDERR, "minishell: %s: command not found\n",
+			ast->cmd->cmd_name);
+		return (cleanup_shell(shell, root), CMD_NOT_FOUND);
+	}
+	env = convert_envl_to_env(shell->envl);
+	close(shell->exp_lst->hd_fd);
+	set_subprocess_signals();
+	execve(cmd_path, ast->cmd->args, env);
+	return (execve_error(cmd_path, env, shell, root));
 }

@@ -1,24 +1,5 @@
 #include "../../minishell.h"
 
-// int	execute_pipeline(t_ast *ast, t_sh *shell, t_ast *root)
-// {
-// 	int		pfd[2];
-// 	pid_t	pid_left;
-// 	pid_t	pid_right;
-// 	int		status;
-
-// 	if (pipe(pfd) < 0)
-// 		return (ERROR);
-// 	pid_left = process_left_child(ast, shell, pfd, root);
-// 	pid_right = process_right_child(ast, shell, pfd, root);
-// 	close(pfd[0]);
-// 	close(pfd[1]);
-// 	waitpid(pid_left, NULL, 0);
-// 	waitpid(pid_right, &status, 0);
-// 	shell->exit_status = process_wait_status(status);
-// 	return (shell->exit_status);
-// }
-
 int	execute_pipeline(t_ast *ast, t_sh *shell, t_ast *root)
 {
 	int		pfd[2];
