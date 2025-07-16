@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:48 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/16 13:26:12 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/17 00:38:01 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ char	**get_paths(t_command *cmd, t_env *envl)
 
 	if (!cmd->cmd_name)
 		return (NULL);
-	// verifier utilite
 	if (cmd->cmd_name[0] == '\0')
 	{
 		paths = malloc(sizeof(char *) * 2);
