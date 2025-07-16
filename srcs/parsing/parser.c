@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/16 00:51:07 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/16 15:55:57 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	count_args(t_lst *exp_lst)
 	return (i);
 }
 
-char	**fill_args(t_lst **exp_lst, int argc, char **cmd_name)
+char	**fill_cmd(t_lst **exp_lst, int argc, char **cmd_name)
 {
 	char	**args;
 	int		i;
@@ -114,6 +114,11 @@ int	parse_ast(t_lst *exp_lst, t_ast **ast, t_sh *shell)
 		return (ERROR);
 	}
 	(*ast)->cmd = create_node_cmd(&exp_lst);
+	if ((*ast)->cmd == NULL)
+	{
+		printf_fd(STDERR, "Malloc error, exiting shell...\n");
+		cleanup_exit(shell, (*ast));
+	}
 	(*ast)->type = CMD;
 	process_node(exp_lst, ast);
 	if (!(*ast)->left && !(*ast)->right && !(*ast)->cmd->cmd_name)

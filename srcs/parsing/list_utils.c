@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 21:11:07 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/15 18:13:17 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/16 15:39:00 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ t_command	*create_node_cmd(t_lst **exp_lst)
 		}
 		*exp_lst = (*exp_lst)->next;
 	}
-	cmd->args = fill_args(&tmp, count_args(tmp), &cmd->cmd_name);
+	cmd->args = fill_cmd(&tmp, count_args(tmp), &cmd->cmd_name);
 	return (cmd);
 }
 

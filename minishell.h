@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/16 15:10:03 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/16 15:39:00 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ int								process_lst(t_lst *tok_lst, t_lst *exp_lst,
 int								init_ast(t_ast **ast, t_sh *shell);
 int								create_node_pipe(t_ast **ast);
 int								count_args(t_lst *exp_lst);
-char							**fill_args(t_lst **exp_lst, int argc,
+char							**fill_cmd(t_lst **exp_lst, int argc,
 									char **cmd_name);
 t_redirect						*add_redirection(t_redirect *redir,
 									t_lst *exp_lst);

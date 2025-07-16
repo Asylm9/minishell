@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/16 15:04:41 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/16 15:56:36 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,13 @@ void	get_input(char **input, t_sh *shell, t_ast *ast)
 	}
 }
 
-void	prepare_next_cmd(t_ast *ast, t_sh *shell, char *input)
+void	prepare_next_cmd(t_ast **ast, t_sh *shell, char *input)
 {
 	signal(SIGINT, handle_sigint);
-	free_ast(ast);
+	free_ast(*ast);
 	free_tok_lst(&shell->tok_lst);
 	free_tok_lst(&shell->exp_lst);
-	ast = NULL;
+	*ast = NULL;
 	shell->tok_lst = NULL;
 	shell->exp_lst = NULL;
 	free(input);
@@ -60,15 +60,15 @@ void	prepare_next_cmd(t_ast *ast, t_sh *shell, char *input)
 int	parse(char *input, t_sh *shell, t_ast **ast)
 {
 	if (tokenize(input, shell) == ERROR)
-		return (cleanup_exit(shell, NULL), ERROR);
+		cleanup_exit(shell, NULL);
 	if (create_list_node(&shell->exp_lst) == ERROR)
-		return (cleanup_exit(shell, NULL), ERROR);
+		cleanup_exit(shell, NULL);
 	if (expand_list(shell->tok_lst, shell->exp_lst, shell) == ERROR)
-		return (cleanup_exit(shell, *ast), ERROR);
+		cleanup_exit(shell, *ast);
 	if (init_ast(ast, shell) == ERROR)
-		return (cleanup_exit(shell, *ast), ERROR);
+		cleanup_exit(shell, *ast);
 	if (parse_ast(shell->exp_lst, ast, shell) == ERROR)
-		return (cleanup_exit(shell, *ast), ERROR);
+		return (ERROR);
 	return (SUCCESS);
 }
 
@@ -97,6 +97,6 @@ int	main(int ac, char **av, char **envp)
 				if (execute_ast(ast, &shell, ast) == ERROR)
 					cleanup_exit(&shell, ast);
 		}
-		prepare_next_cmd(ast, &shell, input);
+		prepare_next_cmd(&ast, &shell, input);
 	}
 }
