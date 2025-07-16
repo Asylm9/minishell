@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   resources.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/16 13:14:01 by agaland           #+#    #+#             */
+/*   Updated: 2025/07/16 13:25:10 by agaland          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 
 void	free_array(char **array, int i)
@@ -54,7 +66,7 @@ void	fd_clean_exit(t_sh *shell, int *pfd, int exit_code)
 	exit(exit_code);
 }
 
-void close_all_fds(int fd)
+void	close_all_fds(int fd)
 {
 	while (fd < 256)
 		close(fd++);

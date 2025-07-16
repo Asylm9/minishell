@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/16 13:13:01 by agaland           #+#    #+#             */
+/*   Updated: 2025/07/16 13:25:31 by agaland          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../minishell.h"
 
 char	**convert_envl_to_env(t_env *envl)
@@ -37,7 +49,7 @@ bool	key_exists(char *key, t_env *envl)
 	{
 		if (ft_strcmp(current->key, key) == 0)
 			return (true);
-		current =  current->next;
+		current = current->next;
 	}
 	return (false);
 }
