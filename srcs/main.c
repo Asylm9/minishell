@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/16 02:06:15 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/16 02:42:28 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,39 @@ void	get_input(char **input, t_sh *shell, t_ast *ast)
 		g_sig = 0;
 	}
 }
-// int	init_ast(t_ast *ast)
-// {}
+// int	init_ast(t_ast *ast, t_sh )
+// {
+// 	ast = malloc(sizeof(t_ast));
+// 	if (!ast)
+// 	{
+// 		free_tok_lst(&shell.tok_lst);
+// 		free_tok_lst(&shell.exp_lst);
+// 		shell.tok_lst = NULL;
+// 		shell.exp_lst = NULL;
+// 	}
+// 	else
+// 	{
+// 		ast->cmd = NULL;
+// 		ast->left = NULL;
+// 		ast->right = NULL;
+// 	}
+// }
 
+int	tokenize(char *input, t_sh *shell)
+{
+	if (create_list_node(&shell->tok_lst) == ERROR)
+	{
+		free(input);
+		return (ERROR);
+	}
+	else if (tokenize_input(shell->tok_lst, input) == ERROR)
+	{
+		free_tok_lst(&shell->tok_lst);
+		free(input);
+		return(ERROR);
+	}
+	return (SUCCESS);
+}
 int	main(int ac, char **av, char **envp)
 {
 	char	*input;
@@ -67,56 +97,51 @@ int	main(int ac, char **av, char **envp)
 		get_input(&input, &shell, ast);
 		if (check_input(input, &shell) == SUCCESS)
 		{
-			if (create_list_node(&shell.tok_lst) == ERROR)
-				free(input);
-			else if (tokenize_input(shell.tok_lst, input) == ERROR)
+			if (tokenize(input, &shell) == ERROR)
+				return (ERROR);
+			if (create_list_node(&shell.exp_lst) == ERROR)
 			{
 				free_tok_lst(&shell.tok_lst);
-				free(input);
+				return (ERROR);
 			}
-			else
+			if (expand_list(shell.tok_lst, shell.exp_lst,
+					&shell) == SUCCESS)
 			{
-				free(input);
-				if (create_list_node(&shell.exp_lst) == ERROR)
-					free_tok_lst(&shell.tok_lst);
-				else if (expand_list(shell.tok_lst, shell.exp_lst,
-						&shell) == SUCCESS)
-				{
-					ast = malloc(sizeof(t_ast));
-					if (!ast)
-					{
-						free_tok_lst(&shell.tok_lst);
-						free_tok_lst(&shell.exp_lst);
-						shell.tok_lst = NULL;
-						shell.exp_lst = NULL;
-					}
-					else
-					{
-						ast->cmd = NULL;
-						ast->left = NULL;
-						ast->right = NULL;
-						if (parse_ast(shell.exp_lst, &ast, &shell) == SUCCESS)
-							execute_ast(ast, &shell, ast);
-						signal(SIGINT, handle_sigint);
-						free_ast(ast);
-						free_tok_lst(&shell.tok_lst);
-						free_tok_lst(&shell.exp_lst);
-						ast = NULL;
-						shell.tok_lst = NULL;
-						shell.exp_lst = NULL;
-					}
-				}
-				else
+				ast = malloc(sizeof(t_ast));
+				if (!ast)
 				{
 					free_tok_lst(&shell.tok_lst);
 					free_tok_lst(&shell.exp_lst);
+					shell.tok_lst = NULL;
+					shell.exp_lst = NULL;
+				}
+				else
+				{
+					ast->cmd = NULL;
+					ast->left = NULL;
+					ast->right = NULL;
+					if (parse_ast(shell.exp_lst, &ast, &shell) == SUCCESS)
+						execute_ast(ast, &shell, ast);
+					signal(SIGINT, handle_sigint);
+					free_ast(ast);
+					free_tok_lst(&shell.tok_lst);
+					free_tok_lst(&shell.exp_lst);
+					ast = NULL;
+					shell.tok_lst = NULL;
+					shell.exp_lst = NULL;
 				}
 			}
+			else
+			{
+				free_tok_lst(&shell.tok_lst);
+				free_tok_lst(&shell.exp_lst);
+			}
 		}
-		else
-			free(input);
+		free(input);
 	}
+	
 }
+
 
 // void	print_token(t_lst *tok_lst)
 // {
