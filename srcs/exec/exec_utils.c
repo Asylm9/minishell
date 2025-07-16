@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:18 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/16 13:13:19 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/17 00:11:12 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ pid_t	process_left_child(t_ast *ast, t_sh *shell, int *pfd, t_ast *root)
 		close(pfd[0]);
 		dup2(pfd[1], STDOUT_FILENO);
 		close(pfd[1]);
+		if (!ast->left)
+		{
+			cleanup_shell(shell, root);
+			exit(0);
+		}
 		if (ast->left->type == PIPE)
 			execute_pipeline(ast->left, shell, root);
 		else
@@ -44,6 +49,11 @@ pid_t	process_right_child(t_ast *ast, t_sh *shell, int *pfd, t_ast *root)
 		close(pfd[1]);
 		dup2(pfd[0], STDIN_FILENO);
 		close(pfd[0]);
+		if (!ast->right)
+		{
+			cleanup_shell(shell, root);
+			exit(0);
+		}
 		if (ast->right->type == PIPE)
 			execute_pipeline(ast->right, shell, root);
 		else
