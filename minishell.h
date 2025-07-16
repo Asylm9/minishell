@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/16 01:30:37 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/16 15:06:24 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,11 +135,11 @@ extern volatile sig_atomic_t	g_sig;
 
 void							print_token(t_lst *tok_lst);
 
-
 /* Initialization */
 int								init_shell(t_sh *shell, char **envp);
 
 /* Tokenizer */
+int								tokenize(char *input, t_sh *shell);
 int								is_empty(char *input);
 char							next_input(char *input);
 int								check_quotes(const char *input, int *i,
@@ -190,6 +190,7 @@ int								process_lst(t_lst *tok_lst, t_lst *exp_lst,
 									t_sh *shell, int advance);
 
 /* Parser */
+int								init_ast(t_ast **ast, t_sh *shell);
 int								create_node_pipe(t_ast **ast);
 int								count_args(t_lst *exp_lst);
 char							**fill_args(t_lst **exp_lst, int argc,
@@ -203,8 +204,10 @@ void							print_ast(t_ast *ast);
 
 /* Heredoc */
 int								handle_heredoc(char *delimiter, t_sh *shell);
-int								read_heredoc_content(char *del, t_sh *shell, char **buffer);
-char							*process_heredoc_line(char *input, char *del, t_sh *shell);
+int								read_heredoc_content(char *del, t_sh *shell,
+									char **buffer);
+char							*process_heredoc_line(char *input, char *del,
+									t_sh *shell);
 
 /**************************		Execution	*****************************/
 
@@ -284,7 +287,7 @@ t_env							*create_node(char *key, char *value);
 t_env							*find_last_node(t_env *head);
 t_env							*add_back_node(t_env *new_node, t_env *head);
 
-/* Resources *//* Free */
+/* Resources */ /* Free */
 void							free_tok_lst(t_lst **list);
 void							free_redir(t_redirect *redirection);
 void							free_cmd(t_command *cmd);
@@ -292,8 +295,10 @@ void							free_ast(t_ast *ast);
 void							free_array(char **array, int i);
 void							free_envl(t_env **head);
 void							cleanup_shell(t_sh *shell, t_ast *ast);
-void							fd_clean_exit(t_sh *shell, int *pfd, int exit_code);
+void							fd_clean_exit(t_sh *shell, int *pfd,
+									int exit_code);
 void							close_all_fds(int fd);
+void							cleanup_exit(t_sh *shell, t_ast *ast);
 
 /* Signals */
 void							handle_here_sig(int sig);

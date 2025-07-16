@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/16 10:53:53 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/16 15:04:41 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,41 +44,34 @@ void	get_input(char **input, t_sh *shell, t_ast *ast)
 		g_sig = 0;
 	}
 }
-int	init_ast(t_ast **ast, t_sh *shell)
+
+void	prepare_next_cmd(t_ast *ast, t_sh *shell, char *input)
 {
-	*ast = malloc(sizeof(t_ast));
-	if (!ast)
-	{
-		free_tok_lst(&shell->tok_lst);
-		free_tok_lst(&shell->exp_lst);
-		shell->tok_lst = NULL;
-		shell->exp_lst = NULL;
-		return (ERROR);
-	}
-	else
-	{
-		(*ast)->cmd = NULL;
-		(*ast)->left = NULL;
-		(*ast)->right = NULL;
-		return (SUCCESS);
-	}
+	signal(SIGINT, handle_sigint);
+	free_ast(ast);
+	free_tok_lst(&shell->tok_lst);
+	free_tok_lst(&shell->exp_lst);
+	ast = NULL;
+	shell->tok_lst = NULL;
+	shell->exp_lst = NULL;
+	free(input);
 }
 
-int	tokenize(char *input, t_sh *shell)
+int	parse(char *input, t_sh *shell, t_ast **ast)
 {
-	if (create_list_node(&shell->tok_lst) == ERROR)
-	{
-		free(input);
-		return (ERROR);
-	}
-	else if (tokenize_input(shell->tok_lst, input) == ERROR)
-	{
-		free_tok_lst(&shell->tok_lst);
-		free(input);
-		return(ERROR);
-	}
+	if (tokenize(input, shell) == ERROR)
+		return (cleanup_exit(shell, NULL), ERROR);
+	if (create_list_node(&shell->exp_lst) == ERROR)
+		return (cleanup_exit(shell, NULL), ERROR);
+	if (expand_list(shell->tok_lst, shell->exp_lst, shell) == ERROR)
+		return (cleanup_exit(shell, *ast), ERROR);
+	if (init_ast(ast, shell) == ERROR)
+		return (cleanup_exit(shell, *ast), ERROR);
+	if (parse_ast(shell->exp_lst, ast, shell) == ERROR)
+		return (cleanup_exit(shell, *ast), ERROR);
 	return (SUCCESS);
 }
+
 int	main(int ac, char **av, char **envp)
 {
 	char	*input;
@@ -100,88 +93,10 @@ int	main(int ac, char **av, char **envp)
 		get_input(&input, &shell, ast);
 		if (check_input(input, &shell) == SUCCESS)
 		{
-			if (tokenize(input, &shell) == ERROR)
-				return (ERROR);
-			if (create_list_node(&shell.exp_lst) == ERROR)
-			{
-				free_tok_lst(&shell.tok_lst);
-				return (ERROR);
-			}
-			if (expand_list(shell.tok_lst, shell.exp_lst,
-					&shell) == SUCCESS)
-			{
-				if (init_ast(&ast, &shell) == SUCCESS)
-				{
-					if (parse_ast(shell.exp_lst, &ast, &shell) == SUCCESS)
-						execute_ast(ast, &shell, ast);
-				}
-			}
+			if (parse(input, &shell, &ast) == SUCCESS)
+				if (execute_ast(ast, &shell, ast) == ERROR)
+					cleanup_exit(&shell, ast);
 		}
-		signal(SIGINT, handle_sigint);
-		free_ast(ast);
-		free_tok_lst(&shell.tok_lst);
-		free_tok_lst(&shell.exp_lst);
-		ast = NULL;
-		shell.tok_lst = NULL;
-		shell.exp_lst = NULL;
-		free(input);
+		prepare_next_cmd(ast, &shell, input);
 	}
 }
-// void	print_token(t_lst *tok_lst)
-// {
-// 	int	i;
-
-// 	i = 1;
-// 	while (tok_lst)
-// 	{
-// 		if (tok_lst->value != NULL)
-// 			printf_fd(STDOUT_FILENO, "Token %d type : %d value : |%s|\n", i, tok_lst->type,
-// 				tok_lst->value);
-// 		if (tok_lst->expand == EXPAND && tok_lst->value != NULL)
-// 			printf_fd(STDOUT_FILENO, "Token %d expand : EXPAND\n", i);
-// 		else if (tok_lst->value != NULL)
-// 			printf_fd(STDOUT_FILENO, "Token %d expand : NO_EXPAND\n", i);
-// 		tok_lst = tok_lst->next;
-// 		i++;
-// 	}
-// }
-
-// CHECK SET TOKEN VALUE FOR QUOTES BUGGED
-
-// execve("/bin/cat", args, NULL);
-
-// export plusieurs variables d'environnement d'un coup
-// pour les binaires 1 string par flag
-
-/*
-	Parse()
-		Readline()
-		Tokenize()
-			Create_tok_lst()
-				Init_token()
-				Add_token()
-			Fill_token()
-		Expand_tok_lst()
-			Expand_token()
-				Expand_var()
-		Create_AST()
-			Count_pipes()
-			Create_pipes_nodes()
-				Init_pipe_node()
-			Create_cmd_nodes()
-				Init_cmd_node()
-				Fill_cmd()
-
-	EXPAND CASES :
-		- $VAR
-		- ${VAR}
-		- $?
-		- $$
-		- $VAR1$VAR2
-		- $VAR1$VAR2$VAR3
-		- $VAR1$VAR2$VAR3$
-		- $VAR1$VAR2$VAR3$$
-		- $VAR1$VAR2$VAR3${VAR4}
-		- $'string'
-		- $"string"
-*/

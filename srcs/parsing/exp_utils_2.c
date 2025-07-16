@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 18:09:47 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/15 18:10:07 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/16 13:56:16 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,29 +48,30 @@ int	process_heredoc(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
 void	process_expand(t_lst *tok_lst, t_lst *exp_lst, char *expanded)
 {
 	int		count;
+	char	*presplit;
 	char	**splitted;
 	int		i;
 
 	i = 0;
 	count = count_nb_words(expanded, ' ');
-	if (count > 1)
+	if (i < count)
 	{
-		splitted = ft_split(trim_quotes(expanded), ' ');
+		presplit = trim_quotes(expanded);
+		splitted = ft_split(presplit, ' ');
 		while (count != 0)
 		{
-			exp_lst->value = splitted[i];
+			exp_lst->value = ft_strdup(splitted[i++]);
 			exp_lst->type = WORD;
 			create_list_node(&exp_lst);
 			exp_lst = exp_lst->next;
-			i++;
 			count--;
 		}
+		free_array(splitted, -1);
+		free(presplit);
+		return ;
 	}
-	else
-	{
-		exp_lst->value = trim_quotes(expanded);
-		exp_lst->type = tok_lst->type;
-	}
+	exp_lst->value = trim_quotes(expanded);
+	exp_lst->type = tok_lst->type;
 }
 
 int	process_lst_node(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell, int *advance)
@@ -109,11 +110,6 @@ int	process_lst(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell, int advance)
 			{
 				create_list_node(&exp_lst);
 				exp_lst = exp_lst->next;
-			}
-			else if (advance)
-			{
-				exp_lst->next = NULL;
-				break ;
 			}
 		}
 		else if (tok_lst->type == PIPE)
