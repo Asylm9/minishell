@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:05:28 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/15 17:29:43 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/16 01:48:20 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,7 @@ int	set_value(t_lst *tok_lst, const char *input, int *start, int *end)
 {
 	tok_lst->value = ft_substr(input, (*start), (*end) - (*start));
 	if (!tok_lst->value)
-	{
-		perror("ft_substr failed.\n");
 		return (ERROR);
-	}
 	return (SUCCESS);
 }
 

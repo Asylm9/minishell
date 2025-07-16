@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/16 01:37:39 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/16 02:06:15 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ int	init_minishell(t_sh *shell, char **envp)
 	return (SUCCESS);
 }
 
-void	get_input(char *input, t_sh *shell, t_ast *ast)
+void	get_input(char **input, t_sh *shell, t_ast *ast)
 {
-	input = readline("\033[0;34m\033[1mMinishell> \033[0m");
-	if (is_empty(input))
-		add_history(input);
-	if (!input)
+	(*input) = readline("\033[0;34m\033[1mMinishell> \033[0m");
+	if (is_empty(*input))
+		add_history(*input);
+	if (!(*input))
 	{
 		cleanup_shell(shell, ast);
 		printf_fd(STDOUT_FILENO, "exit\n");
@@ -44,6 +44,8 @@ void	get_input(char *input, t_sh *shell, t_ast *ast)
 		g_sig = 0;
 	}
 }
+// int	init_ast(t_ast *ast)
+// {}
 
 int	main(int ac, char **av, char **envp)
 {
@@ -57,56 +59,34 @@ int	main(int ac, char **av, char **envp)
 		fprintf(stderr, "Usage: %s\n", av[0]);
 		return (1);
 	}
-	if (init_minishell(&shell, envp) == 1)
+	if (init_minishell(&shell, envp) == ERROR)
 		return (ERROR);
 	set_main_signals();
 	while (1)
 	{
-		// get_input(input, &shell, ast);
-		input = readline("\033[0;34m\033[1mMinishell> \033[0m");
-		if (is_empty(input))
-			add_history(input);
-		if (!input)
-		{
-			cleanup_shell(&shell, ast);
-			printf_fd(STDOUT_FILENO, "exit\n");
-			exit(SUCCESS);
-		}
-		if (g_sig == SIGINT)
-		{
-			shell.exit_status = 128 + g_sig;
-			g_sig = 0;
-		}
+		get_input(&input, &shell, ast);
 		if (check_input(input, &shell) == SUCCESS)
 		{
 			if (create_list_node(&shell.tok_lst) == ERROR)
 				free(input);
-			else if (tokenize_input(shell.tok_lst, input) == ERROR
-				|| (shell.tok_lst->value == NULL
-					&& shell.tok_lst->next == NULL))
+			else if (tokenize_input(shell.tok_lst, input) == ERROR)
 			{
-				if (shell.tok_lst)
-					free_tok_lst(&shell.tok_lst);
+				free_tok_lst(&shell.tok_lst);
 				free(input);
 			}
 			else
 			{
 				free(input);
 				if (create_list_node(&shell.exp_lst) == ERROR)
-				{
 					free_tok_lst(&shell.tok_lst);
-					shell.tok_lst = NULL;
-				}
 				else if (expand_list(shell.tok_lst, shell.exp_lst,
 						&shell) == SUCCESS)
 				{
 					ast = malloc(sizeof(t_ast));
 					if (!ast)
 					{
-						perror("malloc");
 						free_tok_lst(&shell.tok_lst);
 						free_tok_lst(&shell.exp_lst);
-
 						shell.tok_lst = NULL;
 						shell.exp_lst = NULL;
 					}
