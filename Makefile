@@ -28,15 +28,16 @@ SRCS =  $(SRCDIR)/srcs/main.c \
         $(SRCDIR)/srcs/free.c \
         $(SRCDIR)/srcs/heredoc.c \
         $(SRCDIR)/srcs/heredoc2.c \
-        $(SRCDIR)/srcs/exec/env_utils.c \
-        $(SRCDIR)/srcs/exec/path.c \
+        $(SRCDIR)/srcs/exec/exec_ast.c \
         $(SRCDIR)/srcs/exec/exec_utils.c \
+        $(SRCDIR)/srcs/exec/exec_builtins.c \
         $(SRCDIR)/srcs/exec/list_utils.c \
-        $(SRCDIR)/srcs/exec/new_exec.c \
         $(SRCDIR)/srcs/exec/redirections.c \
+        $(SRCDIR)/srcs/exec/env_utils.c \
+        $(SRCDIR)/srcs/exec/path1.c \
+        $(SRCDIR)/srcs/exec/path2.c \
         $(SRCDIR)/srcs/exec/resources.c \
         $(SRCDIR)/srcs/exec/utils.c \
-        $(SRCDIR)/srcs/exec/exec_builtins.c \
         $(SRCDIR)/srcs/builtins/cd.c \
         $(SRCDIR)/srcs/builtins/echo.c \
         $(SRCDIR)/srcs/builtins/env.c \

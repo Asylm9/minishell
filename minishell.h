@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/16 15:06:24 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/16 15:10:03 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,6 +238,8 @@ int								fork_single_binary(t_ast *ast, t_sh *shell,
 char							*get_env_var(char *name, char **env);
 int								set_env_var(char *name, char **env, char *path);
 char							**get_paths(t_command *cmd, t_env *envl);
+char							*resolve_path(t_ast *ast, t_sh *shell);
+char							*resolve_direct_path(t_ast *ast);
 char							*find_cmd_path(char **paths, char *cmd_name);
 
 /* Redirections */
