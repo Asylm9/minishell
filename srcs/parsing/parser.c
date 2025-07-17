@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/16 15:55:57 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/17 13:50:48 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int	parse_ast(t_lst *exp_lst, t_ast **ast, t_sh *shell)
 	if (exp_lst->type == PIPE)
 	{
 		shell->exit_status = 2;
-		printf_fd(STDERR, " syntax error near unexpected token `|'");
+		printf_fd(STDERR, " syntax error near unexpected token `|'\n");
 		return (ERROR);
 	}
 	(*ast)->cmd = create_node_cmd(&exp_lst);

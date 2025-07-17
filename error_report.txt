@@ -1,0 +1,16 @@
+
+
+Minishell> $HOMEE | > grep c
+ syntax error near unexpected token `|'
+ xc: 2
+ Minishell> $HOMEE | grep c
+ syntax error near unexpected token `|'
+ xc: 2
+
+bash-5.1$ $HOMEE | > grep c
+bash: c: command not found
+xc: 127
+bash-5.1$ $HOMEE | grep c
+>
+xc: 1
+---------------------------------------
