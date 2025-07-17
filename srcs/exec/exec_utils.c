@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:18 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/17 00:11:12 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/17 16:11:15 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,5 +118,5 @@ int	fork_single_binary(t_ast *ast, t_sh *shell, t_ast *root)
 		printf("\n");
 	if (shell->exit_status == 131)
 		printf("Quit (core dumped)\n");
-	return (shell->exit_status);
+	return (0);
 }

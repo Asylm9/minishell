@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/16 15:56:36 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/17 16:13:01 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,7 @@ int	main(int ac, char **av, char **envp)
 		if (check_input(input, &shell) == SUCCESS)
 		{
 			if (parse(input, &shell, &ast) == SUCCESS)
-				if (execute_ast(ast, &shell, ast) == ERROR)
-					cleanup_exit(&shell, ast);
+				execute_ast(ast, &shell, ast);
 		}
 		prepare_next_cmd(&ast, &shell, input);
 	}

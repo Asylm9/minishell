@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:14:45 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/16 13:14:46 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/17 14:12:16 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	valid_exit(char *code)
 
 void	exit_arg_error(t_ast *ast)
 {
-	printf_fd(STDERR, "minishell: exit:%s: numeric argument required\n",
+	printf_fd(STDERR, "minishell: exit: %s: numeric argument required\n",
 		ast->cmd->args[1]);
 }
 
