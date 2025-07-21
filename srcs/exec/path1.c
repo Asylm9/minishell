@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:36 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/17 16:05:04 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/22 00:16:16 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	execute_binary(t_ast *ast, t_sh *shell, t_ast *root)
 			return (cleanup_shell(shell, root), CMD_NOT_FOUND);
 	}
 	else
-		cmd_path = resolve_path(ast, shell);
+		cmd_path = resolve_path(ast, shell, root);
 	if (!cmd_path)
 	{
 		printf_fd(STDERR, "minishell: %s: command not found\n",

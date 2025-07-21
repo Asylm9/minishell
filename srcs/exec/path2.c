@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:48 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/17 00:38:01 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/22 00:17:21 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,17 @@ char	**get_paths(t_command *cmd, t_env *envl)
 	return (paths);
 }
 
-char	*resolve_path(t_ast *ast, t_sh *shell)
+char	*resolve_path(t_ast *ast, t_sh *shell, t_ast *root)
 {
 	char	**paths;
 	char	*cmd_path;
 
 	paths = get_paths(ast->cmd, shell->envl);
 	if (!paths)
-		return (NULL);
+	{
+		cleanup_shell(shell, root);
+		exit (CMD_NOT_FOUND);
+	}
 	cmd_path = find_cmd_path(paths, ast->cmd->cmd_name);
 	free_array(paths, -1);
 	return (cmd_path);
