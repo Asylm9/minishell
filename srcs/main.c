@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/17 16:13:01 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/22 01:17:23 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	init_minishell(t_sh *shell, char **envp)
 
 void	get_input(char **input, t_sh *shell, t_ast *ast)
 {
-	(*input) = readline("\033[0;34m\033[1mMinishell> \033[0m");
+	(*input) = readline("\001\033[0;34m\033[1m\002Minishell> \001\033[0m\002");
 	if (is_empty(*input))
 		add_history(*input);
 	if (!(*input))
