@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:36 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/22 00:16:16 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/22 00:21:19 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,5 @@ int	execute_binary(t_ast *ast, t_sh *shell, t_ast *root)
 	env = convert_envl_to_env(shell->envl);
 	set_subprocess_signals();
 	execve(cmd_path, ast->cmd->args, env);
-	//set_main_signals();
 	return (execve_error(cmd_path, env, shell, root));
 }

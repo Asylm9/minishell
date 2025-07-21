@@ -3,23 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:14:30 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/16 15:22:32 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/22 00:22:11 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-// static void	sigpipe_intercepted(t_sh *shell, t_ast *ast)
-// {
-// 	if (g_sig == SIGPIPE)
-// 	{
-// 		cleanup_shell(shell, ast);
-// 		g_sig = 0;
-// 	}
-// }
 
 static int	skip_n_flags(char **args, bool *newline)
 {
@@ -53,7 +44,6 @@ int	builtin_echo(t_ast *ast, t_sh *shell)
 	while (ast->cmd->args[i])
 	{
 		printf_fd(STDOUT_FILENO, "%s", ast->cmd->args[i]);
-		// sigpipe_intercepted(shell, ast);
 		if (ast->cmd->args[i + 1])
 			printf_fd(STDOUT_FILENO, " ");
 		i++;
