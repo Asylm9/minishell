@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:14:30 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/22 00:22:11 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/22 20:11:07 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,6 @@ int	builtin_echo(t_ast *ast, t_sh *shell)
 	bool	newline;
 
 	(void)shell;
-	if (!ast->cmd->args || !ast->cmd->args[0])
-		return (BUILTIN_ERR);
 	newline = true;
 	i = skip_n_flags(ast->cmd->args, &newline);
 	while (ast->cmd->args[i])

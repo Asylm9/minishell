@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:54 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/16 13:13:55 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/22 17:42:59 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,8 @@ int	save_or_restore_fds(t_sh *shell, char flag)
 	}
 	else if (flag == 'r')
 	{
-		if (shell->saved_stdin < 0)
-			return (ERROR);
 		if (dup2(shell->saved_stdin, STDIN_FILENO) < 0)
 			return (perror("dup2"), ERROR);
-		if (shell->saved_stdout < 0)
-			return (ERROR);
 		if (dup2(shell->saved_stdout, STDOUT_FILENO) < 0)
 			return (perror("dup2"), ERROR);
 	}

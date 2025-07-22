@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:18 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/17 16:11:15 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/22 17:38:26 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,7 @@ void	handle_binary_pipeline(t_ast *ast, t_sh *shell, t_ast *root)
 		exit(1);
 	}
 	close_all_fds(3);
-	shell->exit_status = execute_binary(ast, shell, root);
-	exit(shell->exit_status);
+	exit(execute_binary(ast, shell, root));
 }
 
 int	fork_single_binary(t_ast *ast, t_sh *shell, t_ast *root)

@@ -1,5 +1,13 @@
 
 CTRL-c dans heredoc fait quitter prgramme -> clean_exit dans le main
+Supprimer clean-up exit dans fonction parse!!
+---------------------------------------
+
+Minishell> echo $>
+ syntax error near unexpected token `newline'
+shi-r12-p2% echo $?    
+2
+
 ---------------------------------------
 
 Minishell> $HOMEE | > grep c
@@ -17,8 +25,27 @@ bash-5.1$ $HOMEE | grep c
 xc: 1
 ---------------------------------------
 
-bash-5.1$ exit 234 efw
-exit
-bash: exit: too many arguments
-quitte le programme mais verifier logique de l'exit code
+process_lst_node-> 	else
+	{
+		exp_lst->value = NULL;
+		exp_lst->type = tok_lst->type;
+		//(*advance) = 0;
+	}
 
+Minishell> $HOMEE | > grep c
+-> conditionnal jump sa mere
+
+Minishell> ls | "" | grep c
+-> conditionnal jump sa mere
+
+Minishell> "" | ls | grep c
+-> idemmmm
+
+Minishell> ls | $HOMEE | grep c
+-> xc + valgrind ok
+
+Minishell> ls | $HOMEE | grep c | $HOMEE
+-> xc + valgrind ok
+
+Minishell> $HOMEE | grep c
+-> xc + valgrind ok

@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:14:25 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/16 13:14:26 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/22 18:05:56 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,6 @@ int	builtin_cd(char **args, t_sh *shell)
 	char	curr_dir[PATH_MAX];
 	char	*new_path;
 
-	if (!args)
-		return (ERROR);
 	if (!getcwd(curr_dir, PATH_MAX))
 		return (perror("getcwd"), BUILTIN_ERR);
 	new_path = set_new_path(args, shell);
