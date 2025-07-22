@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:12:37 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/16 13:12:38 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/22 02:57:43 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	handle_sigint_exec(int sig)
 {
 	(void)sig;
-	write(1, "\n", 1);
 }
 
 void	handle_here_sig(int sig)

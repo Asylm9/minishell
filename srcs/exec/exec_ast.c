@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:30 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/16 13:27:04 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/22 03:00:21 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	execute_pipeline(t_ast *ast, t_sh *shell, t_ast *root)
 	waitpid(pid_left, NULL, 0);
 	waitpid(pid_right, &status, 0);
 	shell->exit_status = process_wait_status(status);
+	if (shell->exit_status == 130)
+		write(1, "\n", 1);	
 	return (shell->exit_status);
 }
 
