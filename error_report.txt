@@ -1,9 +1,6 @@
 
-bash-5.1$ exit 234 efw
-exit
-bash: exit: too many arguments
-quitte le programme mais verifier logique de l'exit code
-
+CTRL-c dans heredoc fait quitter prgramme -> clean_exit dans le main
+---------------------------------------
 
 Minishell> $HOMEE | > grep c
  syntax error near unexpected token `|'
@@ -19,3 +16,9 @@ bash-5.1$ $HOMEE | grep c
 >
 xc: 1
 ---------------------------------------
+
+bash-5.1$ exit 234 efw
+exit
+bash: exit: too many arguments
+quitte le programme mais verifier logique de l'exit code
+
