@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 21:11:07 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/16 15:39:00 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/23 18:00:40 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,15 @@ int	create_node_pipe(t_ast **ast)
 	new_ast->right = NULL;
 	*ast = new_ast;
 	return (SUCCESS);
+}
+
+void	create_ast_right_node(t_lst **exp_lst, t_ast **ast)
+{
+	(*ast)->right = malloc(sizeof(t_ast));
+	(*ast)->right->cmd = create_node_cmd(exp_lst);
+	(*ast)->right->type = CMD;
+	(*ast)->right->right = NULL;
+	(*ast)->right->left = NULL;
 }
 
 t_command	*create_node_cmd(t_lst **exp_lst)

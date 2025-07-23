@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exp_utils_2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 18:09:47 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/16 13:56:16 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/23 17:26:13 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ int	process_lst_node(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell, int *advance)
 {
 	char	*expanded;
 
+	(void)advance;
 	exp_lst->expand = NO_EXPAND;
 	if (tok_lst->type == REDIR_HEREDOC)
 		if (process_heredoc(tok_lst, exp_lst, shell) == ERROR)
@@ -91,7 +92,10 @@ int	process_lst_node(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell, int *advance)
 	else if ((ft_strlen(expanded)) != 0)
 		process_expand(tok_lst, exp_lst, expanded);
 	else
-		(*advance) = 0;
+	{
+		exp_lst->value = NULL;
+		exp_lst->type = tok_lst->type;
+	}
 	free(expanded);
 	return (SUCCESS);
 }

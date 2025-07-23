@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/22 20:12:00 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/23 18:01:58 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,8 @@ char							**fill_cmd(t_lst **exp_lst, int argc,
 t_redirect						*add_redirection(t_redirect *redir,
 									t_lst *exp_lst);
 t_command						*create_node_cmd(t_lst **exp_lst);
+void							create_ast_right_node(t_lst **exp_lst,
+									t_ast **ast);
 int								parse_ast(t_lst *exp_lst, t_ast **ast,
 									t_sh *shell);
 void							print_ast(t_ast *ast);

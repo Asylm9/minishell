@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:36 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/22 00:21:19 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/23 17:15:06 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,8 @@ int	execute_binary(t_ast *ast, t_sh *shell, t_ast *root)
 	char	*cmd_path;
 	char	**env;
 
-	if (!ast->cmd || !shell->envl)
-		return (1);
-	if (!ast->cmd->cmd_name)
-		cleanup_exit(shell, root);
+	if (!ast->cmd || !ast->cmd->cmd_name || !shell->envl)
+		return (cleanup_shell(shell, root), 0);
 	if (is_absolute_or_relative(ast->cmd->cmd_name))
 	{
 		cmd_path = resolve_direct_path(ast);

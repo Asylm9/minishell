@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/17 13:50:48 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/23 17:58:40 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,21 +86,11 @@ void	process_node(t_lst *exp_lst, t_ast **ast)
 			{
 				exp_lst = exp_lst->next;
 				if (exp_lst->type >= 3 && exp_lst->type <= 6)
-				{
-					(*ast)->right = malloc(sizeof(t_ast));
-					(*ast)->right->cmd = create_node_cmd(&exp_lst);
-					(*ast)->right->type = CMD;
-				}
+					create_ast_right_node(&exp_lst, ast);
 			}
 		}
 		if (exp_lst && exp_lst->type == WORD)
-		{
-			(*ast)->right = malloc(sizeof(t_ast));
-			(*ast)->right->cmd = create_node_cmd(&exp_lst);
-			(*ast)->right->type = CMD;
-			(*ast)->right->right = NULL;
-			(*ast)->right->left = NULL;
-		}
+			create_ast_right_node(&exp_lst, ast);
 	}
 }
 
