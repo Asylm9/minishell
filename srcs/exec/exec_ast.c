@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:30 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 00:55:11 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 01:28:18 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ int	execute_pipeline(t_ast *ast, t_sh *shell, t_ast *root)
 	waitpid(pid_right, &status, 0);
 	shell->exit_status = process_wait_status(status);
 	if (shell->exit_status == 130)
-		ft_printf("\n");
+		printf_fd(STDOUT_FILENO, "\n");
 	else if (shell->exit_status == 131)
-		ft_printf("Quit (core dumped)\n");
+		printf_fd(STDOUT_FILENO, "Quit (core dumped)\n");
 	return (shell->exit_status);
 }
 

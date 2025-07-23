@@ -1,4 +1,21 @@
 
+Minishell> cat < nonexistentfile
+open: No such file or directory
+
+bash: nonexistentfile: No such file or directory
+bash-5.2$ echo $?
+1
+
+---------------------------------------
+
+Minishell> echo $UNDEFINED_VAR
+
+
+Minishell> 
+--> double saut de ligne
+---------------------------------------
+
+
 Minishell> cat | cat 
 ^\Minishell> cat    
 ^\Quit (core dumped)
