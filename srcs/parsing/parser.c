@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/23 17:58:40 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/23 19:01:59 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,12 @@ int	count_args(t_lst *exp_lst)
 	{
 		if (exp_lst->type >= 3)
 			exp_lst = exp_lst->next->next;
-		if (exp_lst && exp_lst->type == WORD)
+		else if (exp_lst && exp_lst->type == WORD && exp_lst->value)
+		{
 			i++;
-		if (exp_lst)
+			exp_lst = exp_lst->next;
+		}
+		else if (exp_lst)
 			exp_lst = exp_lst->next;
 	}
 	return (i);
@@ -63,13 +66,15 @@ char	**fill_cmd(t_lst **exp_lst, int argc, char **cmd_name)
 	{
 		if (tmp->type >= 3 && tmp->type <= 6)
 			tmp = tmp->next->next;
-		else
+		else if (tmp->value != NULL)
 		{
 			if (i == 0 && cmd_name)
 				*cmd_name = ft_strdup(tmp->value);
 			args[i++] = ft_strdup(tmp->value);
 			tmp = tmp->next;
 		}
+		else
+			tmp = tmp->next;
 	}
 	args[i] = NULL;
 	return (args);
