@@ -1,3 +1,10 @@
+Minishell> ls | | pwd
+ syntax error near unexpected token `|'
+asylm@ho66or:~/19/minishell$ 
+
+--> fait quitter le programme : suprrimer les cleanup_exit de parse!!
+
+---------------------------------------
 
 Minishell> cat < nonexistentfile
 open: No such file or directory
