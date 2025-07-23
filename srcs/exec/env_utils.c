@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:01 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/16 13:25:31 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 00:55:24 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,7 @@ char	**convert_envl_to_env(t_env *envl)
 	while (current)
 	{
 		if (current->value)
-		{
 			env[i] = ft_charjoin(current->key, current->value, '=');
-		}
 		else
 			env[i] = ft_strdup(current->key);
 		if (!env[i])

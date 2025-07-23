@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:14:45 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/17 14:12:16 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 00:59:03 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	exit_arg_error(t_ast *ast)
 
 int	builtin_exit(t_ast *ast, t_sh *shell)
 {
-	printf_fd(1, "exit\n");
+	ft_printf("exit\n");
 	if (ast->cmd->args && ast->cmd->args[1])
 	{
 		if (!is_numeric(ast->cmd->args[1]))

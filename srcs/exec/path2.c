@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:48 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/22 00:17:21 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 00:56:35 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	**get_paths(t_command *cmd, t_env *envl)
 	env_path = get_envl_var("PATH", envl);
 	if (!env_path)
 	{
-		printf_fd(2, "minishell: %s: No such file or directory\n",
+		printf_fd(STDERR, "minishell: %s: No such file or directory\n",
 			cmd->cmd_name);
 		return (NULL);
 	}

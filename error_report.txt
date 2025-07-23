@@ -1,4 +1,10 @@
 
+Minishell> cat | cat 
+^\Minishell> cat    
+^\Quit (core dumped)
+
+---------------------------------------
+
 CTRL-c dans heredoc fait quitter prgramme -> clean_exit dans le main
 Supprimer clean-up exit dans fonction parse!!
 ---------------------------------------
@@ -44,7 +50,7 @@ Minishell> "" | ls | grep c
 Minishell> ls | $HOMEE | grep c
 -> xc + valgrind ok
 
-Minishell> ls | $HOMEE | grep c | $HOMEE
+Minishell> |-
 -> xc + valgrind ok
 
 Minishell> $HOMEE | grep c
