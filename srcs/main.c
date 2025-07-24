@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/24 14:39:46 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/24 19:40:26 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,12 @@ int	parse(char *input, t_sh *shell, t_ast **ast)
 {
 	if (tokenize(input, shell) == ERROR)
 		cleanup_exit(shell, NULL);
-	if (create_list_node(&shell->exp_lst) == ERROR)
+	if (create_list_node(&shell->exp_lst, shell) == ERROR)
 		cleanup_exit(shell, NULL);
 	if (expand_list(shell->tok_lst, shell->exp_lst, shell) == ERROR)
 	{
 		if (shell->exit_status == 130)
 			return (ERROR);
-		cleanup_exit(shell, *ast);
 	}
 	if (init_ast(ast, shell) == ERROR)
 		cleanup_exit(shell, *ast);

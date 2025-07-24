@@ -6,13 +6,13 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 21:11:07 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/24 15:23:36 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/24 19:34:39 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	create_list_node(t_lst **tok_lst)
+int	create_list_node(t_lst **tok_lst, t_sh *shell)
 {
 	t_lst	*new_token;
 	t_lst	*temp;
@@ -22,7 +22,7 @@ int	create_list_node(t_lst **tok_lst)
 	if (!new_token)
 	{
 		printf_fd(STDERR, "Malloc failed.\n");
-		return (ERROR);
+		cleanup_exit(shell, NULL);
 	}
 	new_token->value = NULL;
 	new_token->expand = NO_EXPAND;

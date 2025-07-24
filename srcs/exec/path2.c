@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:48 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 00:56:35 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 19:32:00 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ char	*resolve_path(t_ast *ast, t_sh *shell, t_ast *root)
 	if (!paths)
 	{
 		cleanup_shell(shell, root);
-		exit (CMD_NOT_FOUND);
+		exit(CMD_NOT_FOUND);
 	}
 	cmd_path = find_cmd_path(paths, ast->cmd->cmd_name);
 	free_array(paths, -1);

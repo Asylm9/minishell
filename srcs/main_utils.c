@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 15:03:39 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/24 14:33:41 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/24 19:34:57 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,12 @@ int	init_ast(t_ast **ast, t_sh *shell)
 
 int	tokenize(char *input, t_sh *shell)
 {
-	if (create_list_node(&shell->tok_lst) == ERROR)
+	if (create_list_node(&shell->tok_lst, shell) == ERROR)
 	{
 		free(input);
 		cleanup_exit(shell, NULL);
 	}
-	else if (tokenize_input(shell->tok_lst, input) == ERROR)
+	else if (tokenize_input(shell->tok_lst, input, shell) == ERROR)
 	{
 		free(input);
 		cleanup_exit(shell, NULL);

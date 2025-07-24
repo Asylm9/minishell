@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:05:28 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/24 15:22:38 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/24 19:29:25 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	process_token(t_lst *tok_lst, const char *input, int *start, int *end)
 	return (SUCCESS);
 }
 
-int	tokenize_input(t_lst *tok_lst, const char *input)
+int	tokenize_input(t_lst *tok_lst, const char *input, t_sh *shell)
 {
 	int	start;
 	int	end;
@@ -95,7 +95,7 @@ int	tokenize_input(t_lst *tok_lst, const char *input)
 			i++;
 		if (input[i] == '\0')
 			break ;
-		create_list_node(&tok_lst);
+		create_list_node(&tok_lst, shell);
 		if (!tok_lst->next)
 			return (ERROR);
 		if (input[end] == ' ')

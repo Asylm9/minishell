@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 18:09:47 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/24 17:53:14 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/24 19:38:37 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,9 @@ void	handle_unclosed_pipes(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
 	(void)shell;
 	input = NULL;
 	input = readline(">");
-	create_list_node(&tok_lst);
-	if (!tok_lst->next)
-		cleanup_exit(shell, NULL);
+	create_list_node(&tok_lst, shell);
 	tok_lst = tok_lst->next;
-	if (tokenize_input(tok_lst, input) == ERROR)
+	if (tokenize_input(tok_lst, input, shell) == ERROR)
 		cleanup_exit(shell, NULL);
 	if (input != NULL)
 		free(input);
@@ -65,9 +63,7 @@ void	process_expand(t_lst *tok_lst, t_lst *exp_lst, char *expanded,
 			if (!exp_lst->value)
 				cleanup_exit(shell, NULL);
 			exp_lst->type = WORD;
-			create_list_node(&exp_lst);
-			if (!exp_lst->next)
-				cleanup_exit(shell, NULL);
+			create_list_node(&exp_lst, shell);
 			exp_lst = exp_lst->next;
 			count--;
 		}
@@ -123,7 +119,7 @@ int	process_lst(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
 			tok_lst = tok_lst->next;
 			if (tok_lst != NULL)
 			{
-				create_list_node(&exp_lst);
+				create_list_node(&exp_lst, shell);
 				exp_lst = exp_lst->next;
 			}
 		}
