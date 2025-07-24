@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 21:11:07 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/23 18:00:40 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 15:23:36 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	create_list_node(t_lst **tok_lst)
 	new_token = malloc(sizeof(t_lst));
 	if (!new_token)
 	{
-		perror("Token list malloc failed.\n");
+		printf_fd(STDERR, "Malloc failed.\n");
 		return (ERROR);
 	}
 	new_token->value = NULL;
