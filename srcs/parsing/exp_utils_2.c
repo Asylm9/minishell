@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exp_utils_2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 18:09:47 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/24 14:23:12 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 16:47:30 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,17 @@
 
 void	handle_unclosed_pipes(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
 {
-	t_lst	*new_line;
 	char	*input;
 
-	new_line = NULL;
+	(void)exp_lst;
+	(void)shell;
 	input = NULL;
-	if (!tok_lst->next)
-	{
-		exp_lst->type = PIPE;
-		create_list_node(&exp_lst);
-		exp_lst = exp_lst->next;
-		input = readline(">");
-		create_list_node(&new_line);
-		tokenize_input(new_line, input);
-		if (input != NULL)
-			free(input);
-		expand_list(new_line, exp_lst, shell);
-		tok_lst = tok_lst->next;
-	}
+	input = readline(">");
+	create_list_node(&tok_lst);
+	tok_lst = tok_lst->next;
+	tokenize_input(tok_lst, input);
+	if (input != NULL)
+		free(input);
 }
 
 int	process_heredoc(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
@@ -105,8 +98,16 @@ int	process_lst(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
 	{
 		if (check_validity(tok_lst, shell) == SUCCESS)
 		{
-			if (process_lst_node(tok_lst, exp_lst, shell) == ERROR)
-				return (ERROR);
+			if (tok_lst->type == PIPE && !tok_lst->next)
+			{
+				handle_unclosed_pipes(tok_lst, exp_lst, shell);
+				exp_lst->type = PIPE;
+			}
+			else
+			{
+				if (process_lst_node(tok_lst, exp_lst, shell) == ERROR)
+					return (ERROR);
+			}
 			tok_lst = tok_lst->next;
 			if (tok_lst != NULL)
 			{
@@ -114,8 +115,6 @@ int	process_lst(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
 				exp_lst = exp_lst->next;
 			}
 		}
-		else if (tok_lst->type == PIPE)
-			handle_unclosed_pipes(tok_lst, exp_lst, shell);
 		else
 			return (ERROR);
 	}

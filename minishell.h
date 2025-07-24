@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 14:39:55 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/24 16:10:05 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,7 @@ int								is_env_var(char *str);
 void							init_exp(t_exp *exp);
 int								is_pipe_redir(char *str);
 size_t							count_nb_words(char const *s, char c);
-int								check_validity(t_lst *exp_lst, t_sh *shell);
+int								check_validity(t_lst *tok_lst, t_sh *shell);
 void							input_error(int error, t_sh *shell,
 									t_token_type tok);
 int								expand_xcode(char **result, t_sh *shell);

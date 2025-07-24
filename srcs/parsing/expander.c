@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/24 14:12:41 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 15:38:15 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ size_t	count_nb_words(char const *s, char c)
 
 int	expand_list(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
 {
-	if (!exp_lst)
-		return (ERROR);
 	if (tok_lst->type == PIPE)
 		return (input_error(1, shell, PIPE), ERROR);
 	return (process_lst(tok_lst, exp_lst, shell));

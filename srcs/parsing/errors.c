@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   errors.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 16:33:10 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/23 16:22:54 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 16:38:49 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,25 +59,24 @@ void	input_error(int error, t_sh *shell, t_token_type tok)
 	}
 }
 
-int	check_validity(t_lst *exp_lst, t_sh *shell)
+int	check_validity(t_lst *tok_lst, t_sh *shell)
 {
 	t_token_type	first;
 	t_token_type	second;
 
 	first = NOT_SET;
-	while (exp_lst)
+	while (tok_lst)
 	{
 		second = first;
-		first = exp_lst->type;
-		if (first == PIPE && (second >= 2 || (exp_lst->next
-					&& (exp_lst->next->type != 1 && exp_lst->next->type != 4))
-				|| !exp_lst->next))
+		first = tok_lst->type;
+		if (first == PIPE && (second >= 2 || (tok_lst->next
+					&& (tok_lst->next->type != 1 && tok_lst->next->type != 4))))
 			return (input_error(1, shell, first), ERROR);
 		if ((second >= 3 && first != WORD) || (first >= 3 && second >= 3))
 			return (input_error(2, shell, first), ERROR);
-		if (first >= 3 && !exp_lst->next)
+		if (first >= 3 && !tok_lst->next)
 			return (input_error(3, shell, first), ERROR);
-		exp_lst = exp_lst->next;
+		tok_lst = tok_lst->next;
 	}
 	return (SUCCESS);
 }
