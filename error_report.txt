@@ -1,3 +1,5 @@
+pwd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+
 Minishell> ls | | pwd
  syntax error near unexpected token `|'
 asylm@ho66or:~/19/minishell$ 

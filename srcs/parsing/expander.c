@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:09:51 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/23 16:27:05 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 14:12:41 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,9 @@ size_t	count_nb_words(char const *s, char c)
 
 int	expand_list(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
 {
-	int	advance;
-
-	advance = 0;
 	if (!exp_lst)
 		return (ERROR);
 	if (tok_lst->type == PIPE)
 		return (input_error(1, shell, PIPE), ERROR);
-	return (process_lst(tok_lst, exp_lst, shell, advance));
+	return (process_lst(tok_lst, exp_lst, shell));
 }

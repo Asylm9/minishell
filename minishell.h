@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/23 18:01:58 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 14:13:24 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,9 +185,9 @@ int								process_heredoc(t_lst *tok_lst, t_lst *exp_lst,
 void							process_expand(t_lst *tok_lst, t_lst *exp_lst,
 									char *expanded);
 int								process_lst_node(t_lst *tok_lst, t_lst *exp_lst,
-									t_sh *shell, int *advance);
+									t_sh *shell);
 int								process_lst(t_lst *tok_lst, t_lst *exp_lst,
-									t_sh *shell, int advance);
+									t_sh *shell);
 
 /* Parser */
 int								init_ast(t_ast **ast, t_sh *shell);
