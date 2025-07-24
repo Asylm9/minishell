@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:11:00 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/16 13:11:03 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 17:36:41 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static int	sigint_in_heredoc(char *input, char **buffer)
 	free(*buffer);
 	*buffer = NULL;
 	signal(SIGINT, handle_sigint);
-	return (1);
+	return (SIGINT);
 }
 
 static int	eof_in_heredoc(int count, char *del)
@@ -39,9 +39,9 @@ static int	append_line_to_buffer(char **buffer, char *line)
 	free(line);
 	free(*buffer);
 	if (!temp)
-		return (1);
+		return (ERROR);
 	*buffer = temp;
-	return (0);
+	return (SUCCESS);
 }
 
 int	process_readline_loop(char *del, t_sh *shell, char **buffer, int *count)
@@ -66,7 +66,7 @@ int	process_readline_loop(char *del, t_sh *shell, char **buffer, int *count)
 		if (!line)
 			break ;
 		ret = append_line_to_buffer(buffer, line);
-		if (ret)
+		if (ret == ERROR)
 			return (ERROR);
 		(*count)++;
 	}

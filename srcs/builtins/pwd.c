@@ -6,11 +6,19 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:15:04 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/16 13:38:10 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 18:20:02 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+static void	welcome_to_the_void(void)
+{
+	printf_fd(STDERR, "pwd: error retrieving current directory: ");
+	printf_fd(STDERR, "getcwd: cannot access parent directories: ");
+	printf_fd(STDERR, "No such file or directory\n");
+	printf_fd(STDERR, "\n*** Welcome to the void ***\n\n");
+}
 
 int	builtin_pwd(char **args)
 {
@@ -26,9 +34,9 @@ int	builtin_pwd(char **args)
 	}
 	if (!getcwd(buffer, sizeof(buffer)))
 	{
-		perror("getcwd");
+		welcome_to_the_void();
 		return (ERROR);
 	}
-	ft_putendl_fd(buffer, 1);
+	printf_fd(STDOUT_FILENO, "%s\n", buffer);
 	return (SUCCESS);
 }
