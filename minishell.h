@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 14:13:24 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 14:39:55 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ int								init_shell(t_sh *shell, char **envp);
 
 /* Tokenizer */
 int								tokenize(char *input, t_sh *shell);
-int								is_empty(char *input);
+int								is_not_empty(char *input);
 char							next_input(char *input);
 int								check_quotes(const char *input, int *i,
 									int *size, t_sh *shell);

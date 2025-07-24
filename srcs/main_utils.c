@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 15:03:39 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/23 16:40:15 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 14:33:41 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,12 @@ int	tokenize(char *input, t_sh *shell)
 	if (create_list_node(&shell->tok_lst) == ERROR)
 	{
 		free(input);
-		return (ERROR);
+		cleanup_exit(shell, NULL);
 	}
 	else if (tokenize_input(shell->tok_lst, input) == ERROR)
 	{
-		free_tok_lst(&shell->tok_lst);
 		free(input);
-		return (ERROR);
+		cleanup_exit(shell, NULL);
 	}
 	return (SUCCESS);
 }

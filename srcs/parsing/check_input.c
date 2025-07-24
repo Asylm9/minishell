@@ -6,13 +6,13 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:18:33 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/16 10:34:21 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/24 14:39:40 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	is_empty(char *input)
+int	is_not_empty(char *input)
 {
 	int	i;
 

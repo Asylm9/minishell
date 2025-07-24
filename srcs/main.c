@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/24 14:18:17 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 14:39:46 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	init_minishell(t_sh *shell, char **envp)
 void	get_input(char **input, t_sh *shell, t_ast *ast)
 {
 	(*input) = readline("\001\033[0;34m\033[1m\002Minishell> \001\033[0m\002");
-	if (is_empty(*input))
+	if (is_not_empty(*input))
 		add_history(*input);
 	if (!(*input))
 	{
