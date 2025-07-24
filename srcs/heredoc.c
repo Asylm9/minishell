@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:12:00 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/16 13:12:02 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 17:33:45 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,18 +77,24 @@ void	heredoc_child(char *del, t_sh *shell, int *pfd)
 {
 	char	*buffer;
 	char	*temp;
+	int		ret;
 
 	buffer = NULL;
-	if (read_heredoc_content(del, shell, &buffer) != SUCCESS)
-		fd_clean_exit(shell, pfd, 130);
+	ret = read_heredoc_content(del, shell, &buffer);
+	if (ret > 0)
+	{
+		if (ret == SIGINT)
+			fd_clean_exit(shell, pfd, 130);
+		fd_clean_exit(shell, pfd, ERROR);
+
+	}
 	if (buffer)
 	{
 		temp = ft_strjoin(buffer, "\n");
-		if (temp)
-		{
-			free(buffer);
-			buffer = temp;
-		}
+		free(buffer);
+		if (!temp)
+			fd_clean_exit(shell, pfd, ERROR);
+		buffer = temp;
 		write(pfd[1], buffer, ft_strlen(buffer));
 		free(buffer);
 	}
