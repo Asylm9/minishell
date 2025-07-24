@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 19:30:17 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/24 19:42:39 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -304,6 +304,7 @@ void							fd_clean_exit(t_sh *shell, int *pfd,
 									int exit_code);
 void							close_all_fds(int fd);
 void							cleanup_exit(t_sh *shell, t_ast *ast);
+void							malloc_exit(t_sh *shell, t_ast *ast);
 
 /* Signals */
 void							handle_here_sig(int sig);

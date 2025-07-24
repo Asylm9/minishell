@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 15:03:39 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/24 19:34:57 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/24 19:42:19 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,13 @@ void	cleanup_exit(t_sh *shell, t_ast *ast)
 {
 	cleanup_shell(shell, ast);
 	exit(shell->exit_status);
+}
+
+void	malloc_exit(t_sh *shell, t_ast *ast)
+{
+	cleanup_shell(shell, ast);
+	printf_fd(STDERR, "Malloc failure: exiting program...");
+	exit(EXIT_FAILURE);
 }
 
 int	init_ast(t_ast **ast, t_sh *shell)
