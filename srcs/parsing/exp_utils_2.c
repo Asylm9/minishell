@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 18:09:47 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/24 14:13:04 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 14:23:12 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	process_expand(t_lst *tok_lst, t_lst *exp_lst, char *expanded)
 int	process_lst_node(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
 {
 	char	*expanded;
-	
+
 	exp_lst->expand = NO_EXPAND;
 	if (tok_lst->type == REDIR_HEREDOC)
 		if (process_heredoc(tok_lst, exp_lst, shell) == ERROR)
