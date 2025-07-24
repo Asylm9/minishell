@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:12:00 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 17:33:45 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 17:56:34 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ void	heredoc_child(char *del, t_sh *shell, int *pfd)
 		if (ret == SIGINT)
 			fd_clean_exit(shell, pfd, 130);
 		fd_clean_exit(shell, pfd, ERROR);
-
 	}
 	if (buffer)
 	{
