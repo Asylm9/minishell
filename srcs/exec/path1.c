@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:36 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/23 17:15:06 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 22:09:10 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,13 @@ static bool	is_absolute_or_relative(char *cmd)
 		|| (cmd[0] == '.' && cmd[1] == '.'));
 }
 
-char	*resolve_direct_path(t_ast *ast)
+char	*resolve_direct_path(t_ast *ast, t_sh *shell, t_ast *root)
 {
 	char	*cmd_path;
 
 	cmd_path = ft_strdup(ast->cmd->cmd_name);
+	if (!cmd_path)
+		malloc_exit(shell, root);
 	if (access(cmd_path, F_OK) < 0 || ft_strcmp("..", cmd_path) == 0)
 	{
 		if (access(cmd_path, X_OK) < 0)
@@ -69,7 +71,7 @@ int	execute_binary(t_ast *ast, t_sh *shell, t_ast *root)
 		return (cleanup_shell(shell, root), 0);
 	if (is_absolute_or_relative(ast->cmd->cmd_name))
 	{
-		cmd_path = resolve_direct_path(ast);
+		cmd_path = resolve_direct_path(ast, shell, root);
 		if (!cmd_path)
 			return (cleanup_shell(shell, root), CMD_NOT_FOUND);
 	}
@@ -81,7 +83,7 @@ int	execute_binary(t_ast *ast, t_sh *shell, t_ast *root)
 			ast->cmd->cmd_name);
 		return (cleanup_shell(shell, root), CMD_NOT_FOUND);
 	}
-	env = convert_envl_to_env(shell->envl);
+	env = convert_envl_to_env(shell, root);
 	set_subprocess_signals();
 	execve(cmd_path, ast->cmd->args, env);
 	return (execve_error(cmd_path, env, shell, root));

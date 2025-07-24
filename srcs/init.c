@@ -6,13 +6,13 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:12:16 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/16 13:12:18 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 22:40:30 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	fill_list(t_env **new_node, char *var)
+void	fill_list(t_env **new_node, char *var, t_sh *shell)
 {
 	char	*equal_pos;
 	char	*value;
@@ -26,18 +26,16 @@ void	fill_list(t_env **new_node, char *var)
 	if (value && strcmp(var, "SHLVL") == 0)
 	{
 		level = atoi(value) + 1;
-		*new_node = create_node(ft_strdup(var), ft_itoa(level));
+		*new_node = create_node(ft_strdup(var), ft_itoa(level), shell, NULL);
 	}
 	else if (value)
-		*new_node = create_node(ft_strdup(var), ft_strdup(value));
+		*new_node = create_node(ft_strdup(var), ft_strdup(value), shell, NULL);
 	else
-		*new_node = create_node(ft_strdup(var), NULL);
+		*new_node = create_node(ft_strdup(var), NULL, shell, NULL);
 	equal_pos[0] = '=';
-	if (!*new_node)
-		return ;
 }
 
-t_env	*init_env_list(char **env)
+t_env	*init_env_list(char **env, t_sh *shell)
 {
 	t_env	*new_node;
 	t_env	*head;
@@ -50,7 +48,7 @@ t_env	*init_env_list(char **env)
 	i = 0;
 	while (env[i])
 	{
-		fill_list(&new_node, env[i]);
+		fill_list(&new_node, env[i], shell);
 		if (!new_node)
 			return (NULL);
 		head = add_back_node(new_node, head);
@@ -59,7 +57,7 @@ t_env	*init_env_list(char **env)
 	return (head);
 }
 
-static t_env	*init_minimal_list(void)
+static t_env	*init_minimal_list(t_sh *shell)
 {
 	t_env	*head;
 	t_env	*new_node1;
@@ -72,13 +70,13 @@ static t_env	*init_minimal_list(void)
 		printf_fd(STDERR, "%s\n", strerror(errno));
 		return (NULL);
 	}
-	new_node1 = create_node(ft_strdup("PWD"), ft_strdup(buffer));
-	if (!new_node1)
-		return (NULL);
+	new_node1 = create_node(ft_strdup("PWD"), ft_strdup(buffer), shell, NULL);
+/* 	if (!new_node1)
+		return (NULL); */
 	head = add_back_node(new_node1, head);
-	new_node2 = create_node(ft_strdup("SHLVL"), ft_strdup("1"));
-	if (!new_node2)
-		return (NULL);
+	new_node2 = create_node(ft_strdup("SHLVL"), ft_strdup("1"), shell, NULL);
+/* 	if (!new_node2)
+		return (NULL); */
 	head = add_back_node(new_node2, head);
 	return (head);
 }
@@ -86,9 +84,9 @@ static t_env	*init_minimal_list(void)
 int	init_shell(t_sh *shell, char **envp)
 {
 	if (!envp || !*envp)
-		shell->envl = init_minimal_list();
+		shell->envl = init_minimal_list(shell);
 	else
-		shell->envl = init_env_list(envp);
+		shell->envl = init_env_list(envp, shell);
 	if (!shell->envl)
 		return (ERROR);
 	shell->in_pipeline = false;

@@ -6,13 +6,13 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:14:25 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/22 18:05:56 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 21:42:10 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-static char	*set_new_path(char **args, t_sh *shell)
+static char	*set_new_path(char **args, t_sh *shell, t_ast *root)
 {
 	char	*new_path;
 	int		argc;
@@ -22,15 +22,20 @@ static char	*set_new_path(char **args, t_sh *shell)
 	if (argc > 2)
 		return (printf_fd(STDERR, "minishell: cd: too many arguments\n"), NULL);
 	if (argc == 1)
-		new_path = get_envl_var("HOME", shell->envl);
+		new_path = get_envl_var("HOME", shell, root);
 	else if (argc == 2)
 	{
 		if (args[1][0] == '~')
-			new_path = get_envl_var("HOME", shell->envl);
+			new_path = get_envl_var("HOME", shell, root);
 		else if (args[1][0] == '-')
-			new_path = get_envl_var("OLDPWD", shell->envl);
+			new_path = get_envl_var("OLDPWD", shell, root);
 		else
+		{
 			new_path = ft_strdup(args[1]);
+			if (!new_path)
+				malloc_exit(shell, root);
+		}
+			
 	}
 	return (new_path);
 }
@@ -61,29 +66,29 @@ int	validate_path(char **args, char *new_path)
 	return (SUCCESS);
 }
 
-int	update_pwds(t_sh *shell, char *curr_dir)
+int	update_pwds(t_sh *shell, char *curr_dir, t_ast *root)
 {
-	set_envl_var("OLDPWD", &shell->envl, curr_dir);
+	set_envl_var("OLDPWD", curr_dir, shell, root);
 	if (!getcwd(curr_dir, PATH_MAX))
 		return (perror("getcwd"), ERROR);
-	set_envl_var("PWD", &shell->envl, curr_dir);
+	set_envl_var("PWD", curr_dir, shell, root);
 	return (SUCCESS);
 }
 
-int	builtin_cd(char **args, t_sh *shell)
+int	builtin_cd(char **args, t_sh *shell, t_ast *root)
 {
 	char	curr_dir[PATH_MAX];
 	char	*new_path;
 
 	if (!getcwd(curr_dir, PATH_MAX))
 		return (perror("getcwd"), BUILTIN_ERR);
-	new_path = set_new_path(args, shell);
+	new_path = set_new_path(args, shell, root);
 	if (validate_path(args, new_path) != SUCCESS)
 		return (ERROR);
 	if (chdir(new_path) < 0)
 		return (BUILTIN_ERR);
 	free(new_path);
-	if (update_pwds(shell, curr_dir) != 0)
+	if (update_pwds(shell, curr_dir, root) != 0)
 		return (BUILTIN_ERR);
 	return (SUCCESS);
 }

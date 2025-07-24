@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:18 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 01:28:52 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 20:57:45 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	handle_builtin(t_ast *ast, t_sh *shell, t_ast *root)
 		save_or_restore_fds(shell, 's');
 	if (apply_redirections(ast->cmd) == ERROR)
 		exit(1);
-	ret = execute_builtin(ast, shell);
+	ret = execute_builtin(ast, shell, root);
 	if (ast->cmd->redirections && !shell->in_pipeline)
 		save_or_restore_fds(shell, 'r');
 	if (shell->in_pipeline)

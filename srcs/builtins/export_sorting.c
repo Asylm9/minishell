@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:14:49 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/16 13:14:50 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 22:25:30 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,16 @@ int	count_elements(t_env *envl)
 	return (n);
 }
 
-void	print_exp_list(t_env *envl)
+void	print_exp_list(t_sh *shell, t_ast *root)
 {
 	t_env	**ptr_array;
 	int		count;
 	int		i;
 
-	count = count_elements(envl);
-	ptr_array = init_temp_array(envl, count);
+	count = count_elements(shell->envl);
+	ptr_array = init_temp_array(count, shell, root);
 	if (!ptr_array)
-		return ;
+		malloc_exit(shell, root);
 	sort_env_list(ptr_array, count);
 	i = 0;
 	while (i < count)
@@ -51,19 +51,19 @@ void	print_exp_list(t_env *envl)
 	free(ptr_array);
 }
 
-t_env	**init_temp_array(t_env *envl, int count)
+t_env	**init_temp_array(int count, t_sh *shell, t_ast *root)
 {
 	t_env	**ptr_array;
 	int		i;
 
 	ptr_array = (t_env **) malloc(sizeof(t_env *) * count);
 	if (!ptr_array)
-		return (NULL);
+		malloc_exit(shell, root);
 	i = 0;
 	while (i < count)
 	{
-		ptr_array[i] = envl;
-		envl = envl->next;
+		ptr_array[i] = shell->envl;
+		shell->envl = shell->envl->next;
 		i++;
 	}
 	return (ptr_array);

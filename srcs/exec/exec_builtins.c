@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:10 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/23 17:10:09 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 21:48:14 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,18 @@ bool	is_builtin(char *cmd_name)
 	return (false);
 }
 
-int	execute_builtin(t_ast *ast, t_sh *shell)
+int	execute_builtin(t_ast *ast, t_sh *shell, t_ast *root)
 {
 	if (!ast->cmd || !shell)
 		return (ERROR);
 	if (ft_strcmp(ast->cmd->cmd_name, "echo") == 0)
 		shell->exit_status = builtin_echo(ast, shell);
 	else if (ft_strcmp(ast->cmd->cmd_name, "cd") == 0)
-		shell->exit_status = builtin_cd(ast->cmd->args, shell);
+		shell->exit_status = builtin_cd(ast->cmd->args, shell, root);
 	else if (ft_strcmp(ast->cmd->cmd_name, "pwd") == 0)
 		shell->exit_status = builtin_pwd(ast->cmd->args);
 	else if (ft_strcmp(ast->cmd->cmd_name, "export") == 0)
-		shell->exit_status = builtin_export(ast->cmd->args, &shell->envl);
+		shell->exit_status = builtin_export(ast->cmd->args, shell, root);
 	else if (ft_strcmp(ast->cmd->cmd_name, "unset") == 0)
 		shell->exit_status = builtin_unset(ast->cmd->args, &shell->envl);
 	else if (ft_strcmp(ast->cmd->cmd_name, "env") == 0)

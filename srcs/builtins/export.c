@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:14:57 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 01:01:31 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 22:23:50 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	validate_format_export(char **args, int i)
 	return (SUCCESS);
 }
 
-static int	append_export(char *key, char *plus_pos, t_env **envl)
+static int	append_export(char *key, char *plus_pos, t_sh *shell, t_ast *root)
 {
 	char	*current_value;
 	char	*new_value;
@@ -49,35 +49,35 @@ static int	append_export(char *key, char *plus_pos, t_env **envl)
 
 	*plus_pos = '\0';
 	new_value = plus_pos + 2;
-	current_value = get_envl_var(key, *envl);
+	current_value = get_envl_var(key, shell, root);
 	if (!current_value)
-		ret = set_envl_var(key, envl, new_value);
+		ret = set_envl_var(key, new_value, shell, root);
 	else
 	{
 		joined_value = ft_strjoin(current_value, new_value);
 		free(current_value);
 		if (!joined_value)
 			return (ERROR);
-		ret = set_envl_var(key, envl, joined_value);
+		ret = set_envl_var(key, joined_value, shell, root);
 		free(joined_value);
 	}
 	return (ret);
 }
 
-static int	process_assignment(char *key, char *equal_pos, t_env **envl)
+static int	process_assignment(char *key, char *equal_pos, t_sh *shell, t_ast *root)
 {
 	char	*value;
 
 	*equal_pos = '\0';
 	value = equal_pos + 1;
 	if ((ft_strcmp(key, "SHLVL") == 0 && (*value == '-' || !is_numeric(value))))
-		return (set_envl_var(key, envl, "0"));
+		return (set_envl_var(key, "0", shell, root));
 	else if (ft_strlen(value) == 0)
-		return (set_envl_var(key, envl, EMPTY));
-	return (set_envl_var(key, envl, value));
+		return (set_envl_var(key, EMPTY, shell, root));
+	return (set_envl_var(key, value, shell, root));
 }
 
-static int	process_export_arg(char **args, int i, t_env **envl)
+static int	process_export_arg(char **args, int i, t_sh *shell, t_ast *root)
 {
 	char	*equal_pos;
 	char	*plus_pos;
@@ -86,26 +86,26 @@ static int	process_export_arg(char **args, int i, t_env **envl)
 	equal_pos = ft_strchr(args[i], '=');
 	if (!equal_pos)
 	{
-		if (!key_exists(args[i], *envl))
-			return (add_new_entry(args[i], NULL, envl));
+		if (!key_exists(args[i], shell->envl))
+			return (add_new_entry(args[i], NULL, shell, root));
 		return (SUCCESS);
 	}
 	if (plus_pos)
-		return (append_export(args[i], plus_pos, envl));
-	return (process_assignment(args[i], equal_pos, envl));
+		return (append_export(args[i], plus_pos, shell, root));
+	return (process_assignment(args[i], equal_pos, shell, root));
 }
 
-int	builtin_export(char **args, t_env **envl)
+int	builtin_export(char **args, t_sh *shell, t_ast *root)
 {
 	int		i;
 	int		ret;
 	int		status;
 
-	if (!envl)
+	if (!shell || !shell->envl)
 		return (ERROR);
 	if (args_count(args) == 1)
 	{
-		print_exp_list(*envl);
+		print_exp_list(shell, root);
 		return (SUCCESS);
 	}
 	ret = 0;
@@ -116,7 +116,7 @@ int	builtin_export(char **args, t_env **envl)
 		ret = validate_format_export(args, i);
 		if (ret != 0)
 			status = ret;
-		else if (process_export_arg(args, i, envl) != 0)
+		else if (process_export_arg(args, i, shell, root) != 0)
 			status = ERROR;
 	}
 	return (status);

@@ -6,22 +6,22 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:01 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 00:55:24 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 22:20:24 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-char	**convert_envl_to_env(t_env *envl)
+char	**convert_envl_to_env(t_sh *shell, t_ast *root)
 {
 	char	**env;
 	t_env	*current;
 	int		i;
 
-	env = malloc(sizeof(char *) * (list_size(envl) + 1));
+	env = malloc(sizeof(char *) * (list_size(shell->envl) + 1));
 	if (!env)
-		return (NULL);
-	current = envl;
+		malloc_exit(shell, root);
+	current = shell->envl;
 	i = 0;
 	while (current)
 	{
@@ -30,7 +30,10 @@ char	**convert_envl_to_env(t_env *envl)
 		else
 			env[i] = ft_strdup(current->key);
 		if (!env[i])
-			return (free_array(env, i), NULL);
+		{
+			free_array(env, i);
+			malloc_exit(shell, root);
+		}
 		current = current->next;
 		i++;
 	}
@@ -52,7 +55,7 @@ bool	key_exists(char *key, t_env *envl)
 	return (false);
 }
 
-int	add_new_entry(char *key, char *value, t_env **envl)
+int	add_new_entry(char *key, char *value, t_sh *shell, t_ast *root)
 {
 	t_env	*new_node;
 	char	*key_copy;
@@ -62,51 +65,69 @@ int	add_new_entry(char *key, char *value, t_env **envl)
 		return (ERROR);
 	key_copy = ft_strdup(key);
 	if (!key_copy)
-		return (ERROR);
+		malloc_exit(shell, root);
 	value_copy = NULL;
 	if (value)
 	{
 		value_copy = ft_strdup(value);
 		if (!value_copy)
-			return (free(key), ERROR);
+		{
+			free(key_copy);
+			malloc_exit(shell, root);
+		}
 	}
-	new_node = create_node(key_copy, value_copy);
+	new_node = create_node(key_copy, value_copy, shell, root);
 	if (!new_node)
 		return (ERROR);
-	*envl = add_back_node(new_node, *envl);
+	shell->envl = add_back_node(new_node, shell->envl); //
 	return (SUCCESS);
 }
 
-char	*get_envl_var(char *name, t_env *envl)
+char	*get_envl_var(char *name, t_sh *shell, t_ast *root)
 {
 	t_env	*current;
+	char	*value;
 
-	if (!name || !envl)
+	if (!name || !shell->envl)
 		return (NULL);
-	current = envl;
+	current = shell->envl;
 	while (current)
 	{
 		if (ft_strcmp(current->key, name) == 0)
-			return (ft_strdup(current->value));
+		{
+			if (current->value)
+			{
+				value = ft_strdup(current->value);
+				if (!value)
+					malloc_exit(shell, root);
+			}
+			else 
+				value = NULL;
+			return (value);
+		}
 		current = current->next;
 	}
 	return (NULL);
 }
 
-int	set_envl_var(char *name, t_env **envl, char *value)
+int	set_envl_var(char *name, char *value, t_sh *shell, t_ast *root)
 {
 	t_env	*current;
 
-	if (!name || !envl)
+	if (!name || !shell->envl)
 		return (ERROR);
-	current = *envl;
+	current = shell->envl;
 	while (current)
 	{
 		if (ft_strcmp(current->key, name) == 0)
 		{
 			free(current->value);
 			if (value)
+			{
 				current->value = ft_strdup(value);
+				if (!current->value)
+					malloc_exit(shell, root);
+			}
 			else
 				current->value = NULL;
 			if (value && !current->value)
@@ -115,5 +136,5 @@ int	set_envl_var(char *name, t_env **envl, char *value)
 		}
 		current = current->next;
 	}
-	return (add_new_entry(name, value, envl));
+	return (add_new_entry(name, value, shell, root));
 }
