@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:54 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/22 17:42:59 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 00:39:36 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@ int	save_or_restore_fds(t_sh *shell, char flag)
 			return (perror("dup2"), ERROR);
 		if (dup2(shell->saved_stdout, STDOUT_FILENO) < 0)
 			return (perror("dup2"), ERROR);
+		close(shell->saved_stdin);
+		close(shell->saved_stdout);
+		shell->saved_stdin = -1;
+		shell->saved_stdout = -1;
 	}
 	else
 		return (ERROR);
