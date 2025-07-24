@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/22 03:26:05 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 14:18:17 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	main(int ac, char **av, char **envp)
 	ast = NULL;
 	if (ac > 1)
 	{
-		fprintf(stderr, "Usage: %s\n", av[0]);
+		printf_fd(STDERR, "Usage: %s\n", av[0]);
 		return (ERROR);
 	}
 	if (init_minishell(&shell, envp) == ERROR)
