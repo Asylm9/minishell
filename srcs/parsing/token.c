@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 16:05:28 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/16 01:48:20 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/24 15:22:38 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,7 @@ int	find_end_of_token(const char *input, int *end)
 			quote = input[(*end)];
 			(*end)++;
 			while (input[(*end)] != quote)
-			{
-				if (input[(*end)] == '\0')
-					return (ERROR);
 				(*end)++;
-			}
 			(*end)++;
 		}
 		else
@@ -74,11 +70,9 @@ int	set_value(t_lst *tok_lst, const char *input, int *start, int *end)
 
 int	process_token(t_lst *tok_lst, const char *input, int *start, int *end)
 {
-	if (skip_spaces(input, start) == ERROR)
-		return (ERROR);
-	*end = *start;
-	if (find_end_of_token(input, end) == ERROR)
-		return (ERROR);
+	skip_spaces(input, start);
+	(*end) = *start;
+	find_end_of_token(input, end);
 	if (set_value(tok_lst, input, start, end) == ERROR)
 		return (ERROR);
 	set_token_type(tok_lst, input, start, end);

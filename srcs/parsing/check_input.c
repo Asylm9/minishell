@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 18:18:33 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/24 14:39:40 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/24 15:13:09 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	check_input(char *input, t_sh *shell)
 
 	i = -1;
 	size = 0;
-	if (is_empty(input) == SUCCESS || ft_strlen(input) == 0)
+	if (is_not_empty(input) == SUCCESS || ft_strlen(input) == 0)
 		return (ERROR);
 	while (input[++i])
 	{
