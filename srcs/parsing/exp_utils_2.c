@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 18:09:47 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/24 16:47:30 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/24 17:53:14 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,11 @@ void	handle_unclosed_pipes(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
 	input = NULL;
 	input = readline(">");
 	create_list_node(&tok_lst);
+	if (!tok_lst->next)
+		cleanup_exit(shell, NULL);
 	tok_lst = tok_lst->next;
-	tokenize_input(tok_lst, input);
+	if (tokenize_input(tok_lst, input) == ERROR)
+		cleanup_exit(shell, NULL);
 	if (input != NULL)
 		free(input);
 }
@@ -32,13 +35,16 @@ int	process_heredoc(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
 	if (tok_lst->next->value)
 	{
 		exp_lst->hd_fd = handle_heredoc(tok_lst->next->value, shell);
+		if (exp_lst->hd_fd == 1)
+			cleanup_exit(shell, NULL);
 		if (exp_lst->hd_fd == 130)
 			return (ERROR);
 	}
 	return (SUCCESS);
 }
 
-void	process_expand(t_lst *tok_lst, t_lst *exp_lst, char *expanded)
+void	process_expand(t_lst *tok_lst, t_lst *exp_lst, char *expanded,
+		t_sh *shell)
 {
 	int		count;
 	char	*presplit;
@@ -49,13 +55,19 @@ void	process_expand(t_lst *tok_lst, t_lst *exp_lst, char *expanded)
 	count = count_nb_words(expanded, ' ');
 	if (i < count)
 	{
-		presplit = trim_quotes(expanded);
+		presplit = trim_quotes(expanded, shell);
 		splitted = ft_split(presplit, ' ');
+		if (!splitted)
+			cleanup_exit(shell, NULL);
 		while (count != 0)
 		{
 			exp_lst->value = ft_strdup(splitted[i++]);
+			if (!exp_lst->value)
+				cleanup_exit(shell, NULL);
 			exp_lst->type = WORD;
 			create_list_node(&exp_lst);
+			if (!exp_lst->next)
+				cleanup_exit(shell, NULL);
 			exp_lst = exp_lst->next;
 			count--;
 		}
@@ -63,7 +75,7 @@ void	process_expand(t_lst *tok_lst, t_lst *exp_lst, char *expanded)
 		free(presplit);
 		return ;
 	}
-	exp_lst->value = trim_quotes(expanded);
+	exp_lst->value = trim_quotes(expanded, shell);
 	exp_lst->type = tok_lst->type;
 }
 
@@ -78,11 +90,11 @@ int	process_lst_node(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
 	expanded = expand_token(tok_lst->value, shell);
 	if (tok_lst->expand == NO_EXPAND)
 	{
-		exp_lst->value = trim_quotes(tok_lst->value);
+		exp_lst->value = trim_quotes(tok_lst->value, shell);
 		exp_lst->type = tok_lst->type;
 	}
 	else if ((ft_strlen(expanded)) != 0)
-		process_expand(tok_lst, exp_lst, expanded);
+		process_expand(tok_lst, exp_lst, expanded, shell);
 	else
 	{
 		exp_lst->value = NULL;

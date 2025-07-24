@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 16:31:53 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/15 16:32:51 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/24 18:37:27 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,27 @@ int	is_env_var(char *str)
 	return (0);
 }
 
-int	expand_var(char *input, char **result, t_env *envl)
+int	expand_var(char *input, char **result, t_sh *shell)
 {
 	int		i;
 	char	*var;
 
 	i = 1;
 	if (input[i] >= '0' && input[i] <= '9')
+	{
 		var = ft_substr(input, 1, 1);
+		if (!var)
+			cleanup_exit(shell, NULL);
+	}
 	else
 	{
 		while (ft_isalnum(input[i]) || input[i] == '_')
 			i++;
 		var = ft_substr(input, 1, i - 1);
+		if (!var)
+			cleanup_exit(shell, NULL);
 	}
-	(*result) = get_envl_var(var, envl);
+	(*result) = get_envl_var(var, shell->envl);
 	free(var);
 	if ((*result) == NULL)
 		return (1);
@@ -51,18 +57,21 @@ int	expand_xcode(char **result, t_sh *shell)
 {
 	*result = ft_itoa(shell->exit_status);
 	if (!(*result))
-		return (1);
-	return (0);
+		return (ERROR);
+	return (SUCCESS);
 }
 
-void	init_exp(t_exp *exp)
+int	init_exp(t_exp *exp)
 {
 	exp->result = ft_calloc(1, 1);
+	if (!exp->result)
+		return (ERROR);
 	exp->buffer = NULL;
 	exp->tmp = NULL;
 	exp->end = 0;
 	exp->start = 0;
 	exp->quote = ' ';
+	return (SUCCESS);
 }
 
 void	match_quotes(char *input, int *end, char *quote)

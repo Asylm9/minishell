@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 16:21:45 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/15 16:24:58 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/24 18:32:54 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,24 @@ static void	handle_dollar(t_exp *exp, char *input, t_sh *shell)
 			|| input[exp->end + 1] == '_' || input[exp->end + 1] == '?'))
 	{
 		exp->buffer = ft_substr(input, exp->start, exp->end - exp->start);
+		if (!exp->buffer)
+			cleanup_exit(shell, NULL);
 		exp->tmp = ft_fstrjoin(&exp->result, &exp->buffer, 3);
+		if (!exp->tmp)
+			cleanup_exit(shell, NULL);
 		exp->result = exp->tmp;
 		if (input[exp->end + 1] == '?')
-			expand_xcode(&exp->buffer, shell);
+		{
+			if (expand_xcode(&exp->buffer, shell))
+				cleanup_exit(shell, NULL);
+		}
 		else
-			expand_var(input + exp->end, &exp->buffer, shell->envl);
+			expand_var(input + exp->end, &exp->buffer, shell);
 		if (exp->buffer)
 		{
 			exp->tmp = ft_fstrjoin(&exp->result, &exp->buffer, 3);
+			if (!exp->tmp)
+				cleanup_exit(shell, NULL);
 			exp->result = exp->tmp;
 		}
 		exp->end++;
@@ -86,7 +95,8 @@ char	*expand_token(char *input, t_sh *shell)
 {
 	t_exp	exp;
 
-	init_exp(&exp);
+	if (init_exp(&exp))
+		cleanup_exit(shell, NULL);
 	while (input[exp.end] != '\0')
 	{
 		if (input[exp.end] == '\'')
@@ -99,10 +109,13 @@ char	*expand_token(char *input, t_sh *shell)
 			exp.end++;
 	}
 	exp.buffer = ft_substr(input, exp.start, exp.end - exp.start);
+	if (!exp.buffer)
+		cleanup_exit(shell, NULL);
 	if (exp.tmp)
 		exp.result = exp.tmp;
 	exp.tmp = ft_fstrjoin(&exp.result, &exp.buffer, 0);
+	if (!exp.tmp)
+		cleanup_exit(shell, NULL);
 	free(exp.result);
-	free(exp.buffer);
-	return (exp.tmp);
+	return (free(exp.buffer), exp.tmp);
 }

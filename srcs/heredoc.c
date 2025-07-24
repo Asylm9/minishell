@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:12:00 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/16 13:12:02 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/24 17:00:26 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,12 +98,12 @@ void	heredoc_child(char *del, t_sh *shell, int *pfd)
 
 int	handle_heredoc(char *del, t_sh *shell)
 {
-	int		pfd[2];
-	int		pid;
-	int		status;
+	int	pfd[2];
+	int	pid;
+	int	status;
 
 	if (pipe(pfd) < 0)
-		return (1);
+		return (ERROR);
 	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == 0)
