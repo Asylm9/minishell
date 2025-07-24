@@ -87,14 +87,14 @@ $(NAME): $(LIBFT) $(OBJ)
 	@echo -e "$(YELLOW)⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠀⠀⠀⠀⠀⠀⠀⠀⢻⣿⣿⡄⠀⢠⣿⣿⢯⣳⣿⣿⣦⣄⠘⣿⣿⡿⠁⣴⣿⣿⢯⣽⣿⡟⢀⣿⣷⢯⣿⣿⡇⠀⣿⣿⣽⣻⣿⠀⣿⣷⣿⠇⠀⠀⠀⠀⣀⠀⠀⢀⣼⣿⣿⣳⢿⣿⠁⣰⣿⣇⢸⣿⡟⠀⠀⠀⠀⠀⠀⠀⠀⣠⡾⠁⠀⠀⠀⠀⠀⠀$(RESET)"
 	@echo -e "$(RED)⠀⠀⠀⠀⠀⠀⠀⢠⣾⠇⠀⠀⠀⠀⠀⠀⠀⠀⣸⣿⢿⣷⠀⣿⣿⢯⣟⣼⣿⡇⢻⣿⣧⠘⣿⠃⣼⣿⡿⡽⣞⣿⣿⠁⢸⣿⣟⣮⢿⣿⡇⠀⣿⣿⢶⣻⣿⣇⠘⣿⣿⠀⠀⢀⣴⡿⠁⠀⣠⣿⢱⣿⣯⣽⣻⣿⠀⣿⡿⣿⡄⢻⣧⠀⠀⠀⠀⠀⠀⣴⣾⡟⠁⠀⠀⠀⠀⠀⠀⠀$(RESET)"
 	@echo -e ""
-	@echo -e "$(BOLD)$(YELLOW)                             🐚  MINISHELL : $(BOLD)$(RED)COMPILATION SUCCESSFUL$(RESET) 🪸"
+	@echo -e "$(BOLD)$(YELLOW)                             🐚  MINISHELL : $(BOLD)$(MINT)COMPILATION SUCCESSFUL$(RESET) 🪸"
 	@echo -e ""
 
 # Création du dossier objs et compilation des objets
 $(OBJ_DIR)/%.o: $(SRCDIR)/%.c
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -c $< -o $@
-	@echo -e "$(CORAL)                                       object files compiling...$(RESET)"
+	@echo -e "$(ORANGE)                                       object files compiling...$(RESET)"
 
 # Règle pour compiler libft
 $(LIBFT):
