@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:14:25 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 21:42:10 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 01:43:43 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ static char	*set_new_path(char **args, t_sh *shell, t_ast *root)
 			if (!new_path)
 				malloc_exit(shell, root);
 		}
-			
 	}
 	return (new_path);
 }

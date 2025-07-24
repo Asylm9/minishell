@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 16:31:53 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/24 21:52:10 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 01:42:48 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	expand_var(char *input, char **result, t_sh *shell)
 		if (!var)
 			cleanup_exit(shell, NULL);
 	}
-	(*result) = get_envl_var(var, shell, NULL); //
+	(*result) = get_envl_var(var, shell, NULL);
 	free(var);
 	if ((*result) == NULL)
 		return (1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/26 20:42:02 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/16 15:11:33 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/25 01:41:08 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,14 @@ void	free_tok_lst(t_lst **list)
 {
 	t_lst	*temp;
 
-	if (!list)
+	if (!list || !*list)
 		return ;
 	while (*list)
 	{
 		temp = (*list)->next;
-		if ((*list)->value != NULL)
+		if ((*list)->hd_fd != -1)
+			close ((*list)->hd_fd);
+		if ((*list)->value)
 			free((*list)->value);
 		(*list)->value = NULL;
 		free(*list);

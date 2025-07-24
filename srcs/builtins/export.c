@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:14:57 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 22:23:50 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 01:43:23 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int	append_export(char *key, char *plus_pos, t_sh *shell, t_ast *root)
 	return (ret);
 }
 
-static int	process_assignment(char *key, char *equal_pos, t_sh *shell, t_ast *root)
+int	process_assignment(char *key, char *equal_pos, t_sh *shell, t_ast *root)
 {
 	char	*value;
 

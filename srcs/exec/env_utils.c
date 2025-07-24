@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:01 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 22:20:24 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 01:44:16 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	add_new_entry(char *key, char *value, t_sh *shell, t_ast *root)
 	new_node = create_node(key_copy, value_copy, shell, root);
 	if (!new_node)
 		return (ERROR);
-	shell->envl = add_back_node(new_node, shell->envl); //
+	shell->envl = add_back_node(new_node, shell->envl);
 	return (SUCCESS);
 }
 
@@ -101,7 +101,7 @@ char	*get_envl_var(char *name, t_sh *shell, t_ast *root)
 				if (!value)
 					malloc_exit(shell, root);
 			}
-			else 
+			else
 				value = NULL;
 			return (value);
 		}
