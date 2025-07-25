@@ -6,11 +6,11 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:14:01 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/16 13:25:10 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/26 00:16:02 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../minishell.h"
 
 void	free_array(char **array, int i)
 {
