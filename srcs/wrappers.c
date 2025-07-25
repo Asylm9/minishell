@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 14:56:44 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 14:57:45 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 15:04:56 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,17 @@ void	cleanup_exit(t_sh *shell, t_ast *ast)
 	exit(shell->exit_status);
 }
 
-void	*x_malloc(int size, t_sh *shell, t_ast *ast)
+void	*x_malloc(int size, t_sh *shell, t_ast *ast, void *var_to_free)
 {
 	void	*var;
 
 	var = malloc(size);
 	if (!var)
+	{
+		if (var_to_free)
+			free(var_to_free);
 		malloc_exit(shell, ast);
+	}
 	return (var);
 }
 
