@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/25 16:51:32 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/25 17:05:03 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ char	**fill_cmd(t_lst **exp_lst, char **cmd_name, t_sh *shell, t_ast *ast)
 		else if (tmp->value != NULL)
 		{
 			if (i == 0 && cmd_name)
-				*cmd_name = ft_strdup(tmp->value);
-			args[i++] = ft_strdup(tmp->value);
+				*cmd_name = x_strdup(tmp->value, shell, ast, NULL);
+			args[i++] = x_strdup(tmp->value, shell, ast, NULL);
 			tmp = tmp->next;
 		}
 		else

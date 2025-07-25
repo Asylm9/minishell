@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:14:08 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/16 13:14:09 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 17:02:04 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,15 @@ char	*ft_charjoin(char const *s1, char const *s2, char c)
 	if (!s2)
 		return (NULL);
 	if (!s1)
-		return (ft_strdup(s2));
+	{
+		result = ft_strdup(s2);
+		if (!result)
+			return (NULL);
+		return (result);
+	}
 	len1 = ft_strlen(s1);
 	len2 = ft_strlen(s2);
-	result = (void *) malloc((len1 + len2 + 2) * sizeof(char));
+	result = (void *)malloc((len1 + len2 + 2) * sizeof(char));
 	if (!result)
 		return (NULL);
 	ft_memcpy(result, s1, len1);

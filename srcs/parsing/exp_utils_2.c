@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 18:09:47 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/24 19:38:37 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/25 17:02:46 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	process_expand(t_lst *tok_lst, t_lst *exp_lst, char *expanded,
 			cleanup_exit(shell, NULL);
 		while (count != 0)
 		{
-			exp_lst->value = ft_strdup(splitted[i++]);
+			exp_lst->value = x_strdup(splitted[i++], shell, NULL, NULL);
 			if (!exp_lst->value)
 				cleanup_exit(shell, NULL);
 			exp_lst->type = WORD;

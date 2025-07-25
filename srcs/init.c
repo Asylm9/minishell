@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:12:16 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 16:56:20 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/25 17:00:57 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,9 +73,11 @@ static t_env	*init_minimal_list(t_sh *shell)
 		printf_fd(STDERR, "%s\n", strerror(errno));
 		return (NULL);
 	}
-	new_node1 = create_node(ft_strdup("PWD"), ft_strdup(buffer), shell, NULL);
+	new_node1 = create_node(x_strdup("PWD", shell, NULL, NULL), x_strdup(buffer,
+				shell, NULL, NULL), shell, NULL);
 	head = add_back_node(new_node1, head);
-	new_node2 = create_node(ft_strdup("SHLVL"), ft_strdup("1"), shell, NULL);
+	new_node2 = create_node(x_strdup("SHLVL", shell, NULL, NULL), x_strdup("1",
+				shell, NULL, NULL), shell, NULL);
 	head = add_back_node(new_node2, head);
 	return (head);
 }
