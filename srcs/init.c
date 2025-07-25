@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:12:16 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 22:40:30 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 16:00:41 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,8 @@ static t_env	*init_minimal_list(t_sh *shell)
 		return (NULL);
 	}
 	new_node1 = create_node(ft_strdup("PWD"), ft_strdup(buffer), shell, NULL);
-/* 	if (!new_node1)
-		return (NULL); */
 	head = add_back_node(new_node1, head);
 	new_node2 = create_node(ft_strdup("SHLVL"), ft_strdup("1"), shell, NULL);
-/* 	if (!new_node2)
-		return (NULL); */
 	head = add_back_node(new_node2, head);
 	return (head);
 }

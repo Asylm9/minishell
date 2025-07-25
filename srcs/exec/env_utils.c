@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:01 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 15:27:03 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 16:00:29 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ char	**convert_envl_to_env(t_sh *shell, t_ast *root)
 	t_env	*current;
 	int		i;
 
-	env = x_malloc((sizeof(char *) * (list_size(shell->envl) + 1)), shell, root, NULL);
+	env = x_malloc((sizeof(char *) * (list_size(shell->envl) + 1)), shell, root,
+			NULL);
 	current = shell->envl;
 	i = 0;
 	while (current)
