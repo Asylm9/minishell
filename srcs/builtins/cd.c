@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:14:25 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 15:35:18 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 18:01:38 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,11 @@ static char	*set_new_path(char **args, t_sh *shell, t_ast *root)
 		else if (args[1][0] == '-')
 			new_path = get_envl_var("OLDPWD", shell, root);
 		else
-			new_path = x_strdup(args[1], shell, root, NULL);
+		{
+			new_path = ft_strdup(args[1]);
+			if (!new_path)
+				malloc_exit(shell, root);
+		}
 	}
 	return (new_path);
 }
@@ -79,7 +83,7 @@ int	builtin_cd(char **args, t_sh *shell, t_ast *root)
 		return (perror("getcwd"), BUILTIN_ERR);
 	new_path = set_new_path(args, shell, root);
 	if (validate_path(args, new_path) != SUCCESS)
-		return (ERROR);
+		return (free(new_path), ERROR);
 	if (chdir(new_path) < 0)
 		return (BUILTIN_ERR);
 	free(new_path);
