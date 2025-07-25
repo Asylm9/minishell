@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 22:38:48 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 14:54:37 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,7 +301,13 @@ void							fd_clean_exit(t_sh *shell, int *pfd,
 									int exit_code);
 void							close_all_fds(int fd);
 void							cleanup_exit(t_sh *shell, t_ast *ast);
+
+
 void							malloc_exit(t_sh *shell, t_ast *ast);
+void							*x_malloc(int size, t_sh *shell, t_ast *ast);
+char							*x_strdup(const char *s1, t_sh *shell, t_ast *ast);
+char							*x_strjoin(const char *s1, const char *s2 , t_sh *shell, t_ast *ast);
+
 
 /* Signals */
 void							handle_here_sig(int sig);
