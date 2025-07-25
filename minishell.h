@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 17:25:49 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/25 17:51:31 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,209 +133,160 @@ extern volatile sig_atomic_t	g_sig;
 
 /**************************		Parsing		*****************************/
 
-void							print_token(t_lst *tok_lst);
+void		print_token(t_lst *tok_lst);
 
 /* Initialization */
-int								init_shell(t_sh *shell, char **envp,
-									t_ast *ast);
+int			init_shell(t_sh *shell, char **envp, t_ast *ast);
 
 /* Tokenizer */
-int								tokenize(char *input, t_sh *shell);
-int								is_not_empty(char *input);
-char							next_input(char *input);
-int								check_quotes(const char *input, int *i,
-									int *size, t_sh *shell);
-int								check_ampersand(const char *input, int i,
-									t_sh *shell);
-int								check_special_delim(char delim, int size,
-									t_sh *shell);
+int			tokenize(char *input, t_sh *shell);
+int			is_not_empty(char *input);
+char		next_input(char *input);
+int			check_quotes(const char *input, int *i, int *size, t_sh *shell);
+int			check_ampersand(const char *input, int i, t_sh *shell);
+int			check_special_delim(char delim, int size, t_sh *shell);
 
-int								check_input(char *input, t_sh *shell);
-int								create_list_node(t_lst **tok_lst, t_sh *shell);
-int								skip_spaces(const char *input, int *start);
-int								find_end_of_token(const char *input, int *end);
-void							set_token_type(t_lst *tok_lst,
-									const char *input, int *start, int *end);
-int								set_value(t_lst *tok_lst, const char *input,
-									int *start, int *end);
-int								tokenize_input(t_lst *tok_lst,
-									const char *input, t_sh *shell);
-int								is_env_var(char *str);
+int			check_input(char *input, t_sh *shell);
+int			create_list_node(t_lst **tok_lst, t_sh *shell);
+int			skip_spaces(const char *input, int *start);
+int			find_end_of_token(const char *input, int *end);
+void		set_token_type(t_lst *tok_lst, const char *input, int *start,
+				int *end);
+int			set_value(t_lst *tok_lst, const char *input, int *start, int *end);
+int			tokenize_input(t_lst *tok_lst, const char *input, t_sh *shell);
+int			is_env_var(char *str);
 
 /* Expander */
-int								init_exp(t_exp *exp);
-int								is_pipe_redir(char *str);
-size_t							count_nb_words(char const *s, char c);
-int								check_validity(t_lst *tok_lst, t_sh *shell);
-void							input_error(int error, t_sh *shell,
-									t_token_type tok);
-int								expand_xcode(char **result, t_sh *shell);
-int								expand_var(char *input, char **result,
-									t_sh *shell);
-char							*expand_token(char *input, t_sh *shell);
-void							expand_buffer(t_exp *exp, char *input,
-									t_sh *shell);
-void							go_to_end(char *input, t_exp *exp);
-void							handle_unclosed_pipes(t_lst *tok_lst,
-									t_lst *exp_lst, t_sh *shell);
-void							handle_dollar(t_exp *exp, char *input,
-									t_sh *shell);
-void							handle_single_quote(t_exp *exp, char *input);
-void							handle_double_quote(t_exp *exp, char *input,
-									t_sh *shell);
-void							match_quotes(char *input, int *end,
-									char *quote);
-char							*trim_quotes(char *input, t_sh *shell);
-int								is_pipe_redir(char *str);
-int								expand_list(t_lst *tok_lst, t_lst *exp_lst,
-									t_sh *shell);
-int								process_heredoc(t_lst *tok_lst, t_lst *exp_lst,
-									t_sh *shell);
-void							process_expand(t_lst *tok_lst, t_lst *exp_lst,
-									char *expanded, t_sh *shell);
-int								process_lst_node(t_lst *tok_lst, t_lst *exp_lst,
-									t_sh *shell);
-int								process_lst(t_lst *tok_lst, t_lst *exp_lst,
-									t_sh *shell);
+int			init_exp(t_exp *exp);
+int			is_pipe_redir(char *str);
+size_t		count_nb_words(char const *s, char c);
+int			check_validity(t_lst *tok_lst, t_sh *shell);
+void		input_error(int error, t_sh *shell, t_token_type tok);
+int			expand_xcode(char **result, t_sh *shell);
+int			expand_var(char *input, char **result, t_sh *shell);
+char		*expand_token(char *input, t_sh *shell);
+void		expand_buffer(t_exp *exp, char *input, t_sh *shell);
+void		go_to_end(char *input, t_exp *exp);
+void		handle_unclosed_pipes(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell);
+void		handle_dollar(t_exp *exp, char *input, t_sh *shell);
+void		handle_single_quote(t_exp *exp, char *input);
+void		handle_double_quote(t_exp *exp, char *input, t_sh *shell);
+void		match_quotes(char *input, int *end, char *quote);
+char		*trim_quotes(char *input, t_sh *shell);
+int			is_pipe_redir(char *str);
+int			expand_list(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell);
+int			process_heredoc(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell);
+void		process_expand(t_lst *tok_lst, t_lst *exp_lst, char *expanded,
+				t_sh *shell);
+int			process_lst_node(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell);
+int			process_lst(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell);
 
 /* Parser */
-int								init_ast(t_ast **ast, t_sh *shell);
-int								create_node_pipe(t_ast **ast, t_sh *shell);
-int								count_args(t_lst *exp_lst);
-char							**fill_cmd(t_lst **exp_lst, char **cmd_name,
-									t_sh *shell, t_ast *ast);
-t_redirect						*add_redirection(t_redirect *redir,
-									t_lst *exp_lst, t_sh *shell, t_ast *ast);
-t_command						*create_node_cmd(t_lst **exp_lst, t_sh *shell,
-									t_ast *ast);
-void							create_ast_right_node(t_lst **exp_lst,
-									t_ast **ast, t_sh *shell);
-int								parse_ast(t_lst *exp_lst, t_ast **ast,
-									t_sh *shell);
-void							print_ast(t_ast *ast);
+int			init_ast(t_ast **ast, t_sh *shell);
+int			create_node_pipe(t_ast **ast, t_sh *shell);
+int			count_args(t_lst *exp_lst);
+char		**fill_cmd(t_lst **exp_lst, char **cmd_name, t_sh *shell,
+				t_ast *ast);
+t_redirect	*add_redirection(t_redirect *redir, t_lst *exp_lst, t_sh *shell,
+				t_ast *ast);
+t_command	*create_node_cmd(t_lst **exp_lst, t_sh *shell, t_ast *ast);
+void		create_ast_right_node(t_lst **exp_lst, t_ast **ast, t_sh *shell);
+int			parse_ast(t_lst *exp_lst, t_ast **ast, t_sh *shell);
 
 /* Heredoc */
-int								handle_heredoc(char *delimiter, t_sh *shell);
-int								read_heredoc_content(char *del, t_sh *shell,
-									char **buffer);
-char							*process_heredoc_line(char *input, char *del,
-									t_sh *shell);
+int			handle_heredoc(char *delimiter, t_sh *shell);
+int			read_heredoc_content(char *del, t_sh *shell, char **buffer);
+char		*process_heredoc_line(char *input, char *del, t_sh *shell);
 
 /**************************		Execution	*****************************/
 
 /* Execution */
-int								execute_ast(t_ast *ast, t_sh *shell,
-									t_ast *root);
-int								execute_command(t_ast *ast, t_sh *shell,
-									t_ast *root);
-int								execute_pipeline(t_ast *ast, t_sh *shell,
-									t_ast *root);
-int								process_wait_status(int status);
-int								execute_binary(t_ast *ast, t_sh *shell,
-									t_ast *root);
+int			execute_ast(t_ast *ast, t_sh *shell, t_ast *root);
+int			execute_command(t_ast *ast, t_sh *shell, t_ast *root);
+int			execute_pipeline(t_ast *ast, t_sh *shell, t_ast *root);
+int			process_wait_status(int status);
+int			execute_binary(t_ast *ast, t_sh *shell, t_ast *root);
 
 /* Exec utils */
-pid_t							process_left_child(t_ast *ast, t_sh *shell,
-									int *pfd, t_ast *root);
-pid_t							process_right_child(t_ast *ast, t_sh *shell,
-									int *pfd, t_ast *root);
-int								handle_builtin(t_ast *ast, t_sh *shell,
-									t_ast *root);
-void							handle_binary_pipeline(t_ast *ast, t_sh *shell,
-									t_ast *root);
-int								fork_single_binary(t_ast *ast, t_sh *shell,
-									t_ast *root);
+pid_t		process_left_child(t_ast *ast, t_sh *shell, int *pfd, t_ast *root);
+pid_t		process_right_child(t_ast *ast, t_sh *shell, int *pfd, t_ast *root);
+int			handle_builtin(t_ast *ast, t_sh *shell, t_ast *root);
+void		handle_binary_pipeline(t_ast *ast, t_sh *shell, t_ast *root);
+int			fork_single_binary(t_ast *ast, t_sh *shell, t_ast *root);
 
 /* Path and environment handling */
-char							**get_paths(t_command *cmd, t_sh *shell,
-									t_ast *root);
-char							*resolve_path(t_ast *ast, t_sh *shell,
-									t_ast *root);
-char							*resolve_direct_path(t_ast *ast, t_sh *shell,
-									t_ast *root);
-char							*find_cmd_path(char **paths, char *cmd_name,
-									t_sh *shell, t_ast *root);
+char		**get_paths(t_command *cmd, t_sh *shell, t_ast *root);
+char		*resolve_path(t_ast *ast, t_sh *shell, t_ast *root);
+char		*resolve_direct_path(t_ast *ast, t_sh *shell, t_ast *root);
+char		*find_cmd_path(char **paths, char *cmd_name, t_sh *shell,
+				t_ast *root);
 
 /* Redirections */
-int								save_or_restore_fds(t_sh *shell, char flag);
-int								redirect_in(t_redirect *redir);
-int								redirect_out(t_redirect *redir);
-int								apply_redirections(t_command *cmd);
+int			save_or_restore_fds(t_sh *shell, char flag);
+int			redirect_in(t_redirect *redir);
+int			redirect_out(t_redirect *redir);
+int			apply_redirections(t_command *cmd);
 
 /* Exec builtins */
-int								args_count(char **args);
-bool							is_builtin(char *cmd_name);
-int								execute_builtin(t_ast *ast, t_sh *shell,
-									t_ast *root);
+int			args_count(char **args);
+bool		is_builtin(char *cmd_name);
+int			execute_builtin(t_ast *ast, t_sh *shell, t_ast *root);
 
 /* Builtin implementations */
-int								builtin_echo(t_ast *ast, t_sh *shell);
-int								builtin_cd(char **args, t_sh *shell,
-									t_ast *root);
-int								builtin_pwd(char **args);
-int								builtin_export(char **args, t_sh *shell,
-									t_ast *root);
-t_env							**init_temp_array(int count, t_sh *shell,
-									t_ast *root);
-void							sort_env_list(t_env **array, int count);
-int								count_elements(t_env *envl);
-int								builtin_unset(char **args, t_env **envl);
-int								builtin_env(t_sh *shell);
-int								builtin_exit(t_ast *ast, t_sh *shell);
-bool							is_numeric(char *arg);
+int			builtin_echo(t_ast *ast, t_sh *shell);
+int			builtin_cd(char **args, t_sh *shell, t_ast *root);
+int			builtin_pwd(char **args);
+int			builtin_export(char **args, t_sh *shell, t_ast *root);
+t_env		**init_temp_array(int count, t_sh *shell, t_ast *root);
+void		sort_env_list(t_env **array, int count);
+int			count_elements(t_env *envl);
+int			builtin_unset(char **args, t_env **envl);
+int			builtin_env(t_sh *shell);
+int			builtin_exit(t_ast *ast, t_sh *shell);
+bool		is_numeric(char *arg);
 
 /* Env utils */
-char							**convert_envl_to_env(t_sh *shell, t_ast *root,
-									t_ast *ast);
-t_env							*init_env_list(char **env, t_sh *shell,
-									t_ast *ast);
-bool							key_exists(char *key, t_env *envl);
-int								add_new_entry(char *key, char *value,
-									t_sh *shell, t_ast *root);
-char							*get_envl_var(char *name, t_sh *shell,
-									t_ast *root);
-int								set_envl_var(char *name, char *value,
-									t_sh *shell, t_ast *root);
+char		**convert_envl_to_env(t_sh *shell, t_ast *root, t_ast *ast);
+t_env		*init_env_list(char **env, t_sh *shell, t_ast *ast);
+bool		key_exists(char *key, t_env *envl);
+int			add_new_entry(char *key, char *value, t_sh *shell, t_ast *root);
+char		*get_envl_var(char *name, t_sh *shell, t_ast *root);
+int			set_envl_var(char *name, char *value, t_sh *shell, t_ast *root);
 
 /* Utils */
-int								ft_strcmp(const char *s1, const char *s2);
-char							*ft_charjoin(char const *s1, char const *s2,
-									char c);
+int			ft_strcmp(const char *s1, const char *s2);
+char		*ft_charjoin(char const *s1, char const *s2, char c);
 
 /* List utils */
-int								list_size(t_env *envl);
-void							print_env_list(t_env *envl);
-void							print_exp_list(t_sh *shell, t_ast *root);
-t_env							*create_node(char *key, char *value,
-									t_sh *shell, t_ast *root);
-t_env							*find_last_node(t_env *head);
-t_env							*add_back_node(t_env *new_node, t_env *head);
+int			list_size(t_env *envl);
+void		print_env_list(t_env *envl);
+void		print_exp_list(t_sh *shell, t_ast *root);
+t_env		*create_node(char *key, char *value, t_sh *shell, t_ast *root);
+t_env		*find_last_node(t_env *head);
+t_env		*add_back_node(t_env *new_node, t_env *head);
 
 /* Resources */ /* Free */
-void							free_tok_lst(t_lst **list);
-void							free_redir(t_redirect *redirection);
-void							free_cmd(t_command *cmd);
-void							free_ast(t_ast *ast);
-void							free_array(char **array, int i);
-void							free_envl(t_env **head);
-void							cleanup_shell(t_sh *shell, t_ast *ast);
-void							fd_clean_exit(t_sh *shell, int *pfd,
-									int exit_code);
-void							close_all_fds(int fd);
-void							cleanup_exit(t_sh *shell, t_ast *ast);
-void							malloc_exit(t_sh *shell, t_ast *ast);
-void							*x_malloc(int size, t_sh *shell, t_ast *ast,
-									void *var_to_free);
-char							*x_strdup(const char *s1, t_sh *shell,
-									t_ast *ast, void *var_to_free);
-char							*x_strjoin(const char *s1, const char *s2,
-									t_sh *shell, t_ast *ast);
+void		free_tok_lst(t_lst **list);
+void		free_redir(t_redirect *redirection);
+void		free_cmd(t_command *cmd);
+void		free_ast(t_ast *ast);
+void		free_array(char **array, int i);
+void		free_envl(t_env **head);
+void		cleanup_shell(t_sh *shell, t_ast *ast);
+void		fd_clean_exit(t_sh *shell, int *pfd, int exit_code);
+void		close_all_fds(int fd);
+void		cleanup_exit(t_sh *shell, t_ast *ast);
+void		malloc_exit(t_sh *shell, t_ast *ast);
+void		*x_malloc(int size, t_sh *shell, t_ast *ast, void *var_to_free);
+char		*x_strdup(const char *s1, t_sh *shell, t_ast *ast,
+				void *var_to_free);
+char		*x_strjoin(const char *s1, const char *s2, t_sh *shell, t_ast *ast);
 
 /* Signals */
-void							handle_here_sig(int sig);
-void							handle_sigint(int sig);
-void							handle_sigint_exec(int sig);
-int								set_main_signals(void);
-int								set_subprocess_signals(void);
+void		handle_here_sig(int sig);
+void		handle_sigint(int sig);
+void		handle_sigint_exec(int sig);
+int			set_main_signals(void);
+int			set_subprocess_signals(void);
 
 #endif
