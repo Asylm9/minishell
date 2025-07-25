@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/23 19:01:59 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 14:53:24 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,22 +80,22 @@ char	**fill_cmd(t_lst **exp_lst, int argc, char **cmd_name)
 	return (args);
 }
 
-void	process_node(t_lst *exp_lst, t_ast **ast)
+void	process_node(t_lst *exp_lst, t_ast **ast, t_sh *shell)
 {
 	while (exp_lst)
 	{
 		if (exp_lst && exp_lst->type == PIPE)
 		{
-			create_node_pipe(ast);
+			create_node_pipe(ast, shell);
 			if (exp_lst->next)
 			{
 				exp_lst = exp_lst->next;
 				if (exp_lst->type >= 3 && exp_lst->type <= 6)
-					create_ast_right_node(&exp_lst, ast);
+					create_ast_right_node(&exp_lst, ast, shell);
 			}
 		}
 		if (exp_lst && exp_lst->type == WORD)
-			create_ast_right_node(&exp_lst, ast);
+			create_ast_right_node(&exp_lst, ast, shell);
 	}
 }
 
@@ -108,14 +108,14 @@ int	parse_ast(t_lst *exp_lst, t_ast **ast, t_sh *shell)
 		printf_fd(STDERR, " syntax error near unexpected token `|'\n");
 		return (ERROR);
 	}
-	(*ast)->cmd = create_node_cmd(&exp_lst);
+	(*ast)->cmd = create_node_cmd(&exp_lst, shell, *ast);
 	if ((*ast)->cmd == NULL)
 	{
 		printf_fd(STDERR, "Malloc error, exiting shell...\n");
 		cleanup_exit(shell, (*ast));
 	}
 	(*ast)->type = CMD;
-	process_node(exp_lst, ast);
+	process_node(exp_lst, ast, shell);
 	if (!(*ast)->left && !(*ast)->right && !(*ast)->cmd->cmd_name)
 		return (ERROR);
 	return (SUCCESS);

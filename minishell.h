@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 22:38:48 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 14:52:25 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,15 +191,16 @@ int								process_lst(t_lst *tok_lst, t_lst *exp_lst,
 
 /* Parser */
 int								init_ast(t_ast **ast, t_sh *shell);
-int								create_node_pipe(t_ast **ast);
+int								create_node_pipe(t_ast **ast, t_sh *shell);
 int								count_args(t_lst *exp_lst);
 char							**fill_cmd(t_lst **exp_lst, int argc,
 									char **cmd_name);
 t_redirect						*add_redirection(t_redirect *redir,
 									t_lst *exp_lst);
-t_command						*create_node_cmd(t_lst **exp_lst);
+t_command						*create_node_cmd(t_lst **exp_lst, t_sh *shell,
+									t_ast *ast);
 void							create_ast_right_node(t_lst **exp_lst,
-									t_ast **ast);
+									t_ast **ast, t_sh *shell);
 int								parse_ast(t_lst *exp_lst, t_ast **ast,
 									t_sh *shell);
 void							print_ast(t_ast *ast);
@@ -237,11 +238,14 @@ int								fork_single_binary(t_ast *ast, t_sh *shell,
 									t_ast *root);
 
 /* Path and environment handling */
-char							**get_paths(t_command *cmd, t_sh *shell, t_ast *root);
+char							**get_paths(t_command *cmd, t_sh *shell,
+									t_ast *root);
 char							*resolve_path(t_ast *ast, t_sh *shell,
 									t_ast *root);
-char							*resolve_direct_path(t_ast *ast, t_sh *shell, t_ast *root);
-char							*find_cmd_path(char **paths, char *cmd_name, t_sh *shell, t_ast *root);
+char							*resolve_direct_path(t_ast *ast, t_sh *shell,
+									t_ast *root);
+char							*find_cmd_path(char **paths, char *cmd_name,
+									t_sh *shell, t_ast *root);
 
 /* Redirections */
 int								save_or_restore_fds(t_sh *shell, char flag);
@@ -252,14 +256,18 @@ int								apply_redirections(t_command *cmd);
 /* Exec builtins */
 int								args_count(char **args);
 bool							is_builtin(char *cmd_name);
-int								execute_builtin(t_ast *ast, t_sh *shell, t_ast *root);
+int								execute_builtin(t_ast *ast, t_sh *shell,
+									t_ast *root);
 
 /* Builtin implementations */
 int								builtin_echo(t_ast *ast, t_sh *shell);
-int								builtin_cd(char **args, t_sh *shell, t_ast *root);
+int								builtin_cd(char **args, t_sh *shell,
+									t_ast *root);
 int								builtin_pwd(char **args);
-int								builtin_export(char **args, t_sh *shell, t_ast *root);
-t_env							**init_temp_array(int count, t_sh *shell, t_ast *root);
+int								builtin_export(char **args, t_sh *shell,
+									t_ast *root);
+t_env							**init_temp_array(int count, t_sh *shell,
+									t_ast *root);
 void							sort_env_list(t_env **array, int count);
 int								count_elements(t_env *envl);
 int								builtin_unset(char **args, t_env **envl);
@@ -273,8 +281,10 @@ t_env							*init_env_list(char **env, t_sh *shell);
 bool							key_exists(char *key, t_env *envl);
 int								add_new_entry(char *key, char *value,
 									t_sh *shell, t_ast *root);
-char							*get_envl_var(char *name, t_sh *shell, t_ast *root);
-int								set_envl_var(char *name, char *value, t_sh *shell, t_ast *root);
+char							*get_envl_var(char *name, t_sh *shell,
+									t_ast *root);
+int								set_envl_var(char *name, char *value,
+									t_sh *shell, t_ast *root);
 
 /* Utils */
 int								ft_strcmp(const char *s1, const char *s2);
@@ -285,7 +295,8 @@ char							*ft_charjoin(char const *s1, char const *s2,
 int								list_size(t_env *envl);
 void							print_env_list(t_env *envl);
 void							print_exp_list(t_sh *shell, t_ast *root);
-t_env							*create_node(char *key, char *value, t_sh *shell, t_ast *root);
+t_env							*create_node(char *key, char *value,
+									t_sh *shell, t_ast *root);
 t_env							*find_last_node(t_env *head);
 t_env							*add_back_node(t_env *new_node, t_env *head);
 
@@ -309,5 +320,14 @@ void							handle_sigint(int sig);
 void							handle_sigint_exec(int sig);
 int								set_main_signals(void);
 int								set_subprocess_signals(void);
+
+/* Malloc wrappers */
+void							*x_malloc(int size, t_sh *shell, t_ast *ast,
+									void *var_to_free);
+char							*x_strjoin(const char *s1, const char *s2,
+									t_sh *shell, t_ast *ast);
+char							*x_strdup(const char *s1, t_sh *shell,
+									t_ast *ast);
+void							malloc_exit(t_sh *shell, t_ast *ast);
 
 #endif

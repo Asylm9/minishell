@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 21:11:07 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/24 19:34:39 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/25 14:53:15 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,7 @@ int	create_list_node(t_lst **tok_lst, t_sh *shell)
 	t_lst	*temp;
 
 	temp = *tok_lst;
-	new_token = malloc(sizeof(t_lst));
-	if (!new_token)
-	{
-		printf_fd(STDERR, "Malloc failed.\n");
-		cleanup_exit(shell, NULL);
-	}
+	new_token = x_malloc(sizeof(t_lst), shell, NULL, NULL);
 	new_token->value = NULL;
 	new_token->expand = NO_EXPAND;
 	new_token->type = WORD;
@@ -40,13 +35,11 @@ int	create_list_node(t_lst **tok_lst, t_sh *shell)
 	return (SUCCESS);
 }
 
-int	create_node_pipe(t_ast **ast)
+int	create_node_pipe(t_ast **ast, t_sh *shell)
 {
 	t_ast	*new_ast;
 
-	new_ast = malloc(sizeof(t_ast));
-	if (!new_ast)
-		return (ERROR);
+	new_ast = x_malloc(sizeof(t_ast), shell, *ast, NULL);
 	new_ast->type = PIPE;
 	new_ast->cmd = NULL;
 	new_ast->left = *ast;
@@ -55,22 +48,22 @@ int	create_node_pipe(t_ast **ast)
 	return (SUCCESS);
 }
 
-void	create_ast_right_node(t_lst **exp_lst, t_ast **ast)
+void	create_ast_right_node(t_lst **exp_lst, t_ast **ast, t_sh *shell)
 {
-	(*ast)->right = malloc(sizeof(t_ast));
-	(*ast)->right->cmd = create_node_cmd(exp_lst);
+	(*ast)->right = x_malloc(sizeof(t_ast), shell, *ast, NULL);
+	(*ast)->right->cmd = create_node_cmd(exp_lst, shell, *ast);
 	(*ast)->right->type = CMD;
 	(*ast)->right->right = NULL;
 	(*ast)->right->left = NULL;
 }
 
-t_command	*create_node_cmd(t_lst **exp_lst)
+t_command	*create_node_cmd(t_lst **exp_lst, t_sh *shell, t_ast *ast)
 {
 	t_lst		*tmp;
 	t_command	*cmd;
 
 	tmp = *exp_lst;
-	cmd = malloc(sizeof(t_command));
+	cmd = x_malloc(sizeof(t_command), shell, ast, NULL);
 	if (!cmd)
 		return (NULL);
 	cmd->cmd_name = NULL;
