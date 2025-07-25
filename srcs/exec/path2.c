@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:48 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 15:11:34 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 15:22:04 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,7 @@ char	**get_paths(t_command *cmd, t_sh *shell, t_ast *root)
 	if (cmd->cmd_name[0] == '\0')
 	{
 		paths = x_malloc((sizeof(char *) * 2), shell, root, NULL);
-		paths[0] = ft_strdup("");
-		if (!paths[0])
-		{
-			free(paths);
-			malloc_exit(shell, root);
-		}
+		paths[0] = x_strdup("", shell, root, paths);
 		paths[1] = NULL;
 		return (paths);
 	}

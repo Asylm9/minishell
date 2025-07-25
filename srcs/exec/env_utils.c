@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:01 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 15:17:52 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 15:27:03 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,14 +64,7 @@ int	add_new_entry(char *key, char *value, t_sh *shell, t_ast *root)
 	key_copy = x_strdup(key, shell, root, NULL);
 	value_copy = NULL;
 	if (value)
-	{
-		value_copy = ft_strdup(value);
-		if (!value_copy)
-		{
-			free(key_copy);
-			malloc_exit(shell, root);
-		}
-	}
+		value_copy = x_strdup(value, shell, root, key_copy);
 	new_node = create_node(key_copy, value_copy, shell, root);
 	if (!new_node)
 		return (ERROR);
@@ -92,11 +85,7 @@ char	*get_envl_var(char *name, t_sh *shell, t_ast *root)
 		if (ft_strcmp(current->key, name) == 0)
 		{
 			if (current->value)
-			{
-				value = ft_strdup(current->value);
-				if (!value)
-					malloc_exit(shell, root);
-			}
+				value = x_strdup(current->value, shell, root, NULL);
 			else
 				value = NULL;
 			return (value);
@@ -119,15 +108,9 @@ int	set_envl_var(char *name, char *value, t_sh *shell, t_ast *root)
 		{
 			free(current->value);
 			if (value)
-			{
-				current->value = ft_strdup(value);
-				if (!current->value)
-					malloc_exit(shell, root);
-			}
+				current->value = x_strdup(value, shell, root, NULL);
 			else
 				current->value = NULL;
-			if (value && !current->value)
-				return (ERROR);
 			return (SUCCESS);
 		}
 		current = current->next;
