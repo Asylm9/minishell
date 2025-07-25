@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 15:05:20 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 15:17:18 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,7 +315,7 @@ void							cleanup_exit(t_sh *shell, t_ast *ast);
 void							malloc_exit(t_sh *shell, t_ast *ast);
 void							*x_malloc(int size, t_sh *shell, t_ast *ast, void *var_to_free);
 char							*x_strdup(const char *s1, t_sh *shell,
-									t_ast *ast);
+									t_ast *ast, void *var_to_free);
 char							*x_strjoin(const char *s1, const char *s2,
 									t_sh *shell, t_ast *ast);
 
