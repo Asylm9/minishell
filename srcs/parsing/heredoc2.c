@@ -6,11 +6,11 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:11:00 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 15:44:46 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/25 17:30:03 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 static int	sigint_in_heredoc(char *input, char **buffer)
 {

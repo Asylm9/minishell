@@ -6,11 +6,11 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:12:00 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 17:17:18 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/25 17:30:38 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
 static bool	has_quotes(char *del)
 {

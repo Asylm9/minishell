@@ -36,12 +36,12 @@ SRCS =  $(SRCDIR)/srcs/main.c \
         $(SRCDIR)/srcs/parsing/exp_utils_2.c \
         $(SRCDIR)/srcs/parsing/exp_utils_3.c \
         $(SRCDIR)/srcs/parsing/expander.c \
+		$(SRCDIR)/srcs/parsing/heredoc.c \
+        $(SRCDIR)/srcs/parsing/heredoc2.c \
         $(SRCDIR)/srcs/parsing/errors.c \
         $(SRCDIR)/srcs/parsing/parser.c \
         $(SRCDIR)/srcs/free.c \
         $(SRCDIR)/srcs/wrappers.c \
-        $(SRCDIR)/srcs/heredoc.c \
-        $(SRCDIR)/srcs/heredoc2.c \
         $(SRCDIR)/srcs/exec/exec_ast.c \
         $(SRCDIR)/srcs/exec/exec_utils.c \
         $(SRCDIR)/srcs/exec/exec_builtins.c \
