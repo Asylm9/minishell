@@ -6,20 +6,19 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/25 14:53:24 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/25 15:34:29 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-t_redirect	*add_redirection(t_redirect *redir, t_lst *exp_lst)
+t_redirect	*add_redirection(t_redirect *redir, t_lst *exp_lst, t_sh *shell,
+		t_ast *ast)
 {
 	t_redirect	*new_redir;
 	t_redirect	*tmp;
 
-	new_redir = malloc(sizeof(t_redirect));
-	if (!new_redir)
-		return (NULL);
+	new_redir = x_malloc(sizeof(t_redirect), shell, ast, NULL);
 	new_redir->type = exp_lst->type;
 	new_redir->target = ft_strdup(exp_lst->next->value);
 	new_redir->fd = exp_lst->hd_fd;
@@ -53,15 +52,15 @@ int	count_args(t_lst *exp_lst)
 	return (i);
 }
 
-char	**fill_cmd(t_lst **exp_lst, int argc, char **cmd_name)
+char	**fill_cmd(t_lst **exp_lst, char **cmd_name, t_sh *shell, t_ast *ast)
 {
 	char	**args;
 	int		i;
 	t_lst	*tmp;
 
-	args = malloc(sizeof(char *) * (argc + 1));
 	i = 0;
 	tmp = *exp_lst;
+	args = x_malloc(sizeof(char *) * (count_args(tmp) + 1), shell, ast, NULL);
 	while (tmp && tmp->type != PIPE)
 	{
 		if (tmp->type >= 3 && tmp->type <= 6)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 15:17:18 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 15:34:41 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,10 +193,10 @@ int								process_lst(t_lst *tok_lst, t_lst *exp_lst,
 int								init_ast(t_ast **ast, t_sh *shell);
 int								create_node_pipe(t_ast **ast, t_sh *shell);
 int								count_args(t_lst *exp_lst);
-char							**fill_cmd(t_lst **exp_lst, int argc,
-									char **cmd_name);
+char							**fill_cmd(t_lst **exp_lst, char **cmd_name,
+									t_sh *shell, t_ast *ast);
 t_redirect						*add_redirection(t_redirect *redir,
-									t_lst *exp_lst);
+									t_lst *exp_lst, t_sh *shell, t_ast *ast);
 t_command						*create_node_cmd(t_lst **exp_lst, t_sh *shell,
 									t_ast *ast);
 void							create_ast_right_node(t_lst **exp_lst,
@@ -313,7 +313,8 @@ void							fd_clean_exit(t_sh *shell, int *pfd,
 void							close_all_fds(int fd);
 void							cleanup_exit(t_sh *shell, t_ast *ast);
 void							malloc_exit(t_sh *shell, t_ast *ast);
-void							*x_malloc(int size, t_sh *shell, t_ast *ast, void *var_to_free);
+void							*x_malloc(int size, t_sh *shell, t_ast *ast,
+									void *var_to_free);
 char							*x_strdup(const char *s1, t_sh *shell,
 									t_ast *ast, void *var_to_free);
 char							*x_strjoin(const char *s1, const char *s2,

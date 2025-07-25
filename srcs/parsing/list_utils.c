@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/12 21:11:07 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/25 14:53:15 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/25 15:35:08 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,13 @@ t_command	*create_node_cmd(t_lst **exp_lst, t_sh *shell, t_ast *ast)
 		if ((*exp_lst)->type >= 3 && (*exp_lst)->next
 			&& (*exp_lst)->next->value)
 		{
-			cmd->redirections = add_redirection(cmd->redirections, *exp_lst);
+			cmd->redirections = add_redirection(cmd->redirections, *exp_lst,
+					shell, ast);
 			*exp_lst = (*exp_lst)->next;
 		}
 		*exp_lst = (*exp_lst)->next;
 	}
-	cmd->args = fill_cmd(&tmp, count_args(tmp), &cmd->cmd_name);
+	cmd->args = fill_cmd(&tmp, &cmd->cmd_name, shell, ast);
 	return (cmd);
 }
 
