@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:12:00 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 18:38:42 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/25 15:44:31 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ char	*process_heredoc_line(char *input, char *del, t_sh *shell)
 	if (has_quotes(del) == false)
 		line = expand_token(input, shell);
 	else
-		line = ft_strdup(input);
+		line = x_strdup(input, shell, NULL, NULL);
 	free(input);
 	return (line);
 }

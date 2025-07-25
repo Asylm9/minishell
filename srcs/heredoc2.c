@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:11:00 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 17:36:41 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 15:44:46 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,8 @@ static int	sigint_in_heredoc(char *input, char **buffer)
 
 static int	eof_in_heredoc(int count, char *del)
 {
-	printf_fd(STDIN_FILENO,
-		"bash: warning: here-document at line %d ",
-		count);
-	printf_fd(STDIN_FILENO,
-		"delimited by end-of-file (wanted `%s')\n", del);
+	printf_fd(STDIN_FILENO, "bash: warning: here-document at line %d ", count);
+	printf_fd(STDIN_FILENO, "delimited by end-of-file (wanted `%s')\n", del);
 	return (0);
 }
 
@@ -75,8 +72,8 @@ int	process_readline_loop(char *del, t_sh *shell, char **buffer, int *count)
 
 int	read_heredoc_content(char *del, t_sh *shell, char **buffer)
 {
-	int		count;
-	int		ret;
+	int	count;
+	int	ret;
 
 	*buffer = NULL;
 	count = 1;
