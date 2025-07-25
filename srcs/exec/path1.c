@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path1.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
+/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:36 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 15:18:16 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 16:59:16 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ char	*resolve_direct_path(t_ast *ast, t_sh *shell, t_ast *root)
 	{
 		if (access(cmd_path, X_OK) < 0)
 		{
-			printf_fd(STDERR, "minishell: %s: %s\n", cmd_path,
-				strerror(errno));
+			printf_fd(STDERR, "minishell: %s: %s\n", cmd_path, strerror(errno));
 		}
 		else
 			printf_fd(STDERR, "minishell: %s: command not found\n",
@@ -81,7 +80,7 @@ int	execute_binary(t_ast *ast, t_sh *shell, t_ast *root)
 			ast->cmd->cmd_name);
 		return (cleanup_shell(shell, root), CMD_NOT_FOUND);
 	}
-	env = convert_envl_to_env(shell, root);
+	env = convert_envl_to_env(shell, root, ast);
 	set_subprocess_signals();
 	execve(cmd_path, ast->cmd->args, env);
 	return (execve_error(cmd_path, env, shell, root));

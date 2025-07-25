@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 15:53:25 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/25 15:34:29 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/25 16:51:32 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_redirect	*add_redirection(t_redirect *redir, t_lst *exp_lst, t_sh *shell,
 
 	new_redir = x_malloc(sizeof(t_redirect), shell, ast, NULL);
 	new_redir->type = exp_lst->type;
-	new_redir->target = ft_strdup(exp_lst->next->value);
+	new_redir->target = x_strdup(exp_lst->next->value, shell, ast, NULL);
 	new_redir->fd = exp_lst->hd_fd;
 	new_redir->next = NULL;
 	if (!redir)

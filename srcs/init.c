@@ -6,13 +6,13 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:12:16 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 16:00:41 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/25 16:56:20 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	fill_list(t_env **new_node, char *var, t_sh *shell)
+void	fill_list(t_env **new_node, char *var, t_sh *shell, t_ast *ast)
 {
 	char	*equal_pos;
 	char	*value;
@@ -26,16 +26,19 @@ void	fill_list(t_env **new_node, char *var, t_sh *shell)
 	if (value && strcmp(var, "SHLVL") == 0)
 	{
 		level = atoi(value) + 1;
-		*new_node = create_node(ft_strdup(var), ft_itoa(level), shell, NULL);
+		*new_node = create_node(x_strdup(var, shell, ast, NULL), ft_itoa(level),
+				shell, NULL);
 	}
 	else if (value)
-		*new_node = create_node(ft_strdup(var), ft_strdup(value), shell, NULL);
+		*new_node = create_node(x_strdup(var, shell, ast, NULL), x_strdup(value,
+					shell, ast, NULL), shell, NULL);
 	else
-		*new_node = create_node(ft_strdup(var), NULL, shell, NULL);
+		*new_node = create_node(x_strdup(var, shell, ast, NULL), NULL, shell,
+				NULL);
 	equal_pos[0] = '=';
 }
 
-t_env	*init_env_list(char **env, t_sh *shell)
+t_env	*init_env_list(char **env, t_sh *shell, t_ast *ast)
 {
 	t_env	*new_node;
 	t_env	*head;
@@ -48,7 +51,7 @@ t_env	*init_env_list(char **env, t_sh *shell)
 	i = 0;
 	while (env[i])
 	{
-		fill_list(&new_node, env[i], shell);
+		fill_list(&new_node, env[i], shell, ast);
 		if (!new_node)
 			return (NULL);
 		head = add_back_node(new_node, head);
@@ -77,12 +80,12 @@ static t_env	*init_minimal_list(t_sh *shell)
 	return (head);
 }
 
-int	init_shell(t_sh *shell, char **envp)
+int	init_shell(t_sh *shell, char **envp, t_ast *ast)
 {
 	if (!envp || !*envp)
 		shell->envl = init_minimal_list(shell);
 	else
-		shell->envl = init_env_list(envp, shell);
+		shell->envl = init_env_list(envp, shell, ast);
 	if (!shell->envl)
 		return (ERROR);
 	shell->in_pipeline = false;

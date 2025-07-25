@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 15:44:53 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/25 16:58:19 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,8 @@ extern volatile sig_atomic_t	g_sig;
 void							print_token(t_lst *tok_lst);
 
 /* Initialization */
-int								init_shell(t_sh *shell, char **envp);
+int								init_shell(t_sh *shell, char **envp,
+									t_ast *ast);
 
 /* Tokenizer */
 int								tokenize(char *input, t_sh *shell);
@@ -276,8 +277,10 @@ int								builtin_exit(t_ast *ast, t_sh *shell);
 bool							is_numeric(char *arg);
 
 /* Env utils */
-char							**convert_envl_to_env(t_sh *shell, t_ast *root);
-t_env							*init_env_list(char **env, t_sh *shell);
+char							**convert_envl_to_env(t_sh *shell, t_ast *root,
+									t_ast *ast);
+t_env							*init_env_list(char **env, t_sh *shell,
+									t_ast *ast);
 bool							key_exists(char *key, t_env *envl);
 int								add_new_entry(char *key, char *value,
 									t_sh *shell, t_ast *root);

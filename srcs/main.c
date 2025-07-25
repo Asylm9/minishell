@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 16:10:00 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/24 19:40:26 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/25 16:58:56 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 volatile sig_atomic_t	g_sig = 0;
 
-int	init_minishell(t_sh *shell, char **envp)
+int	init_minishell(t_sh *shell, char **envp, t_ast *ast)
 {
 	shell->tok_lst = NULL;
 	shell->exp_lst = NULL;
-	if (init_shell(shell, envp) != SUCCESS)
+	if (init_shell(shell, envp, ast) != SUCCESS)
 	{
 		printf_fd(2, "Shell initialization failed\n");
 		free_envl(&shell->envl);
@@ -88,7 +88,7 @@ int	main(int ac, char **av, char **envp)
 		printf_fd(STDERR, "Usage: %s\n", av[0]);
 		return (ERROR);
 	}
-	if (init_minishell(&shell, envp) == ERROR)
+	if (init_minishell(&shell, envp, ast) == ERROR)
 		return (ERROR);
 	set_main_signals();
 	while (1)

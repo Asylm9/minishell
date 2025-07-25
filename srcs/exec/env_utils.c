@@ -6,13 +6,13 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:01 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 16:00:29 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/25 16:52:33 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-char	**convert_envl_to_env(t_sh *shell, t_ast *root)
+char	**convert_envl_to_env(t_sh *shell, t_ast *root, t_ast *ast)
 {
 	char	**env;
 	t_env	*current;
@@ -27,7 +27,7 @@ char	**convert_envl_to_env(t_sh *shell, t_ast *root)
 		if (current->value)
 			env[i] = ft_charjoin(current->key, current->value, '=');
 		else
-			env[i] = ft_strdup(current->key);
+			env[i] = x_strdup(current->key, shell, ast, NULL);
 		if (!env[i])
 		{
 			free_array(env, i);
