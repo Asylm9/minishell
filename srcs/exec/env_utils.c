@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:01 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 01:44:16 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 15:17:52 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ char	**convert_envl_to_env(t_sh *shell, t_ast *root)
 	t_env	*current;
 	int		i;
 
-	env = malloc(sizeof(char *) * (list_size(shell->envl) + 1));
-	if (!env)
-		malloc_exit(shell, root);
+	env = x_malloc((sizeof(char *) * (list_size(shell->envl) + 1)), shell, root, NULL);
 	current = shell->envl;
 	i = 0;
 	while (current)
@@ -63,9 +61,7 @@ int	add_new_entry(char *key, char *value, t_sh *shell, t_ast *root)
 
 	if (!key)
 		return (ERROR);
-	key_copy = ft_strdup(key);
-	if (!key_copy)
-		malloc_exit(shell, root);
+	key_copy = x_strdup(key, shell, root, NULL);
 	value_copy = NULL;
 	if (value)
 	{

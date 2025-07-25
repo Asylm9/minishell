@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:36 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 22:09:10 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 15:18:16 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@ char	*resolve_direct_path(t_ast *ast, t_sh *shell, t_ast *root)
 {
 	char	*cmd_path;
 
-	cmd_path = ft_strdup(ast->cmd->cmd_name);
-	if (!cmd_path)
-		malloc_exit(shell, root);
+	cmd_path = x_strdup(ast->cmd->cmd_name, shell, root, NULL);
 	if (access(cmd_path, F_OK) < 0 || ft_strcmp("..", cmd_path) == 0)
 	{
 		if (access(cmd_path, X_OK) < 0)
