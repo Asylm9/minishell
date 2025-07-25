@@ -6,27 +6,11 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 18:09:47 by magoosse          #+#    #+#             */
-/*   Updated: 2025/07/25 17:02:46 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/25 17:22:03 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-void	handle_unclosed_pipes(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
-{
-	char	*input;
-
-	(void)exp_lst;
-	(void)shell;
-	input = NULL;
-	input = readline(">");
-	create_list_node(&tok_lst, shell);
-	tok_lst = tok_lst->next;
-	if (tokenize_input(tok_lst, input, shell) == ERROR)
-		cleanup_exit(shell, NULL);
-	if (input != NULL)
-		free(input);
-}
 
 int	process_heredoc(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
 {
@@ -41,32 +25,39 @@ int	process_heredoc(t_lst *tok_lst, t_lst *exp_lst, t_sh *shell)
 	return (SUCCESS);
 }
 
+static void	process_split_expand(t_lst *exp_lst, char **splitted, int count,
+		t_sh *shell)
+{
+	int	i;
+
+	i = 0;
+	while (count != 0)
+	{
+		exp_lst->value = x_strdup(splitted[i++], shell, NULL, NULL);
+		if (!exp_lst->value)
+			cleanup_exit(shell, NULL);
+		exp_lst->type = WORD;
+		create_list_node(&exp_lst, shell);
+		exp_lst = exp_lst->next;
+		count--;
+	}
+}
+
 void	process_expand(t_lst *tok_lst, t_lst *exp_lst, char *expanded,
 		t_sh *shell)
 {
 	int		count;
 	char	*presplit;
 	char	**splitted;
-	int		i;
 
-	i = 0;
 	count = count_nb_words(expanded, ' ');
-	if (i < count)
+	if (count > 0)
 	{
 		presplit = trim_quotes(expanded, shell);
 		splitted = ft_split(presplit, ' ');
 		if (!splitted)
 			cleanup_exit(shell, NULL);
-		while (count != 0)
-		{
-			exp_lst->value = x_strdup(splitted[i++], shell, NULL, NULL);
-			if (!exp_lst->value)
-				cleanup_exit(shell, NULL);
-			exp_lst->type = WORD;
-			create_list_node(&exp_lst, shell);
-			exp_lst = exp_lst->next;
-			count--;
-		}
+		process_split_expand(exp_lst, splitted, count, shell);
 		free_array(splitted, -1);
 		free(presplit);
 		return ;

@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 16:58:19 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/25 17:25:49 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,8 +173,16 @@ int								expand_xcode(char **result, t_sh *shell);
 int								expand_var(char *input, char **result,
 									t_sh *shell);
 char							*expand_token(char *input, t_sh *shell);
+void							expand_buffer(t_exp *exp, char *input,
+									t_sh *shell);
+void							go_to_end(char *input, t_exp *exp);
 void							handle_unclosed_pipes(t_lst *tok_lst,
 									t_lst *exp_lst, t_sh *shell);
+void							handle_dollar(t_exp *exp, char *input,
+									t_sh *shell);
+void							handle_single_quote(t_exp *exp, char *input);
+void							handle_double_quote(t_exp *exp, char *input,
+									t_sh *shell);
 void							match_quotes(char *input, int *end,
 									char *quote);
 char							*trim_quotes(char *input, t_sh *shell);

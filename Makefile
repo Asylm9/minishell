@@ -34,6 +34,7 @@ SRCS =  $(SRCDIR)/srcs/main.c \
         $(SRCDIR)/srcs/parsing/exp_token.c \
         $(SRCDIR)/srcs/parsing/exp_utils.c \
         $(SRCDIR)/srcs/parsing/exp_utils_2.c \
+        $(SRCDIR)/srcs/parsing/exp_utils_3.c \
         $(SRCDIR)/srcs/parsing/expander.c \
         $(SRCDIR)/srcs/parsing/errors.c \
         $(SRCDIR)/srcs/parsing/parser.c \
