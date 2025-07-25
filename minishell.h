@@ -6,7 +6,7 @@
 /*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 14:52:25 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/25 15:01:45 by magoosse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -313,6 +313,11 @@ void							fd_clean_exit(t_sh *shell, int *pfd,
 void							close_all_fds(int fd);
 void							cleanup_exit(t_sh *shell, t_ast *ast);
 void							malloc_exit(t_sh *shell, t_ast *ast);
+void							*x_malloc(int size, t_sh *shell, t_ast *ast);
+char							*x_strdup(const char *s1, t_sh *shell,
+									t_ast *ast);
+char							*x_strjoin(const char *s1, const char *s2,
+									t_sh *shell, t_ast *ast);
 
 /* Signals */
 void							handle_here_sig(int sig);
@@ -320,14 +325,5 @@ void							handle_sigint(int sig);
 void							handle_sigint_exec(int sig);
 int								set_main_signals(void);
 int								set_subprocess_signals(void);
-
-/* Malloc wrappers */
-void							*x_malloc(int size, t_sh *shell, t_ast *ast,
-									void *var_to_free);
-char							*x_strjoin(const char *s1, const char *s2,
-									t_sh *shell, t_ast *ast);
-char							*x_strdup(const char *s1, t_sh *shell,
-									t_ast *ast);
-void							malloc_exit(t_sh *shell, t_ast *ast);
 
 #endif
