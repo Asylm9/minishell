@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:23 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 22:37:12 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 15:24:46 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,7 @@ t_env	*create_node(char *key, char *value, t_sh *shell, t_ast *root)
 
 	if (!key)
 		malloc_exit(shell, root);
-	new_node = (t_env *) malloc(sizeof(t_env));
-	if (!new_node)
-		malloc_exit(shell, root);
+	new_node = x_malloc(sizeof(t_env), shell, root, NULL);
 	new_node->key = key;
 	if (value)
 		new_node->value = value;
