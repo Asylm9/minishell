@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:14:49 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 22:25:30 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/25 15:31:48 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ void	print_exp_list(t_sh *shell, t_ast *root)
 
 	count = count_elements(shell->envl);
 	ptr_array = init_temp_array(count, shell, root);
-	if (!ptr_array)
-		malloc_exit(shell, root);
 	sort_env_list(ptr_array, count);
 	i = 0;
 	while (i < count)
@@ -56,9 +54,7 @@ t_env	**init_temp_array(int count, t_sh *shell, t_ast *root)
 	t_env	**ptr_array;
 	int		i;
 
-	ptr_array = (t_env **) malloc(sizeof(t_env *) * count);
-	if (!ptr_array)
-		malloc_exit(shell, root);
+	ptr_array = x_malloc(sizeof(t_env *) * count, shell, root, NULL);
 	i = 0;
 	while (i < count)
 	{
