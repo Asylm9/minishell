@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:12:16 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 17:00:57 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/26 23:09:56 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ void	fill_list(t_env **new_node, char *var, t_sh *shell, t_ast *ast)
 		return ;
 	value = equal_pos + 1;
 	equal_pos[0] = '\0';
-	if (value && strcmp(var, "SHLVL") == 0)
+	if (value && ft_strcmp(var, "SHLVL") == 0)
 	{
-		level = atoi(value) + 1;
+		level = ft_atoi(value) + 1;
 		*new_node = create_node(x_strdup(var, shell, ast, NULL), ft_itoa(level),
 				shell, NULL);
 	}
