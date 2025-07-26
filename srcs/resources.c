@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:14:01 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/26 00:16:02 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/26 14:29:19 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	fd_clean_exit(t_sh *shell, int *pfd, int exit_code)
 	exit(exit_code);
 }
 
-void	close_all_fds(int fd)
+void	close_fds(int fd)
 {
 	while (fd < 256)
 		close(fd++);

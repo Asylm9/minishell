@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 17:51:31 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/26 14:29:12 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,7 +274,7 @@ void		free_array(char **array, int i);
 void		free_envl(t_env **head);
 void		cleanup_shell(t_sh *shell, t_ast *ast);
 void		fd_clean_exit(t_sh *shell, int *pfd, int exit_code);
-void		close_all_fds(int fd);
+void		close_fds(int fd);
 void		cleanup_exit(t_sh *shell, t_ast *ast);
 void		malloc_exit(t_sh *shell, t_ast *ast);
 void		*x_malloc(int size, t_sh *shell, t_ast *ast, void *var_to_free);

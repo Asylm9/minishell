@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:12:00 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 17:30:38 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/26 14:29:29 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	heredoc_child(char *del, t_sh *shell, int *pfd)
 		write(pfd[1], buffer, ft_strlen(buffer));
 		free(buffer);
 	}
-	close_all_fds(3);
+	close_fds(3);
 	fd_clean_exit(shell, pfd, SUCCESS);
 }
 
