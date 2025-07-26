@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:10 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 21:48:14 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/26 23:12:30 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,6 @@ int	execute_builtin(t_ast *ast, t_sh *shell, t_ast *root)
 	else if (ft_strcmp(ast->cmd->cmd_name, "env") == 0)
 		shell->exit_status = builtin_env(shell);
 	else if (ft_strcmp(ast->cmd->cmd_name, "exit") == 0)
-		shell->exit_status = builtin_exit(ast, shell);
+		shell->exit_status = builtin_exit(ast, shell, root);
 	return (shell->exit_status);
 }

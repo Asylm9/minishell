@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/26 14:29:12 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/26 23:12:15 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,7 +242,7 @@ void		sort_env_list(t_env **array, int count);
 int			count_elements(t_env *envl);
 int			builtin_unset(char **args, t_env **envl);
 int			builtin_env(t_sh *shell);
-int			builtin_exit(t_ast *ast, t_sh *shell);
+int			builtin_exit(t_ast *ast, t_sh *shell, t_ast *root);
 bool		is_numeric(char *arg);
 
 /* Env utils */

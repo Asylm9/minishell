@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:14:45 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 01:29:15 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/26 23:14:53 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	exit_arg_error(t_ast *ast)
 		ast->cmd->args[1]);
 }
 
-int	builtin_exit(t_ast *ast, t_sh *shell)
+int	builtin_exit(t_ast *ast, t_sh *shell, t_ast *root)
 {
 	printf_fd(STDOUT_FILENO, "exit\n");
 	if (ast->cmd->args && ast->cmd->args[1])
@@ -69,7 +69,7 @@ int	builtin_exit(t_ast *ast, t_sh *shell)
 			shell->exit_status = 2;
 		}
 	}
-	cleanup_shell(shell, ast);
+	cleanup_shell(shell, root);
 	exit(shell->exit_status);
 	return (SUCCESS);
 }
