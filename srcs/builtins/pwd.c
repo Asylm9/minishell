@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:15:04 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/24 18:20:02 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/28 21:19:05 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ int	builtin_pwd(char **args)
 	{
 		if (!(args[1][1] == '-' && args[1][2] == '\0'))
 		{
-			printf_fd(STDERR, "minishell: pwd: %s: invalid option\n", args[1]);
+			printf_fd(STDERR, "minishell: pwd: -%c: invalid option\n",
+				args[1][1]);
 			return (BUILTIN_ERR);
 		}
 	}

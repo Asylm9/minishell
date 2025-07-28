@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:14:57 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/28 21:06:31 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/28 21:08:01 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int	builtin_export(char **args, t_sh *shell, t_ast *root)
 		return (ERROR);
 	if (args_count(args) == 1)
 		print_exp_list(shell, root);
-		ret = 0;
+	ret = 0;
 	status = 0;
 	i = 0;
 	while (args[++i])

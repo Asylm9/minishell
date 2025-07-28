@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:15:11 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/16 13:15:12 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/28 21:25:26 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ int	builtin_unset(char **args, t_env **envl)
 		return (SUCCESS);
 	if (args[1][0] == '-' && args[1][1])
 	{
-		printf_fd(STDERR, "minishell: unset: %s: invalid option\n", args[1]);
-		return (BUILTIN_ERR);
+		return (printf_fd(STDERR, "minishell: unset: -%c: invalid option\n",
+				args[1][1]), BUILTIN_ERR);
 	}
 	i = 0;
 	while (args[++i])
