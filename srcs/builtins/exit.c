@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:14:45 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/26 23:14:53 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/28 18:10:18 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	builtin_exit(t_ast *ast, t_sh *shell, t_ast *root)
 		else
 		{
 			exit_arg_error(ast);
-			shell->exit_status = 2;
+			shell->exit_status = BUILTIN_ERR;
 		}
 	}
 	cleanup_shell(shell, root);
