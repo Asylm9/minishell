@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:12:16 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/28 15:50:40 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/28 19:09:31 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ void	fill_list(t_env **new_node, char *var, t_sh *shell, t_ast *ast)
 	if (value && ft_strcmp(var, "SHLVL") == 0)
 	{
 		level = ft_atoi(value) + 1;
-		*new_node = create_node(x_strdup(var, shell, ast, NULL), x_itoa(level, shell, ast),
-				shell, NULL);
+		*new_node = create_node(x_strdup(var, shell, ast, NULL),
+				x_itoa(level, shell, ast), shell, NULL);
 	}
 	else if (value)
 		*new_node = create_node(x_strdup(var, shell, ast, NULL), x_strdup(value,
