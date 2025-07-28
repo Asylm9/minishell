@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:14:57 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 15:33:59 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/28 21:06:31 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int	append_export(char *key, char *plus_pos, t_sh *shell, t_ast *root)
 		joined_value = ft_strjoin(current_value, new_value);
 		free(current_value);
 		if (!joined_value)
-			return (ERROR);
+			malloc_exit(shell, root);
 		ret = set_envl_var(key, joined_value, shell, root);
 		free(joined_value);
 	}
@@ -104,11 +104,8 @@ int	builtin_export(char **args, t_sh *shell, t_ast *root)
 	if (!shell || !shell->envl)
 		return (ERROR);
 	if (args_count(args) == 1)
-	{
 		print_exp_list(shell, root);
-		return (SUCCESS);
-	}
-	ret = 0;
+		ret = 0;
 	status = 0;
 	i = 0;
 	while (args[++i])
