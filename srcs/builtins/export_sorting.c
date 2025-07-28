@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:14:49 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/26 23:23:42 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/28 15:49:51 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ t_env	**init_temp_array(int count, t_sh *shell, t_ast *root)
 	t_env	**ptr_array;
 	t_env	*current;
 	int		i;
-	
 
 	ptr_array = x_malloc(sizeof(t_env *) * count, shell, root, NULL);
 	current = shell->envl;

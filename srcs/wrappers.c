@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 14:56:44 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 15:16:53 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/28 15:49:15 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ void	*x_malloc(int size, t_sh *shell, t_ast *ast, void *var_to_free)
 	return (var);
 }
 
-char	*x_strjoin(const char *s1, const char *s2, t_sh *shell, t_ast *ast)
+char	*x_itoa(int n, t_sh *shell, t_ast *ast)
 {
 	void	*var;
 
-	var = ft_strjoin(s1, s2);
+	var = ft_itoa(n);
 	if (!var)
 		malloc_exit(shell, ast);
 	return (var);
