@@ -6,13 +6,13 @@
 #    By: agaland <agaland@student.s19.be>           +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/16 19:27:12 by agaland           #+#    #+#              #
-#    Updated: 2025/07/02 12:07:39 by agaland          ###   ########.fr        #
+#    Updated: 2025/07/28 15:43:54 by agaland          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 
-SRCS = ft_atoi.c ft_isalnum.c ft_isalpha.c ft_isascii.c ft_isdigit.c ft_isprint.c ft_isspace.c ft_isspec.c ft_memcmp.c ft_memcpy.c ft_memmove.c ft_memset.c ft_bzero.c ft_memchr.c ft_strchr.c ft_strlcat.c ft_strlcpy.c ft_strlen.c ft_strcmp.c ft_strncmp.c ft_strnstr.c ft_strrchr.c ft_tolower.c ft_toupper.c ft_calloc.c ft_strdup.c
+SRCS = ft_atoi.c ft_atol.c ft_isalnum.c ft_isalpha.c ft_isascii.c ft_isdigit.c ft_isprint.c ft_isspace.c ft_isspec.c ft_memcmp.c ft_memcpy.c ft_memmove.c ft_memset.c ft_bzero.c ft_memchr.c ft_strchr.c ft_strlcat.c ft_strlcpy.c ft_strlen.c ft_strcmp.c ft_strncmp.c ft_strnstr.c ft_strrchr.c ft_tolower.c ft_toupper.c ft_calloc.c ft_strdup.c
 OBJS = $(SRCS:%.c=%.o)
 
 SUPP_SRCS = ft_substr.c ft_strjoin.c ft_fstrjoin.c ft_strtrim.c ft_itoa.c ft_strmapi.c ft_striteri.c ft_putchar_fd.c ft_putstr_fd.c ft_putendl_fd.c ft_putnbr_fd.c ft_split.c
@@ -26,16 +26,18 @@ PRINTF_FD_LIB = $(PRINTF_FD_DIR)/libftprintf.a
 
 ALL_OBJS = $(OBJS) $(SUPP_OBJS)
 
-CC = gcc
+CC = cc
 
 CCFLAGS = -Wall -Wextra -Werror
 
 all: $(NAME)
 
 $(NAME): $(ALL_OBJS) $(PRINTF_FD_LIB)
-	@ar rcs $(NAME) $(LIBFT_OBJS)
-	@ar x $(PRINTF_FD_LIB)
-	@ar rcs $(NAME) *.o
+	@ar rcs $(NAME) $(ALL_OBJS)
+	@mkdir -p tmp_objs
+	@cd tmp_objs && ar x ../$(PRINTF_FD_LIB)
+	@ar rcs $(NAME) tmp_objs/*.o
+	@rm -rf tmp_objs
 
 %.o: %.c
 	@$(CC) $(CCFLAGS) -c $< -o $@
