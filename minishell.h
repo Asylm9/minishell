@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 20:11:26 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/28 15:49:32 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/28 19:23:26 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,6 +256,7 @@ int			set_envl_var(char *name, char *value, t_sh *shell, t_ast *root);
 /* Utils */
 int			ft_strcmp(const char *s1, const char *s2);
 char		*ft_charjoin(char const *s1, char const *s2, char c);
+int			check_file_type(char *path);
 
 /* List utils */
 int			list_size(t_env *envl);

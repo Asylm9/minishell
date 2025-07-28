@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:14:25 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/26 00:18:42 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/28 19:22:09 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ int	validate_path(char **args, char *new_path)
 		printf_fd(STDERR, "cd: %s: No such file or directory\n", new_path);
 		return (ERROR);
 	}
-	if (access(new_path, X_OK) < 0)
+	if (access(new_path, X_OK) < 0 || !check_file_type(new_path))
 	{
-		printf_fd(STDERR, "minishell: %s: Not a directory\n", args[1]);
+		printf_fd(STDERR, "minishell: %s: Not a directory\n", new_path);
 		return (ERROR);
 	}
 	return (SUCCESS);
@@ -81,7 +81,7 @@ int	builtin_cd(char **args, t_sh *shell, t_ast *root)
 	if (validate_path(args, new_path) != SUCCESS)
 		return (free(new_path), ERROR);
 	if (chdir(new_path) < 0)
-		return (BUILTIN_ERR);
+		return (free(new_path), BUILTIN_ERR);
 	free(new_path);
 	if (update_pwds(shell, curr_dir, root) != 0)
 		return (BUILTIN_ERR);

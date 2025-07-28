@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path1.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: magoosse <magoosse@student.42.be>          +#+  +:+       +#+        */
+/*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:13:36 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/25 16:59:16 by magoosse         ###   ########.fr       */
+/*   Updated: 2025/07/28 19:19:30 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	*resolve_direct_path(t_ast *ast, t_sh *shell, t_ast *root)
 	return (cmd_path);
 }
 
-static int	check_file_type(char *path)
+int	check_file_type(char *path)
 {
 	struct stat	file_stat;
 
