@@ -6,7 +6,7 @@
 /*   By: agaland <agaland@student.s19.be>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/16 13:14:45 by agaland           #+#    #+#             */
-/*   Updated: 2025/07/28 18:10:18 by agaland          ###   ########.fr       */
+/*   Updated: 2025/07/30 13:41:47 by agaland          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ void	exit_arg_error(t_ast *ast)
 
 int	builtin_exit(t_ast *ast, t_sh *shell, t_ast *root)
 {
-	printf_fd(STDOUT_FILENO, "exit\n");
+	if (!shell->in_pipeline)
+		printf_fd(STDERR, "exit\n");
 	if (ast->cmd->args && ast->cmd->args[1])
 	{
 		if (!is_numeric(ast->cmd->args[1]))
